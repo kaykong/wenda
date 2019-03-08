@@ -17,4 +17,8 @@ public class UserService {
         return userDao.getUserList();
     }
 
+
+    public List<User> getUserList2() {
+        return userDao.getUserList2();
+    }
 }

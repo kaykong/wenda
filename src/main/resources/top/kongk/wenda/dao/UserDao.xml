@@ -5,4 +5,7 @@
     <select id="getUserList" resultType="top.kongk.wenda.model.User">
       select * from user;
     </select>
+    <select id="getUserList2" resultType="top.kongk.wenda.model.User">
+
+    </select>
 </mapper>
