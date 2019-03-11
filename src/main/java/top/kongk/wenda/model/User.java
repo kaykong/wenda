@@ -1,6 +1,6 @@
 package top.kongk.wenda.model;
 
-public class User extends IdEntity {
+public class User extends BaseIdEntity {
 
     /**
      * 用户名
@@ -8,9 +8,19 @@ public class User extends IdEntity {
     private String name;
 
     /**
+     * 昵称
+     */
+    private String nickname;
+
+    /**
      * 密码
      */
     private String password;
+
+    /**
+     * 性别
+     */
+    private Integer gender;
 
     /**
      * 加密要用到的: 盐
@@ -21,6 +31,19 @@ public class User extends IdEntity {
      * 邮箱
      */
     private String email;
+
+    /**
+     * 用户角色，0-管理员,1-普通用户
+     */
+    private Integer role;
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
 
     public String getName() {
         return name;
@@ -52,5 +75,21 @@ public class User extends IdEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

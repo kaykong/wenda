@@ -3,7 +3,10 @@ package top.kongk.wenda.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class IdEntity implements Serializable {
+/**
+ * @author kkk
+ */
+public abstract class BaseIdEntity implements Serializable {
 
     protected Integer id;
 
@@ -38,7 +41,7 @@ public abstract class IdEntity implements Serializable {
             return false;
         }
 
-        IdEntity idEntity = (IdEntity) obj;
+        BaseIdEntity idEntity = (BaseIdEntity) obj;
         if (idEntity.id == null || id == null) {
             return false;
         }

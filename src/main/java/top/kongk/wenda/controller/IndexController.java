@@ -70,27 +70,4 @@ public class IndexController {
         return stringList;
     }
 
-
-
-
-
-
-
-
-
-
-
-    /**
-     *                南 无 阿 弥 陀 佛
-     */
-
-
-
-
-
-
-
-
-
-
 }

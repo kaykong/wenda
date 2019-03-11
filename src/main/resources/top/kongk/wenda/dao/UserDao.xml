@@ -2,10 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="top.kongk.wenda.dao.UserDao">
 
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+      insert into user
+      <include refid="insert-column"/>
+      values
+      <include refid="insert-values-column"/>
+    </insert>
+
     <select id="getUserList" resultType="top.kongk.wenda.model.User">
       select * from user;
     </select>
     <select id="getUserList2" resultType="top.kongk.wenda.model.User">
 
+    </select>
+
+    <sql id="common-column">
+        id, name, password, salt, gender, email, role
+    </sql>
+    <sql id="insert-column">
+        (id, name, password, salt, gender, email, role)
+    </sql>
+    <sql id="insert-values-column">
+        (#{name}, #{password}, #{salt}, #{gender}, #{email}, #{role})
+    </sql>
+
+    <select id="getUserByName" resultType="top.kongk.wenda.model.User">
+      select
+      <include refid="common-column"/>
+      from user
+      where name = #{name}
+    </select>
+
+    <select id="getUserByEmail" resultType="top.kongk.wenda.model.User">
+      select
+      <include refid="common-column"/>
+      from user
+      where email = #{email}
     </select>
 </mapper>
