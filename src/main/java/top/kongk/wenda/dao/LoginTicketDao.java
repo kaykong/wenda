@@ -19,4 +19,14 @@ public interface LoginTicketDao {
      * @param loginTicket
      */
     void addLoginTicket(LoginTicket loginTicket);
+
+
+    /**
+     * 根据ticket, 获取可用的,有效的 user
+     *
+     * @author kongkk
+     * @param ticket ticket
+     * @return top.kongk.wenda.model.User
+     */
+    User getUsableUserByTicket(String ticket);
 }

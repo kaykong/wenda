@@ -14,7 +14,7 @@ public class LoginTicket extends BaseIdEntity {
     private Integer userId;
 
     /**
-     * ticket
+     * ticket, 使用uuid生成
      */
     private String ticket;
 
