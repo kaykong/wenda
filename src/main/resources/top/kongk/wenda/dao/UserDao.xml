@@ -20,7 +20,7 @@
         id, name, password, salt, gender, email, role
     </sql>
     <sql id="insert-column">
-        (id, name, password, salt, gender, email, role)
+        (name, password, salt, gender, email, role)
     </sql>
     <sql id="insert-values-column">
         (#{name}, #{password}, #{salt}, #{gender}, #{email}, #{role})

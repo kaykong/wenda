@@ -4,9 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.kongk.wenda.common.QuestionCode;
 import top.kongk.wenda.common.ResponseCode;
 import top.kongk.wenda.common.ServerResponse;
+import top.kongk.wenda.model.HostHolder;
+import top.kongk.wenda.model.Question;
 import top.kongk.wenda.model.User;
+import top.kongk.wenda.service.QuestionService;
 import top.kongk.wenda.service.UserService;
 
 import javax.servlet.http.Cookie;
@@ -25,64 +29,33 @@ public class QuestionController {
     private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
 
     @Autowired
-    private UserService userService;
+    private HostHolder hostHolder;
+    @Autowired
+    private QuestionService questionService;
 
-    @PostMapping("/login")
-    public ServerResponse login(@RequestParam("name") String name,
-                         @RequestParam("password") String password,
-                         @RequestParam(value = "rememberMe", defaultValue = "false") Boolean rememberMe,
-                         HttpServletResponse response) {
+    /**
+     * 用户提交问题, 把问题插入数据库, 设置状态为待审核
+     *
+     * @author kongkk
+     * @param question
+     * @return top.kongk.wenda.common.ServerResponse
+     */
+    @PostMapping("/addQuestion")
+    public ServerResponse addQuestion(@RequestBody Question question) {
+
+        User user = hostHolder.getCurrentUser();
+        if (user == null) {
+            return ServerResponse.createNeedloginError("请先登录");
+        }
         ServerResponse serverResponse;
         try {
-            serverResponse = userService.login(name, password, rememberMe);
+            serverResponse = questionService.addQuestion(question, user);
         } catch (Exception e) {
-            log.error("登录异常 {}", e.getMessage());
-            return ServerResponse.createErrorWithMsg("登录失败");
-        }
-
-        if (serverResponse.getStatus() == ResponseCode.SUCCESS_CODE && serverResponse.getData() != null) {
-            //登录成功, 设置cookie
-            String ticket = (String) serverResponse.getData();
-            Cookie cookie = new Cookie("ticket", ticket);
-            cookie.setPath("/");
-            if (rememberMe) {
-                //100天
-                cookie.setMaxAge(100*24*60*60);
-            } else {
-                cookie.setMaxAge(7*24*60*60);
-            }
-            response.addCookie(cookie);
+            log.error("新增问题异常 {}", e.getMessage());
+            return ServerResponse.createErrorWithMsg("新增问题失败");
         }
 
         return serverResponse;
     }
 
-    @PostMapping("/register")
-    public ServerResponse register(@RequestBody User user, HttpServletResponse response) {
-
-        ServerResponse serverResponse;
-        try {
-            serverResponse = userService.register(user);
-        } catch (Exception e) {
-            log.error("注册异常 {}", e.getMessage());
-            return ServerResponse.createErrorWithMsg("注册失败");
-        }
-
-        if (serverResponse.getStatus() == ResponseCode.SUCCESS_CODE && serverResponse.getData() != null) {
-            //注册成功, 设置cookie
-            String ticket = (String) serverResponse.getData();
-            Cookie cookie = new Cookie("ticket", ticket);
-            cookie.setPath("/");
-            cookie.setMaxAge(7*24*60*60);
-            response.addCookie(cookie);
-        }
-
-        return serverResponse;
-    }
-
-
-    @GetMapping("/getList")
-    public List<User> getList() {
-        return userService.getUserList();
-    }
 }

@@ -10,7 +10,7 @@ public enum ResponseCode {
     /**
      * 操作成功
      */
-    SUCCESS(ResponseCode.SUCCESS_CODE, "SUCCESS"),
+    SUCCESS(0, "SUCCESS"),
     /**
      * 操作失败
      */

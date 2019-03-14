@@ -2,11 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="top.kongk.wenda.dao.QuestionDao">
 
+    <sql id="common-column">
+        id, title, content, user_id, anonymous, status, comment_count, create_date
+    </sql>
+    <sql id="insert-column">
+        (title, content, user_id, anonymous, status, create_date)
+    </sql>
+    <sql id="insert-values-column">
+        (#{title}, #{content}, #{userId}, #{anonymous}, #{status}, #{createDate})
+    </sql>
+
+
     <insert id="addUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
       insert into user
       <include refid="insert-column"/>
       values
       <include refid="insert-values-column"/>
+    </insert>
+
+    <insert id="addQuestion" keyProperty="id" useGeneratedKeys="true">
+        insert into question
+        <include refid="insert-column"/>
+        values
+        <include refid="insert-values-column"/>
     </insert>
 
     <select id="getUserList" resultType="top.kongk.wenda.model.User">
@@ -16,15 +34,7 @@
 
     </select>
 
-    <sql id="common-column">
-        id, name, password, salt, gender, email, role
-    </sql>
-    <sql id="insert-column">
-        (id, name, password, salt, gender, email, role)
-    </sql>
-    <sql id="insert-values-column">
-        (#{name}, #{password}, #{salt}, #{gender}, #{email}, #{role})
-    </sql>
+
 
     <select id="getUserByName" resultType="top.kongk.wenda.model.User">
       select
