@@ -14,6 +14,8 @@ public class WendaUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(WendaUtil.class);
 
+    public static final String REPLACE_COMMENT = "***";
+
     public static String MD5(String key) {
         char hexDigits[] = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
