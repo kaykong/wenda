@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+<div class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="index.html" class="navbar-brand"></a>
+        </div>
+        <label id="toggle-label" class="visible-xs-inline-block" for="toggle-checkbox">MENU</label>
+        <input class="hidden" id="toggle-checkbox" type="checkbox">
+        <div class="hidden-xs">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">首页</a></li>
+                <li><a href="#">国内</a></li>
+                <li><a href="#">国际</a></li>
+                <li><a href="#">数读</a></li>
+                <li><a href="#">社会</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="login.html">登录</a></li>
+                <li><a href="signup.html">注册</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container container-small">
+    <h1>登录
+        <small>没有账号？<a href="signup.html">注册</a></small>
+    </h1>
+    <form id="id-login-form">
+        <div class="form-group">
+            <label>用户名/手机/邮箱</label>
+            <input type="text" class="form-control" id="name" name="name">
+        </div>
+        <div class="form-group">
+            <label>密码</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block"  id="id-login">登录</button>
+        </div>
+        <div class="form-group">
+            <a href="#">忘记密码？</a>
+        </div>
+    </form>
+</div>
+<div class="footer">
+    © 2017 拴蛋头条 中国互联网举报中心京ICP证1401号京ICP备125439号-3京公网安备
+</div>
+
+
+<script>
+    //var APP_PATH = "http://localhost:10623";
+    var APP_PATH = "";
+    /*用户登录事件*/
+    $("#id-login").click(function () {
+        var username = $("#id-username").val();
+        var password = $("#id-password").val();
+        var data = $("#id-login-form").serialize();
+        //alert(data + '..');
+
+        /*$.ajax({
+            url : "http://localhost:10623/user/getList",
+            type : 'GET',
+            success : function (result) {
+                alert(result)
+            }
+        });*/
+
+        $.ajax({
+            url: APP_PATH + '/user/login',
+            type: 'POST',
+            data: data,
+            async : false,
+            success: function (result) {
+
+                alert(result.msg)
+
+                //alert(result)
+                //alert("ok")
+                /*if (result.codeNum == 100) {
+                    $('#myModal').modal('hide');
+                    getPage(totalCount);
+                }
+                else {
+                    //显示失败信息
+                    //有哪个字段的错误信息就显示哪个字段的；
+                    if(undefined != result.map.empName){
+                        //显示邮箱错误信息
+                        show_validate_msg("#empName_form_input", "error", result.map.empName);
+                    }
+                    if(undefined != result.map.email){
+                        //显示员工名字的错误信息
+                        show_validate_msg("#email_form_input", "error", result.map.email);
+                    }
+                    alert("保存失败!");
+                }*/
+            }
+        });
+    });
+</script>
+</body>
+</html>

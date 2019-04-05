@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.kongk.wenda.common.ResponseCode;
 import top.kongk.wenda.common.ServerResponse;
+import top.kongk.wenda.dao.LoginTicketDao;
+import top.kongk.wenda.model.HostHolder;
 import top.kongk.wenda.model.User;
 import top.kongk.wenda.service.UserService;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -26,6 +29,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private HostHolder hostHolder;
+    @Autowired
+    private LoginTicketDao loginTicketDao;
 
     @PostMapping("/login")
     public ServerResponse login(@RequestParam("name") String name,
@@ -57,7 +64,7 @@ public class UserController {
         return serverResponse;
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register")
     public ServerResponse register(@RequestBody User user, HttpServletResponse response) {
 
         ServerResponse serverResponse;
@@ -84,5 +91,10 @@ public class UserController {
     @GetMapping("/getList")
     public List<User> getList() {
         return userService.getUserList();
+    }
+
+    @GetMapping("/getCurrentUser")
+    public User getCurrentUser() {
+        return hostHolder.getCurrentUser();
     }
 }

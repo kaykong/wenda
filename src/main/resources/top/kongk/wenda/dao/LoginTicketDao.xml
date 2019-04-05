@@ -7,12 +7,12 @@
         insert into login_ticket
         (user_id, ticket, expired, status)
         values
-        (#{user_id}, #{ticket}, #{expired}, #{status})
+        (#{userId}, #{ticket}, #{expired}, #{status})
     </insert>
 
     <select id="getUsableUserByTicket" resultType="top.kongk.wenda.model.User">
       select u.id, u.name, u.password, u.salt, u.gender, u.email, u.role
       from user u, login_ticket lt
-      where u.id = lt.user_id and lt.ticket = #{ticket} and lt.status = 0 and lt.expired &lt; now()
+      where u.id = lt.user_id and lt.ticket = #{ticket} and lt.status = 0 and lt.expired &gt; now()
     </select>
 </mapper>
