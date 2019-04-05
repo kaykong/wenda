@@ -20,4 +20,12 @@ public interface QuestionDao {
      * @return void
      */
     void addQuestion(Question question);
+
+    /**
+     * 根据id获取问题
+     *
+     * @param id
+     * @return top.kongk.wenda.model.Question
+     */
+    Question getQuestionById(int id);
 }

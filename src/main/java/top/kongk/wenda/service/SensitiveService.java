@@ -25,6 +25,10 @@ public class SensitiveService implements InitializingBean {
     private TrieNode rootNode = new TrieNode();
 
 
+    /**
+     * 初始化敏感词--字典树
+     * afterPropertiesSet方法将在所有的属性被初始化后调用
+     */
     @Override
     public void afterPropertiesSet() {
         try {

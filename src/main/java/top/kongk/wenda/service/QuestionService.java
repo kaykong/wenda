@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 import top.kongk.wenda.common.QuestionCode;
 import top.kongk.wenda.common.ServerResponse;
-import top.kongk.wenda.common.UserValidatorUtil;
-import top.kongk.wenda.dao.LoginTicketDao;
 import top.kongk.wenda.dao.QuestionDao;
 import top.kongk.wenda.model.Question;
 import top.kongk.wenda.model.User;
@@ -22,10 +20,12 @@ import java.time.LocalDateTime;
 @Service
 public class QuestionService {
 
-    private static final Logger log = LoggerFactory.getLogger(QuestionService.class);
+    private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
 
     @Autowired
     private QuestionDao questionDao;
+    @Autowired
+    private SensitiveService sensitiveService;
 
 
     /**
@@ -44,6 +44,9 @@ public class QuestionService {
         question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
         question.setContent(HtmlUtils.htmlEscape(question.getContent()));
 
+        //过滤敏感词
+        question.setTitle(sensitiveService.filter(question.getTitle()));
+        question.setContent(sensitiveService.filter(question.getContent()));
 
         question.setUserId(user.getId());
         question.setStatus(QuestionCode.TO_BE_AUDITED.getCode());
@@ -53,5 +56,25 @@ public class QuestionService {
          * 问题的分类, 需要问题id, 还有一张表
          */
         return ServerResponse.createSuccessWithMsg("问题提交成功, 等待审核");
+    }
+
+    /**
+     * 根据 id 获取问题
+     *
+     * @param id
+     * @return top.kongk.wenda.common.ServerResponse
+     */
+    public ServerResponse getQuestionById(int id) {
+
+        ServerResponse serverResponse;
+        try {
+            Question question = questionDao.getQuestionById(id);
+            serverResponse = ServerResponse.createSuccess(question);
+        } catch (Exception e) {
+            logger.error("QuestionService.getQuestionById Exception", e);
+            serverResponse = ServerResponse.createServerErrorWithMessage("数据库获取question失败");
+        }
+
+        return serverResponse;
     }
 }

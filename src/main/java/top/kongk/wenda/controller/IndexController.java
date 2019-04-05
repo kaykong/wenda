@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.kongk.wenda.common.ServerResponse;
 import top.kongk.wenda.model.User;
 import top.kongk.wenda.service.UserService;
 
@@ -25,6 +26,11 @@ public class IndexController {
     @GetMapping("/getList")
     public List<User> getList() {
         return userService.getUserList();
+    }
+
+    @GetMapping("/getList2")
+    public ServerResponse getList2() {
+        return ServerResponse.createSuccess(userService.getUserList());
     }
 
     @GetMapping("/response")

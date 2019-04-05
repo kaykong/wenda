@@ -49,4 +49,11 @@
       from user
       where email = #{email}
     </select>
+
+    <select id="getQuestionById" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question
+        where id = #{id}
+    </select>
 </mapper>

@@ -58,4 +58,23 @@ public class QuestionController {
         return serverResponse;
     }
 
+    @PostMapping("{id}")
+    public ServerResponse getQuestion(@PathVariable("id") int id) {
+
+        /*User user = hostHolder.getCurrentUser();
+        if (user == null) {
+            return ServerResponse.createNeedloginError("请先登录");
+        }*/
+        ServerResponse serverResponse;
+        try {
+            serverResponse = questionService.getQuestionById(id);
+        } catch (Exception e) {
+            log.error("获取问题异常 {}", e.getMessage());
+            return ServerResponse.createErrorWithMsg("获取问题失败");
+        }
+
+        return serverResponse;
+    }
+
+
 }
