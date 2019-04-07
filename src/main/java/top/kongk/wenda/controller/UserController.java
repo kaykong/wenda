@@ -3,6 +3,7 @@ package top.kongk.wenda.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import top.kongk.wenda.common.ResponseCode;
 import top.kongk.wenda.common.ServerResponse;
@@ -21,7 +22,7 @@ import java.util.List;
  *
  * @author kongkk
  */
-@RestController
+@Controller
 @RequestMapping("/user")
 public class UserController {
 
@@ -34,7 +35,8 @@ public class UserController {
     @Autowired
     private LoginTicketDao loginTicketDao;
 
-    @PostMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
     public ServerResponse login(@RequestParam("name") String name,
                          @RequestParam("password") String password,
                          @RequestParam(value = "rememberMe", defaultValue = "false") Boolean rememberMe,
@@ -64,7 +66,8 @@ public class UserController {
         return serverResponse;
     }
 
-    @PostMapping(value = "/register")
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseBody
     public ServerResponse register(@RequestBody User user, HttpServletResponse response) {
 
         ServerResponse serverResponse;
@@ -87,13 +90,8 @@ public class UserController {
         return serverResponse;
     }
 
-
-    @GetMapping("/getList")
-    public List<User> getList() {
-        return userService.getUserList();
-    }
-
-    @GetMapping("/getCurrentUser")
+    @RequestMapping("/getCurrentUser")
+    @ResponseBody
     public User getCurrentUser() {
         return hostHolder.getCurrentUser();
     }

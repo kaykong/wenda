@@ -1,6 +1,6 @@
 package top.kongk.wenda.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author kkk
@@ -20,7 +20,7 @@ public class Question extends BaseIdEntity {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
 
     /**
      * 提问者id (不能为null)
@@ -42,6 +42,32 @@ public class Question extends BaseIdEntity {
      */
     private Integer status;
 
+    /**
+     * 问题分类id
+     */
+    private Integer categoryId;
+
+    /**
+     * 问题分类名称
+     */
+    private String categoryName;
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -58,11 +84,11 @@ public class Question extends BaseIdEntity {
         this.content = content;
     }
 
-    public LocalDateTime getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 

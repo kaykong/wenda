@@ -41,4 +41,12 @@ public interface UserDao {
      * @return int
      */
     int addUser(User user);
+
+    /**
+     * 根据id获取用户
+     *
+     * @param id
+     * @return top.kongk.wenda.model.User
+     */
+    User selectById(Integer id);
 }

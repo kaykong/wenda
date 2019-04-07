@@ -1,6 +1,7 @@
 package top.kongk.wenda.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import top.kongk.wenda.model.LoginTicket;
 import top.kongk.wenda.model.User;
 
@@ -29,4 +30,13 @@ public interface LoginTicketDao {
      * @return top.kongk.wenda.model.User
      */
     User getUsableUserByTicket(String ticket);
+
+    /**
+     * 更新 ticket 状态
+     *
+     * @param ticket
+     * @param status
+     * @return void
+     */
+    void updateStatus(@Param("ticket") String ticket, @Param("status") Integer status);
 }

@@ -3,22 +3,15 @@
 <mapper namespace="top.kongk.wenda.dao.QuestionDao">
 
     <sql id="common-column">
-        id, title, content, user_id, anonymous, status, comment_count, create_date
+        q.id, q.title, q.content, q.user_id, q.category_id, c.name as categoryName,
+        q.anonymous, q.status, q.comment_count, q.create_date
     </sql>
     <sql id="insert-column">
-        (title, content, user_id, anonymous, status, create_date)
+        (title, content, user_id, category_id, anonymous, status, create_date)
     </sql>
     <sql id="insert-values-column">
-        (#{title}, #{content}, #{userId}, #{anonymous}, #{status}, #{createDate})
+        (#{title}, #{content}, #{userId}, #{categoryId}, #{anonymous}, #{status}, #{createDate})
     </sql>
-
-
-    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-      insert into user
-      <include refid="insert-column"/>
-      values
-      <include refid="insert-values-column"/>
-    </insert>
 
     <insert id="addQuestion" keyProperty="id" useGeneratedKeys="true">
         insert into question
@@ -27,33 +20,22 @@
         <include refid="insert-values-column"/>
     </insert>
 
-    <select id="getUserList" resultType="top.kongk.wenda.model.User">
-      select * from user;
-    </select>
-    <select id="getUserList2" resultType="top.kongk.wenda.model.User">
-
-    </select>
-
-
-
-    <select id="getUserByName" resultType="top.kongk.wenda.model.User">
-      select
-      <include refid="common-column"/>
-      from user
-      where name = #{name}
-    </select>
-
-    <select id="getUserByEmail" resultType="top.kongk.wenda.model.User">
-      select
-      <include refid="common-column"/>
-      from user
-      where email = #{email}
-    </select>
 
     <select id="getQuestionById" resultType="top.kongk.wenda.model.Question">
         SELECT
         <include refid="common-column"/>
-        from question
-        where id = #{id}
+        from question q, category c
+        where q.id = #{id} and q.category_id = c.id
+    </select>
+
+    <select id="selectLatestQuestions" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q, category c
+        <if test="userId != null and userId != 0">
+            WHERE q.user_id = #{userId}
+        </if>
+        ORDER BY q.id DESC
+        LIMIT #{offset},#{limit}
     </select>
 </mapper>

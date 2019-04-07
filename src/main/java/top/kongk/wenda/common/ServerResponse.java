@@ -1,6 +1,6 @@
 package top.kongk.wenda.common;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import java.io.Serializable;
 
@@ -84,7 +84,6 @@ public class ServerResponse<T> implements Serializable {
      *
      * @return boolean
      */
-    @JsonIgnore
     public boolean isSuccess() {
         return this.status == ResponseCode.SUCCESS.getCode();
     }
@@ -94,7 +93,6 @@ public class ServerResponse<T> implements Serializable {
      * 添加了JsonIgnore注解，在序列化的时候会被忽略掉
      * @return boolean
      */
-    @JsonIgnore
     public boolean isError() {
         return this.status == ResponseCode.ERROR.getCode();
     }

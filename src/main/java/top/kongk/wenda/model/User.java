@@ -27,15 +27,31 @@ public class User extends BaseIdEntity {
      */
     private String salt;
 
+
+
     /**
      * 邮箱
      */
+
     private String email;
 
     /**
      * 用户角色，0-管理员,1-普通用户
      */
     private Integer role;
+
+    /**
+     * 头像
+     */
+    private String headUrl;
+
+    public String getHeadUrl() {
+        return headUrl;
+    }
+
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
+    }
 
     public Integer getGender() {
         return gender;

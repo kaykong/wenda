@@ -3,6 +3,7 @@ package top.kongk.wenda.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import top.kongk.wenda.common.QuestionCode;
 import top.kongk.wenda.common.ResponseCode;
@@ -22,7 +23,7 @@ import java.util.List;
  *
  * @author kongkk
  */
-@RestController
+@Controller
 @RequestMapping("/question")
 public class QuestionController {
 
@@ -40,7 +41,8 @@ public class QuestionController {
      * @param question
      * @return top.kongk.wenda.common.ServerResponse
      */
-    @PostMapping("/addQuestion")
+    @RequestMapping(value = "/addQuestion", method = RequestMethod.POST)
+    @ResponseBody
     public ServerResponse addQuestion(@RequestBody Question question) {
 
         User user = hostHolder.getCurrentUser();
@@ -58,7 +60,8 @@ public class QuestionController {
         return serverResponse;
     }
 
-    @PostMapping("{id}")
+    @RequestMapping("{id}")
+    @ResponseBody
     public ServerResponse getQuestion(@PathVariable("id") int id) {
 
         /*User user = hostHolder.getCurrentUser();

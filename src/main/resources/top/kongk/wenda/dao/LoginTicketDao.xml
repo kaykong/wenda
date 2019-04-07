@@ -9,9 +9,12 @@
         values
         (#{userId}, #{ticket}, #{expired}, #{status})
     </insert>
+    <update id="updateStatus">
+        update login_ticket set status = #{status} where ticket = #{ticket}
+    </update>
 
     <select id="getUsableUserByTicket" resultType="top.kongk.wenda.model.User">
-      select u.id, u.name, u.password, u.salt, u.gender, u.email, u.role
+      select u.id, u.name, u.password, u.salt, u.gender, u.email, u.role, u.head_url
       from user u, login_ticket lt
       where u.id = lt.user_id and lt.ticket = #{ticket} and lt.status = 0 and lt.expired &gt; now()
     </select>

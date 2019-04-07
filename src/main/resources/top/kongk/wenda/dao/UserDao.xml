@@ -3,10 +3,10 @@
 <mapper namespace="top.kongk.wenda.dao.UserDao">
 
     <insert id="addUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-      insert into user
-      <include refid="insert-column"/>
-      values
-      <include refid="insert-values-column"/>
+        insert into user
+        <include refid="insert-column"/>
+        values
+        <include refid="insert-values-column"/>
     </insert>
 
     <select id="getUserList" resultType="top.kongk.wenda.model.User">
@@ -17,26 +17,33 @@
     </select>
 
     <sql id="common-column">
-        id, name, password, salt, gender, email, role
+        id, name, password, salt, gender, email, role, head_url
     </sql>
     <sql id="insert-column">
-        (name, password, salt, gender, email, role)
+        (name, password, salt, gender, email, role, head_url)
     </sql>
     <sql id="insert-values-column">
-        (#{name}, #{password}, #{salt}, #{gender}, #{email}, #{role})
+        (#{name}, #{password}, #{salt}, #{gender}, #{email}, #{role}, #{headUrl})
     </sql>
 
     <select id="getUserByName" resultType="top.kongk.wenda.model.User">
-      select
-      <include refid="common-column"/>
-      from user
-      where name = #{name}
+        select
+        <include refid="common-column"/>
+        from user
+        where name = #{name}
     </select>
 
     <select id="getUserByEmail" resultType="top.kongk.wenda.model.User">
-      select
-      <include refid="common-column"/>
-      from user
-      where email = #{email}
+        select
+        <include refid="common-column"/>
+        from user
+        where email = #{email}
+    </select>
+
+    <select id="selectById" resultType="top.kongk.wenda.model.User">
+        select
+        <include refid="common-column"/>
+        from user
+        where id = #{id}
     </select>
 </mapper>

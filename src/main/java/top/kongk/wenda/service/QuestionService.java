@@ -13,6 +13,8 @@ import top.kongk.wenda.model.Question;
 import top.kongk.wenda.model.User;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author kkk
@@ -50,7 +52,8 @@ public class QuestionService {
 
         question.setUserId(user.getId());
         question.setStatus(QuestionCode.TO_BE_AUDITED.getCode());
-        question.setCreateDate(LocalDateTime.now());
+        //question.setCreateDate(LocalDateTime.now());
+        question.setCreateDate(new Date());
         questionDao.addQuestion(question);
         /*
          * 问题的分类, 需要问题id, 还有一张表
@@ -76,5 +79,18 @@ public class QuestionService {
         }
 
         return serverResponse;
+    }
+
+
+    /**
+     * 分页获取数据
+     *
+     * @param userId 用户id
+     * @param offset
+     * @param limit
+     * @return java.util.List<top.kongk.wenda.model.Question>
+     */
+    public List<Question> getLatestQuestions(Integer userId, Integer offset, Integer limit) {
+        return questionDao.selectLatestQuestions(userId, offset, limit);
     }
 }

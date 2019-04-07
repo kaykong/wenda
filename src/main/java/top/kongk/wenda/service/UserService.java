@@ -15,8 +15,7 @@ import top.kongk.wenda.util.MD5Util;
 import top.kongk.wenda.util.WendaUtil;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author kkk
@@ -32,6 +31,92 @@ public class UserService {
     @Autowired
     private LoginTicketDao loginTicketDao;
 
+    public Map<String, Object> register(String username, String password) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (StringUtils.isBlank(username)) {
+            map.put("msg", "用户名不能为空");
+            return map;
+        }
+
+        if (StringUtils.isBlank(password)) {
+            map.put("msg", "密码不能为空");
+            return map;
+        }
+
+        User user = userDao.getUserByName(username);
+
+        if (user != null) {
+            map.put("msg", "用户名已经被注册");
+            return map;
+        }
+
+        // 密码强度
+        user = new User();
+        user.setName(username);
+        user.setSalt(UUID.randomUUID().toString().substring(0, 5));
+        if (StringUtils.isBlank(user.getHeadUrl())) {
+            String headUrl = "http://kongk.top/q/img/" + new Random().nextInt(40) + ".jpg";
+            user.setHeadUrl(headUrl);
+        }
+        user.setPassword(WendaUtil.MD5(password + user.getSalt()));
+        userDao.addUser(user);
+
+        // 登陆
+        String ticket = addLoginTicket(user.getId());
+        map.put("ticket", ticket);
+        return map;
+    }
+
+
+    public Map<String, Object> login(String username, String password) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (StringUtils.isBlank(username)) {
+            map.put("msg", "用户名不能为空");
+            return map;
+        }
+
+        if (StringUtils.isBlank(password)) {
+            map.put("msg", "密码不能为空");
+            return map;
+        }
+
+        User user = userDao.getUserByName(username);
+
+        if (user == null) {
+            map.put("msg", "用户名不存在");
+            return map;
+        }
+
+        if (!WendaUtil.MD5(password + user.getSalt()).equals(user.getPassword())) {
+            map.put("msg", "密码不正确");
+            return map;
+        }
+
+        String ticket = addLoginTicket(user.getId());
+        map.put("ticket", ticket);
+        return map;
+    }
+
+    private String addLoginTicket(Integer id) {
+        /*
+         * 设置ticket
+         */
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setStatus(0);
+        loginTicket.setTicket(WendaUtil.get32UUID());
+        loginTicket.setUserId(id);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        loginTicket.setExpired(localDateTime.plusDays(7));
+
+        try {
+            loginTicketDao.addLoginTicket(loginTicket);
+            return loginTicket.getTicket();
+        } catch (Exception e) {
+            log.error("新增ticket {}", e.getMessage());
+        }
+        return "error";
+    }
+
     public List<User> getUserList() {
         return userDao.getUserList();
     }
@@ -39,6 +124,10 @@ public class UserService {
 
     public List<User> getUserList2() {
         return userDao.getUserList2();
+    }
+
+    public User getUser(int id) {
+        return userDao.selectById(id);
     }
 
     public User getUserByName(String name) {
@@ -75,7 +164,7 @@ public class UserService {
                 return ServerResponse.createErrorWithMsg("邮箱格式错误");
             }
             if (getUserByEmail(user.getEmail()) != null) {
-                return ServerResponse.createErrorWithMsg("邮箱[" + user.getEmail() +"]已经被占用");
+                return ServerResponse.createErrorWithMsg("邮箱[" + user.getEmail() + "]已经被占用");
             }
         }
 
@@ -93,6 +182,10 @@ public class UserService {
         user.setSalt(UUID.randomUUID().toString().substring(0, 6));
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword() + user.getSalt()));
 
+        if (StringUtils.isBlank(user.getHeadUrl())) {
+            String headUrl = "http://kongk.top/q/img/" + new Random().nextInt(40) + ".jpg";
+            user.setHeadUrl(headUrl);
+        }
 
 
         /*
@@ -167,5 +260,9 @@ public class UserService {
         }
 
         return ServerResponse.createSuccess(loginTicket.getTicket());
+    }
+
+    public void logout(String ticket) {
+        loginTicketDao.updateStatus(ticket, 1);
     }
 }
