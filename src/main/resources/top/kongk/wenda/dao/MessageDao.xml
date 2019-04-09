@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kongk.wenda.dao.MessageDao">
+
+    <sql id="common-column">
+        id, from_id, to_id, content, has_read, conversation_id, created_date
+    </sql>
+
+    <sql id="conversationList-column">
+        from_id, to_id, content, has_read, conversation_id, created_date, count(id) as id
+    </sql>
+
+    <sql id="insert-column">
+        (from_id, to_id, content, has_read, conversation_id, created_date)
+    </sql>
+    <sql id="insert-values-column">
+        (#{fromId},#{toId},#{content},#{hasRead},#{conversationId},#{createdDate})
+    </sql>
+
+    <insert id="addQuestion" keyProperty="id" useGeneratedKeys="true">
+        insert into question
+        <include refid="insert-column"/>
+        values
+        <include refid="insert-values-column"/>
+    </insert>
+
+
+    <update id="updateCommentCount">
+        update question set comment_count = #{commentCount}
+        where id = #{id}
+    </update>
+
+    <update id="updateMessageStatusByConversationId">
+        update message set has_read = 1 where conversation_id = #{conversationId} and to_id = #{userId}
+    </update>
+
+
+    <select id="getQuestionById" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q left join category c
+        on q.category_id = c.id
+        where q.id = #{id}
+    </select>
+
+    <!--*******************-->
+
+    <insert id="addMessage">
+        insert into message
+        <include refid="insert-column"/>
+        values
+        <include refid="insert-values-column"/>
+    </insert>
+
+    <select id="getConversationDetail" resultType="top.kongk.wenda.model.Message">
+        SELECT
+        <include refid="common-column"/>
+        from message
+        where conversation_id = #{conversationId}
+        order by id desc
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="getConvesationUnreadCount" resultType="java.lang.Integer">
+        select count(id)
+        from message
+        where has_read = 0
+        and to_id = #{userId} and conversation_id = #{conversationId}
+    </select>
+
+    <select id="getConversationList" resultType="top.kongk.wenda.model.Message">
+        select
+        <include refid="conversationList-column"/>
+        from ( select * from message where from_id = #{userId} or to_id = #{userId} order by id desc) tt
+        group by conversation_id
+        order by created_date desc
+        limit #{offset}, #{limit}
+    </select>
+</mapper>

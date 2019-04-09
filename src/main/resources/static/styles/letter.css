@@ -6682,11 +6682,11 @@ header.navbar .navbar-toggle .icon-bar {
 .letter-brief {
     position: absolute;
     left: 80px;
-    top: 50px;
+    top: 53px;
     z-index: 2;
     color: #666;
     float: left;
-    font-size: 14px;
+    font-size: 13px;
     width: 300px;
     overflow: hidden;
     white-space: nowrap;
@@ -6793,7 +6793,7 @@ header.navbar .navbar-toggle .icon-bar {
 }
 
 .letter-chat .chat-content {
-    width: 300px;
+    /*width: 300px;*/
     line-height: 1.6;
     font-size: 14px;
 }
