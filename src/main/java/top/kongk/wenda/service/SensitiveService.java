@@ -132,10 +132,21 @@ public class SensitiveService implements InitializingBean {
             char c = text.charAt(position);
 
             if (isContinueChar(c)) {
+                if (trieNode == rootNode) {
+                    sb.append(c);
+                    ++begin;
+                }
+                ++position;
+                continue;
+            }
+
+            /*
+            //过滤<script>alert("I am an alert box!!")</script>时错误
+            if (isContinueChar(c)) {
                 sb.append(c);
                 position++;
                 continue;
-            }
+            }*/
 
             trieNode = trieNode.getSubNode(c);
 

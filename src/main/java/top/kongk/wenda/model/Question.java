@@ -20,7 +20,7 @@ public class Question extends BaseIdEntity {
     /**
      * 创建时间
      */
-    private Date createDate;
+    private Date createdDate;
 
     /**
      * 提问者id (不能为null)
@@ -84,12 +84,12 @@ public class Question extends BaseIdEntity {
         this.content = content;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Integer getUserId() {

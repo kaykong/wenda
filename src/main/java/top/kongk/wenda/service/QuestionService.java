@@ -52,9 +52,14 @@ public class QuestionService {
 
         question.setUserId(user.getId());
         question.setStatus(QuestionCode.TO_BE_AUDITED.getCode());
-        //question.setCreateDate(LocalDateTime.now());
-        question.setCreateDate(new Date());
-        questionDao.addQuestion(question);
+        question.setCreatedDate(new Date());
+        try {
+            questionDao.addQuestion(question);
+        } catch (Exception e) {
+            logger.error("QuestionService.addQuestion Exception", e);
+            return ServerResponse.createServerErrorWithMessage("问题提交失败");
+        }
+
         /*
          * 问题的分类, 需要问题id, 还有一张表
          */
@@ -81,9 +86,27 @@ public class QuestionService {
         return serverResponse;
     }
 
+    /**
+     * 根据 id 获取问题
+     *
+     * @param id
+     * @return top.kongk.wenda.model.Question
+     */
+    public Question getById(int id) {
+
+        Question question = new Question();
+        try {
+            question = questionDao.getQuestionById(id);
+        } catch (Exception e) {
+            logger.error("QuestionService.getQuestionById Exception", e);
+        }
+
+        return question;
+    }
+
 
     /**
-     * 分页获取数据
+     * 分页获取问题数据-->展示在首页
      *
      * @param userId 用户id
      * @param offset
@@ -92,5 +115,17 @@ public class QuestionService {
      */
     public List<Question> getLatestQuestions(Integer userId, Integer offset, Integer limit) {
         return questionDao.selectLatestQuestions(userId, offset, limit);
+    }
+
+
+    /**
+     * 根据问题id更新问题的评论数
+     *
+     * @param id
+     * @param count
+     * @return int
+     */
+    public int updateCommentCount(int id, int count) {
+        return questionDao.updateCommentCount(id, count);
     }
 }

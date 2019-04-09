@@ -40,4 +40,13 @@ public interface QuestionDao {
      */
     List<Question> selectLatestQuestions(@Param("userId") Integer userId, @Param("offset") Integer offset,
                                          @Param("limit") Integer limit);
+
+    /**
+     * 根据问题id更新问题的评论数
+     *
+     * @param id
+     * @param commentCount
+     * @return int
+     */
+    int updateCommentCount(@Param("id") int id, @Param("commentCount") int commentCount);
 }

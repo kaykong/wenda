@@ -4,13 +4,13 @@
 
     <sql id="common-column">
         q.id, q.title, q.content, q.user_id, q.category_id, c.name as categoryName,
-        q.anonymous, q.status, q.comment_count, q.create_date
+        q.anonymous, q.status, q.comment_count, q.created_date
     </sql>
     <sql id="insert-column">
-        (title, content, user_id, category_id, anonymous, status, create_date)
+        (title, content, user_id, category_id, anonymous, status, created_date)
     </sql>
     <sql id="insert-values-column">
-        (#{title}, #{content}, #{userId}, #{categoryId}, #{anonymous}, #{status}, #{createDate})
+        (#{title}, #{content}, #{userId}, #{categoryId}, #{anonymous}, #{status}, #{createdDate})
     </sql>
 
     <insert id="addQuestion" keyProperty="id" useGeneratedKeys="true">
@@ -20,20 +20,27 @@
         <include refid="insert-values-column"/>
     </insert>
 
+    <update id="updateCommentCount">
+        update question set comment_count = #{commentCount}
+        where id = #{id}
+    </update>
+
 
     <select id="getQuestionById" resultType="top.kongk.wenda.model.Question">
         SELECT
         <include refid="common-column"/>
-        from question q, category c
-        where q.id = #{id} and q.category_id = c.id
+        from question q left join category c
+        on q.category_id = c.id
+        where q.id = #{id}
     </select>
 
     <select id="selectLatestQuestions" resultType="top.kongk.wenda.model.Question">
         SELECT
         <include refid="common-column"/>
-        from question q, category c
+        from question q LEFT JOIN category c
+        on q.category_id = c.id
         <if test="userId != null and userId != 0">
-            WHERE q.user_id = #{userId}
+            where q.user_id = #{userId}
         </if>
         ORDER BY q.id DESC
         LIMIT #{offset},#{limit}

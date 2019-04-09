@@ -1,6 +1,5 @@
 package top.kongk.wenda.interceptor;
 
-import org.apache.catalina.Host;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
