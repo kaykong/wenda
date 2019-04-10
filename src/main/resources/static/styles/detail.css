@@ -12767,6 +12767,8 @@ html.no-touchevents .zm-votebar .up:hover,html.no-touchevents .zm-votebar .down:
     color:#fff
 }
 .zm-item-vote-count {
+    position: absolute;
+    top: -25px;
     display:block;
     color:#25bb9b;
     height:24px;
