@@ -229,6 +229,13 @@ public class JedisAdapter implements InitializingBean {
         return 0;
     }
 
+    /**
+     * value 是否是 key 集合中的元素
+     *
+     * @param key
+     * @param value
+     * @return boolean
+     */
     public boolean sismember(String key, String value) {
         Jedis jedis = null;
         try {
@@ -244,6 +251,37 @@ public class JedisAdapter implements InitializingBean {
         return false;
     }
 
+    /**
+     * 将 value 添加进 key List中, 从左边添加
+     *
+     * @param key
+     * @param value
+     * @return long
+     */
+    public long lpush(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.lpush(key, value);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 在timeout秒后, 从 key List的右侧取出一个元素
+     *
+     * @param timeout
+     * @param key
+     * @return java.util.List<java.lang.String>
+     * 假如在指定时间内没有任何元素被弹出，则返回一个 nil 和等待时长。
+     * 反之，返回一个含有两个元素的列表，第一个元素是被弹出元素所属的 key ，第二个元素是被弹出元素的值。
+     */
     public List<String> brpop(int timeout, String key) {
         Jedis jedis = null;
         try {
@@ -259,18 +297,5 @@ public class JedisAdapter implements InitializingBean {
         return null;
     }
 
-    public long lpush(String key, String value) {
-        Jedis jedis = null;
-        try {
-            jedis = pool.getResource();
-            return jedis.lpush(key, value);
-        } catch (Exception e) {
-            logger.error("发生异常" + e.getMessage());
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
-        return 0;
-    }
+
 }

@@ -6679,20 +6679,21 @@ header.navbar .navbar-toggle .icon-bar {
     /*display: block;*/
 
 }
+
 .letter-brief {
-    position: absolute;
-    left: 80px;
-    top: 53px;
-    z-index: 2;
-    color: #666;
-    float: left;
-    font-size: 13px;
-    width: 300px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    /*for ie8不变省略号问题*/
-    word-wrap:normal;
+  position: absolute;
+  left: 80px;
+  top: 53px;
+  z-index: 2;
+  color: #666;
+  float: left;
+  font-size: 13px;
+  width: 300px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  /*for ie8不变省略号问题*/
+  word-wrap: normal;
 }
 .msg-num {
     position: absolute;
@@ -6808,7 +6809,8 @@ header.navbar .navbar-toggle .icon-bar {
 }
 
 .letter-chat .letter-info {
-    width: 120px;
+    /*width: 120px;*/
+    width: auto;
 }
 .tooltip {
     position: absolute;

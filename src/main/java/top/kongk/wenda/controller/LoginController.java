@@ -68,7 +68,7 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(path = {"/login/"}, method = {RequestMethod.POST})
+    @RequestMapping(path = {"/login"}, method = {RequestMethod.POST})
     public String login(Model model, @RequestParam("username") String username,
                         @RequestParam("password") String password,
                         @RequestParam(value = "next", required = false) String next,

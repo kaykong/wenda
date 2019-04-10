@@ -19,7 +19,7 @@ public class RedisKeyUtil {
      */
     private static String BIZ_DISLIKE = "DISLIKE";
     /**
-     *
+     * 事件
      */
     private static String BIZ_EVENTQUEUE = "EVENT_QUEUE";
 

@@ -15,7 +15,15 @@ public class WendaUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(WendaUtil.class);
 
+    /**
+     * 敏感词替换的字符串
+     */
     public static final String REPLACE_COMMENT = "***";
+
+    /**
+     * 管理员id
+     */
+    public static int SYSTEM_USERID = 1;
 
     public static String getJSONString(int code) {
         JSONObject json = new JSONObject();
