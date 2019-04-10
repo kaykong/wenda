@@ -55,4 +55,11 @@
       where entity_id = #{entityId} and entity_type = #{entityType} and status = 0
     </select>
 
+    <select id="getCommentById" resultType="top.kongk.wenda.model.Comment">
+        select
+        <include refid="common-column"/>
+        from comment
+        where id = #{id}
+    </select>
+
 </mapper>

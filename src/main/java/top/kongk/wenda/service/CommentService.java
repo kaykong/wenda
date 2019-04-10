@@ -33,4 +33,8 @@ public class CommentService {
     public void deleteComment(int entityId, int entityType) {
         commentDao.updateStatus(entityId, entityType, 1);
     }
+
+    public Comment getCommentById(int commentId) {
+        return commentDao.getCommentById(commentId);
+    }
 }

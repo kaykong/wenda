@@ -64,6 +64,7 @@ public class CommentController {
             }
             comment.setContent(content);
             comment.setEntityId(questionId);
+            //给问题做评论 --> 回答问题
             comment.setEntityType(EntityType.ENTITY_QUESTION);
             comment.setCreatedDate(new Date());
             comment.setStatus(0);

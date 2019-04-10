@@ -11,6 +11,7 @@ import top.kongk.wenda.common.ResponseCode;
 import top.kongk.wenda.common.ServerResponse;
 import top.kongk.wenda.model.*;
 import top.kongk.wenda.service.CommentService;
+import top.kongk.wenda.service.LikeService;
 import top.kongk.wenda.service.QuestionService;
 import top.kongk.wenda.service.UserService;
 import top.kongk.wenda.util.WendaUtil;
@@ -43,6 +44,9 @@ public class QuestionController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    LikeService likeService;
 
     /**
      * 用户提交问题, 把问题插入数据库, 设置状态为待审核
@@ -79,6 +83,18 @@ public class QuestionController {
         for (Comment comment : commentList) {
             ViewObject vo = new ViewObject();
             vo.set("comment", comment);
+
+            if (hostHolder.getCurrentUser() == null) {
+                vo.set("liked", 0);
+            } else {
+                //获取用户是否喜欢该回答
+                vo.set("liked",
+                        likeService.getLikeStatus(hostHolder.getCurrentUser().getId(),
+                                EntityType.ENTITY_ANSWER, comment.getId()));
+            }
+
+            //获取回答的喜欢人数
+            vo.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_ANSWER, comment.getId()));
             vo.set("user", userService.getUser(comment.getUserId()));
             vos.add(vo);
         }
@@ -86,25 +102,6 @@ public class QuestionController {
 
         return "detail";
     }
-
-    /*@RequestMapping("{id}")
-    @ResponseBody
-    public ServerResponse getQuestion(@PathVariable("id") int id) {
-
-        *//*User user = hostHolder.getCurrentUser();
-        if (user == null) {
-            return ServerResponse.createNeedloginError("请先登录");
-        }*//*
-        ServerResponse serverResponse;
-        try {
-            serverResponse = questionService.getQuestionById(id);
-        } catch (Exception e) {
-            log.error("获取问题异常 {}", e.getMessage());
-            return ServerResponse.createErrorWithMsg("获取问题失败");
-        }
-
-        return serverResponse;
-    }*/
 
     @RequestMapping(value = "/add", method = {RequestMethod.POST})
     @ResponseBody

@@ -2,18 +2,18 @@ package top.kongk.wenda.model;
 
 
 /**
- * 实体类-->数字
+ * 评论的实体类-->数字
  *
  * @author kk
  */
 public class EntityType {
     /**
-     * 问题实体类
+     * 给问题做评论
      */
     public static int ENTITY_QUESTION = 1;
 
     /**
-     * 评论实体类
+     * 给回答做评论
      */
-    public static int ENTITY_COMMENT = 2;
+    public static int ENTITY_ANSWER = 2;
 }

@@ -48,4 +48,13 @@ public interface CommentDao {
      * @return int
      */
     int getCommentCount(@Param("entityId") int entityId, @Param("entityType") int entityType);
+
+
+    /**
+     * 根据id 获取评论
+     *
+     * @param id
+     * @return top.kongk.wenda.model.Comment
+     */
+    Comment getCommentById(int id);
 }
