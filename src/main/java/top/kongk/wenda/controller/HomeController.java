@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import top.kongk.wenda.model.Question;
-import top.kongk.wenda.model.ViewObject;
+import top.kongk.wenda.model.*;
+import top.kongk.wenda.service.CommentService;
+import top.kongk.wenda.service.FollowService;
 import top.kongk.wenda.service.QuestionService;
 import top.kongk.wenda.service.UserService;
 
@@ -33,12 +34,21 @@ public class HomeController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    FollowService followService;
+
+    @Autowired
+    CommentService commentService;
+
+    @Autowired
+    HostHolder hostHolder;
+
     private List<ViewObject> getQuestions(Integer userId, Integer offset, Integer limit) {
         List<Question> questionList = questionService.getLatestQuestions(userId, offset, limit);
         List<ViewObject> vos = new ArrayList<>();
         for (Question question : questionList) {
-            //question.setCreateDate(LocalDateTime.now());
             ViewObject vo = new ViewObject();
+            vo.set("followCount", followService.getFollowerCount(EntityType.ENTITY_QUESTION, question.getId()));
             vo.set("question", question);
             vo.set("user", userService.getUser(question.getUserId()));
             vos.add(vo);
@@ -55,7 +65,25 @@ public class HomeController {
 
     @RequestMapping(path = {"/user/{userId}"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String userIndex(Model model, @PathVariable("userId") Integer userId) {
-        model.addAttribute("vos", getQuestions(userId, 0, 10));
-        return "index";
+
+        model.addAttribute("vos", getQuestions(userId, 0, 100));
+
+        //获取人物简介
+        User user = userService.getUser(userId);
+        ViewObject vo = new ViewObject();
+        vo.set("user", user);
+        vo.set("commentCount", commentService.getUserCommentCount(userId));
+        vo.set("followerCount", followService.getFollowerCount(EntityType.ENTITY_USER, userId));
+        vo.set("followeeCount", followService.getFolloweeCount(userId, EntityType.ENTITY_USER));
+        //获取当前用户是否是此用户的粉丝
+        if (hostHolder.getCurrentUser() != null) {
+            vo.set("followed", followService.isFollower(hostHolder.getCurrentUser().getId(), EntityType.ENTITY_USER, userId));
+        } else {
+            vo.set("followed", false);
+        }
+
+        model.addAttribute("profileUser", vo);
+
+        return "profile";
     }
 }

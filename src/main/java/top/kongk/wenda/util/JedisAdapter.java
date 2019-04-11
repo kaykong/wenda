@@ -6,13 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.BinaryClient;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.Tuple;
+import redis.clients.jedis.*;
 import top.kongk.wenda.model.User;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -297,5 +296,213 @@ public class JedisAdapter implements InitializingBean {
         return null;
     }
 
+
+    /**
+     * 获取 key List 中 [start, end]的元素
+     *
+     * @param key
+     * @param start
+     * @param end
+     * @return java.util.List<java.lang.String>
+     */
+    public List<String> lrange(String key, int start, int end) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.lrange(key, start, end);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取 key 优先队列中 元素value的权重
+     *
+     * @param key
+     * @param score
+     * @param value
+     * @return long
+     */
+    public long zadd(String key, double score, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.zadd(key, score, value);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 在key优先队列中移除 value 元素
+     *
+     * @param key
+     * @param value
+     * @return long
+     */
+    public long zrem(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.zrem(key, value);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return 0;
+    }
+
+    public Jedis getJedis() {
+        return pool.getResource();
+    }
+
+    /**
+     * 给当前jedis开启事务
+     *
+     * @param jedis
+     * @return redis.clients.jedis.Transaction
+     */
+    public Transaction multi(Jedis jedis) {
+        try {
+            return jedis.multi();
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+        }
+        return null;
+    }
+
+    /**
+     * 执行事务 当前jedis 的 tx
+     *
+     * @param tx
+     * @param jedis
+     * @return java.util.List<java.lang.Object>
+     * 返回事务中成功执行的命令, 例如成功执行了两个命令返回 [1,1]
+     */
+    public List<Object> exec(Transaction tx, Jedis jedis) {
+        try {
+            return tx.exec();
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+            tx.discard();
+        } finally {
+            if (tx != null) {
+                try {
+                    tx.close();
+                } catch (IOException ioe) {
+                    // ..
+                }
+            }
+
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 在key优先队列中取 [start, end]的元素
+     * 根据权重从小到大排
+     *
+     * @param key
+     * @param start
+     * @param end
+     * @return java.util.Set<java.lang.String>
+     */
+    public Set<String> zrange(String key, int start, int end) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.zrange(key, start, end);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 逆向取出元素
+     *
+     * @param key
+     * @param start
+     * @param end
+     * @return java.util.Set<java.lang.String>
+     */
+    public Set<String> zrevrange(String key, int start, int end) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.zrevrange(key, start, end);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 计算key优先队列的元素数量
+     *
+     * @param key
+     * @return long
+     */
+    public long zcard(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.zcard(key);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 获取key优先队列中 member 成员的权重
+     *
+     * @param key
+     * @param member
+     * @return java.lang.Double
+     */
+    public Double zscore(String key, String member) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.zscore(key, member);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
 
 }

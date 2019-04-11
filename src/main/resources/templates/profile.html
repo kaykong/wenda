@@ -26,17 +26,16 @@
                                     <img src="${profileUser.user.headUrl}" class="zm-item-img-avatar">
                                 </a>
                                 <div class="zm-list-content-medium">
-                                    <h2 class="zm-list-content-title"><a data-tip="p$t$buaabarty" href="/user/${profileUser.user.id}" class="zg-link">${profileUser.user.name}</a></h2>
+                                    <h2 class="zm-list-content-title"><a style="font-size: 20px" data-tip="p$t$buaabarty" href="/user/${profileUser.user.id}" class="zg-link">${profileUser.user.name}</a></h2>
 
-                                    <!-- <div class="zg-big-gray">计蒜客教研首席打杂</div> -->
-                                    <div class="details zg-gray">
-                                        <a target="_blank" href="/user/${profileUser.user.id}/followers" class="zg-link-gray-normal">${profileUser.followerCount}粉丝</a>
+                                    <div style="margin-top: 6px" class="details zg-gray">
+                                        <a style="font-size: 14px" target="_blank" href="/user/${profileUser.user.id}/followers" class="zg-link-gray-normal">${profileUser.followerCount} 粉丝 </a>
                                         /
-                                        <a target="_blank" href="/user/${profileUser.user.id}/followees" class="zg-link-gray-normal">${profileUser.followeeCount}关注</a>
+                                        <a style="font-size: 14px" target="_blank" href="/user/${profileUser.user.id}/followees" class="zg-link-gray-normal">${profileUser.followeeCount} 关注 </a>
                                         /
-                                        <a target="_blank" href="#" class="zg-link-gray-normal">${profileUser.commentCount} 回答</a>
+                                        <a style="font-size: 14px" target="_blank" href="#" class="zg-link-gray-normal">${profileUser.commentCount} 回答 </a>
                                         /
-                                        <a target="_blank" href="#" class="zg-link-gray-normal">548 赞同</a>
+                                        <a style="font-size: 14px" target="_blank" href="#" class="zg-link-gray-normal">548 赞同</a>
                                     </div>
                                 </div>
                             </div>
@@ -66,6 +65,12 @@
                                         <img src="$!{vo.user.headUrl}" class="zm-item-img-avatar"></a>
                                 </div>
                                 <div class="feed-main">
+                                    <div class="feed-source" data-za-module="FeedSource">来自
+                                        <a href="https://nowcoder.com/topic/19562033" data-tip="t$t$19562033"
+                                           data-token="19562033" data-topicid="3946" target="_blank">$!{vo.question.categoryName}</a>
+                                        <a data-follow="t:link" href="javascript:;"
+                                           class="zg-follow zu-autohide follow-topic zu-edit-button" data-id="3946">关注话题</a>
+                                    </div>
                                     <div class="feed-content" data-za-module="AnswerItem">
                                         <meta itemprop="answer-id" content="389034">
                                         <meta itemprop="answer-url-token" content="13174385">
@@ -79,7 +84,7 @@
                                                 <a class="zm-item-vote-count js-expand js-vote-count" href="javascript:;" data-bind-votecount="">${vo.followCount}</a></div>
                                             <div class="zm-item-answer-author-info">
                                                 <a class="author-link" data-tip="p$b$amuro1230" target="_blank" href="/user/$!{vo.user.id}">$!{vo.user.name}</a>
-                                                ，$data.format('yyyy-MM-dd HH:mm:ss', $!{vo.question.createdDate})</div>
+                                                , $date.format('yyyy-MM-dd HH:mm:ss', $!{vo.question.createdDate})</div>
                                             <div class="zm-item-vote-info" data-votecount="4168" data-za-module="VoteInfo">
                                                 <span class="voters text">
                                                     <a href="#" class="more text">

@@ -57,4 +57,12 @@ public interface CommentDao {
      * @return top.kongk.wenda.model.Comment
      */
     Comment getCommentById(int id);
+
+    /**
+     * 获取用户回答的数量
+     *
+     * @param id
+     * @return int
+     */
+    int getUserCommentCount(int id);
 }

@@ -22,7 +22,15 @@ public enum EventType {
     /**
      * 邮箱
      */
-    MAIL(3);
+    MAIL(3),
+    /**
+     * 关注
+     */
+    FOLLOW(4),
+    /**
+     * 取消关注
+     */
+    UNFOLLOW(5);
 
     private int value;
 

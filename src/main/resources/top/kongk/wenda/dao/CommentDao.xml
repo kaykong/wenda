@@ -62,4 +62,9 @@
         where id = #{id}
     </select>
 
+    <select id="getUserCommentCount" resultType="java.lang.Integer">
+        select count(id) from comment
+        where user_id = #{id} and entity_type = 1
+    </select>
+
 </mapper>

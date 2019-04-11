@@ -10,10 +10,7 @@ import top.kongk.wenda.common.QuestionCode;
 import top.kongk.wenda.common.ResponseCode;
 import top.kongk.wenda.common.ServerResponse;
 import top.kongk.wenda.model.*;
-import top.kongk.wenda.service.CommentService;
-import top.kongk.wenda.service.LikeService;
-import top.kongk.wenda.service.QuestionService;
-import top.kongk.wenda.service.UserService;
+import top.kongk.wenda.service.*;
 import top.kongk.wenda.util.WendaUtil;
 
 import javax.servlet.http.Cookie;
@@ -47,6 +44,9 @@ public class QuestionController {
 
     @Autowired
     LikeService likeService;
+
+    @Autowired
+    FollowService followService;
 
     /**
      * 用户提交问题, 把问题插入数据库, 设置状态为待审核
@@ -99,6 +99,27 @@ public class QuestionController {
             vos.add(vo);
         }
         model.addAttribute("comments", vos);
+
+        // 获取关注此问题的用户信息
+        List<ViewObject> followUsers = new ArrayList<>(20);
+        List<Integer> users = followService.getFollowers(EntityType.ENTITY_QUESTION, qid, 20);
+        for (Integer userId : users) {
+            ViewObject vo = new ViewObject();
+            User u = userService.getUser(userId);
+            if (u == null) {
+                continue;
+            }
+            vo.set("name", u.getName());
+            vo.set("headUrl", u.getHeadUrl());
+            vo.set("id", u.getId());
+            followUsers.add(vo);
+        }
+        model.addAttribute("followUsers", followUsers);
+        if (hostHolder.getCurrentUser() != null) {
+            model.addAttribute("followed", followService.isFollower(hostHolder.getCurrentUser().getId(), EntityType.ENTITY_QUESTION, qid));
+        } else {
+            model.addAttribute("followed", false);
+        }
 
         return "detail";
     }
