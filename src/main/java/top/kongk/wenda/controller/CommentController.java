@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.HtmlUtils;
+import top.kongk.wenda.async.EventModel;
+import top.kongk.wenda.async.EventProducer;
+import top.kongk.wenda.async.EventType;
 import top.kongk.wenda.model.Comment;
 import top.kongk.wenda.model.EntityType;
 import top.kongk.wenda.model.HostHolder;
+import top.kongk.wenda.model.Question;
 import top.kongk.wenda.service.CommentService;
 import top.kongk.wenda.service.QuestionService;
 import top.kongk.wenda.service.SensitiveService;
@@ -41,6 +45,9 @@ public class CommentController {
     @Autowired
     SensitiveService sensitiveService;
 
+    @Autowired
+    EventProducer eventProducer;
+
     /**
      * 给问题增加回答
      *
@@ -52,6 +59,12 @@ public class CommentController {
     public String addComment(@RequestParam("questionId") int questionId,
                              @RequestParam("content") String content) {
         try {
+
+            Question question = questionService.getById(questionId);
+
+            if (question == null) {
+                return "redirect:/question/" + String.valueOf(questionId);
+            }
             content = HtmlUtils.htmlEscape(content);
             content = sensitiveService.filter(content);
             // 过滤content
@@ -75,7 +88,15 @@ public class CommentController {
             // 更新题目里的评论数量
             int count = commentService.getCommentCount(comment.getEntityId(), comment.getEntityType());
             questionService.updateCommentCount(comment.getEntityId(), count);
-            // 怎么异步化
+
+            //回答问题事件
+            eventProducer.fireEvent(new EventModel(EventType.Answer)
+                    .setActorId(hostHolder.getCurrentUser().getId())
+                    .setEntityId(questionId)
+                    .setEntityType(EntityType.ENTITY_QUESTION)
+                    .setEntityOwnerId(question.getUserId()));
+
+
         } catch (Exception e) {
             logger.error("增加评论失败" + e.getMessage());
         }

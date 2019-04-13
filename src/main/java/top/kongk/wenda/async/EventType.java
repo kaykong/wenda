@@ -14,7 +14,7 @@ public enum EventType {
     /**
      * 回答了问题事件
      */
-    COMMENT(1),
+    Answer(1),
     /**
      * 登录事件
      */

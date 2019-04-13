@@ -96,7 +96,7 @@ public class RedisKeyUtil {
     }
 
     /**
-     * 获取用户的时间线
+     * 获取用户的时间线key
      *
      * @param userId
      * @return java.lang.String
