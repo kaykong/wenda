@@ -30,7 +30,11 @@ public enum EventType {
     /**
      * 取消关注
      */
-    UNFOLLOW(5);
+    UNFOLLOW(5),
+    /**
+     * 添加问题事件
+     */
+    ADD_QUESTION(6);
 
     private int value;
 

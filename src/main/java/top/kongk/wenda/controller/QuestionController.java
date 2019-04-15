@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import top.kongk.wenda.async.EventHandler;
+import top.kongk.wenda.async.EventModel;
+import top.kongk.wenda.async.EventProducer;
+import top.kongk.wenda.async.EventType;
 import top.kongk.wenda.common.QuestionCode;
 import top.kongk.wenda.common.ResponseCode;
 import top.kongk.wenda.common.ServerResponse;
@@ -47,6 +51,9 @@ public class QuestionController {
 
     @Autowired
     FollowService followService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     /**
      * 用户提交问题, 把问题插入数据库, 设置状态为待审核
@@ -141,7 +148,11 @@ public class QuestionController {
             } else {
                 question.setUserId(hostHolder.getCurrentUser().getId());
             }
+
             if (questionService.addQuestion(question, hostHolder.getCurrentUser()).isSuccess()) {
+                eventProducer.fireEvent(new EventModel(EventType.ADD_QUESTION)
+                        .setActorId(question.getUserId()).setEntityId(question.getId())
+                        .setExt("title", question.getTitle()).setExt("content", question.getContent()));
                 return WendaUtil.getJSONString(0);
             }
         } catch (Exception e) {

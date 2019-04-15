@@ -74,6 +74,13 @@
 			<version>2.8.0</version>
 		</dependency>
 
+		<!--solr-->
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-solrj</artifactId>
+			<version>6.2.0</version>
+		</dependency>
+
 		<!--邮箱发送-->
 		<!--<dependency>
 			<groupId>javax.mail</groupId>
