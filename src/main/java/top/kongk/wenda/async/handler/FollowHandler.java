@@ -40,6 +40,7 @@ public class FollowHandler implements EventHandler {
         message.setFromId(WendaUtil.SYSTEM_USERID);
         message.setToId(model.getEntityOwnerId());
         message.setCreatedDate(new Date());
+        message.setHasRead(0);
 
         User user = userService.getUser(model.getActorId());
 

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <!-- saved from url=(0029)#signin -->
-<html lang="zh-CN" dropeffect="none" class="js is-AppPromotionBarVisible cssanimations csstransforms csstransitions flexbox no-touchevents no-mobile" style="">
+<html lang="zh-CN" dropeffect="none"
+      class="js is-AppPromotionBarVisible cssanimations csstransforms csstransitions flexbox no-touchevents no-mobile"
+      style="">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -11,17 +13,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="mobile-agent" content="format=html5;url=https://nowcoder.com/">
     <meta id="znonce" name="znonce" content="d3edc464cf014708819feffde7ddd01e">
-    <link rel="search" type="application/opensearchdescription+xml" href="https://nowcoder.com/static/search.xml" title="牛客">
+    <link rel="search" type="application/opensearchdescription+xml" href="https://nowcoder.com/static/search.xml"
+          title="牛客">
     <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css">
+    <!--引入jQuery-->
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
     <style>
-    .zm-item-answer-author-info a.collapse {margin-top: 0}
+        .zm-item-answer-author-info a.collapse {
+            margin-top: 0
+        }
+
+        .class-similar-question {
+            margin-top: 4px;
+            margin-bottom: 3px;
+            margin-left: 6px;
+            height: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #F0F0F0;
+
+        }
+
+        .class-searchQuestionResult {
+            width: 450px;
+            height: 17px;
+            overflow: hidden;
+        }
+
+        .class-similar-question-answers {
+            float: right;
+            font-size: 13px;
+            margin-left: 3px;
+            color: #636363;
+        }
+
+        .class-select-option {
+            font-size: 14px;
+            margin-top: 4px;
+            margin-left: 4px;
+            margin-bottom: 4px;
+            color: #636363;
+        }
+
     </style>
 
 </head>
 <body class="zhi $!{bodyclass}">
 <div role="navigation" class="zu-top">
     <div class="zg-wrap modal-shifting clearfix" id="zh-top-inner">
-        <a href="/" class="zu-top-link-logo" id="zh-top-link-logo" data-za-c="view_home" data-za-a="visit_home" data-za-l="top_navigation_zhihu_logo">牛客</a>
+        <a href="/" class="zu-top-link-logo" id="zh-top-link-logo" data-za-c="view_home" data-za-a="visit_home"
+           data-za-l="top_navigation_zhihu_logo">牛客</a>
         <div class="top-nav-profile">
             #if(!$user)
             <ul class="topnav-noauth clearfix">
@@ -30,10 +71,12 @@
                 </li>
             </ul>
             #else
-            <a href="/user/$!{user.id}" class="zu-top-nav-userinfo " id=":0" role="button" aria-haspopup="true" aria-activedescendant="">
+            <a href="/user/$!{user.id}" class="zu-top-nav-userinfo " id=":0" role="button" aria-haspopup="true"
+               aria-activedescendant="">
                 <span class="name">$!{user.name}</span>
                 <img class="Avatar" src="$!{user.headUrl}" alt="$!{user.name}">
-                    <span id="zh-top-nav-new-pm" class="zg-noti-number zu-top-nav-pm-count" style="visibility:hidden" data-count="0">
+                <span id="zh-top-nav-new-pm" class="zg-noti-number zu-top-nav-pm-count" style="visibility:hidden"
+                      data-count="0">
                     </span>
             </a>
             <ul class="top-nav-dropdown" id="top-nav-profile-dropdown" aria-labelledby=":0">
@@ -45,7 +88,8 @@
                 <li>
                     <a href="/msg/list" tabindex="-1" id=":2">
                         <i class="zg-icon zg-icon-dd-pm"></i>私信
-                    <span id="zh-top-nav-pm-count" class="zu-top-nav-pm-count zg-noti-number" style="visibility:hidden" data-count="0">
+                        <span id="zh-top-nav-pm-count" class="zu-top-nav-pm-count zg-noti-number"
+                              style="visibility:hidden" data-count="0">
                     </span>
                     </a>
                 </li>
@@ -58,29 +102,39 @@
             #end
         </div>
         #if ($user)
-        <button class="zu-top-add-question" id="zu-top-add-question">提问</button>
+        <!-- <button class="zu-top-add-question" id="zu-top-add-question">提问</button>-->
+        <button class="zu-top-add-question" id="my-zu-top-add-question">提问</button>
         #end
         <div role="search" id="zh-top-search" class="zu-top-search">
             <form method="GET" action="/search" id="zh-top-search-form" class="zu-top-search-form">
-                <label for="q" class="hide-text">牛客搜索</label><input type="text" class="zu-top-search-input" id="q" name="q" autocomplete="off" value="$!{keyword}" placeholder="搜索你感兴趣的内容..." role="combobox" aria-autocomplete="list">
-                <button type="submit" class="zu-top-search-button"><span class="hide-text">搜索</span><span class="sprite-global-icon-magnifier-dark"></span></button>
+                <label for="q" class="hide-text">牛客搜索</label><input type="text" class="zu-top-search-input" id="q"
+                                                                    name="q" autocomplete="off" value="$!{keyword}"
+                                                                    placeholder="搜索你感兴趣的内容..." role="combobox"
+                                                                    aria-autocomplete="list">
+                <button type="submit" class="zu-top-search-button"><span class="hide-text">搜索</span><span
+                        class="sprite-global-icon-magnifier-dark"></span></button>
             </form>
         </div>
         <div id="zg-top-nav" class="zu-top-nav">
             <ul class="zu-top-nav-ul zg-clear">
                 <li class="zu-top-nav-li current" id="zh-top-nav-home">
-                    <a class="zu-top-nav-link" href="/" id="zh-top-link-home" data-za-c="view_home" data-za-a="visit_home" data-za-l="top_navigation_home">首页</a>
+                    <a class="zu-top-nav-link" href="/" id="zh-top-link-home" data-za-c="view_home"
+                       data-za-a="visit_home" data-za-l="top_navigation_home">首页</a>
                 </li>
                 <li class="zu-top-nav-li " id="zh-top-nav-explore">
                     <a class="zu-top-nav-link" href="/pullfeeds">发现</a>
                 </li>
                 #if ($user)
                 <li class="top-nav-noti zu-top-nav-li ">
-                    <a class="zu-top-nav-link" href="#" id="zh-top-nav-count-wrap" role="button"><span class="mobi-arrow"></span>消息<span id="zh-top-nav-count" class="zu-top-nav-count zg-noti-number" style="display: none;">0</span></a>
+                    <a class="zu-top-nav-link" href="#" id="zh-top-nav-count-wrap" role="button"><span
+                            class="mobi-arrow"></span>消息<span id="zh-top-nav-count"
+                                                              class="zu-top-nav-count zg-noti-number"
+                                                              style="display: none;">0</span></a>
                 </li>
                 #end
             </ul>
-            <div class="zu-top-nav-live zu-noti7-popup zg-r5px no-hovercard" id="zh-top-nav-live-new" role="popup" tabindex="0">
+            <div class="zu-top-nav-live zu-noti7-popup zg-r5px no-hovercard" id="zh-top-nav-live-new" role="popup"
+                 tabindex="0">
                 <div class="zu-top-nav-live-inner zg-r5px">
                     <div class="zu-top-live-icon">&nbsp;</div>
                     <div class="zu-home-noti-inner" id="zh-top-nav-live-new-inner">
@@ -99,43 +153,570 @@
                     <div class="zm-noti7-frame-border top"></div>
                     <div class="zm-noti7-frame">
                         <div class="zm-noti7-content message zh-scroller" style="position: relative; overflow: hidden;">
-                            <div class="zh-scroller-inner" style="height: 100%; width: 150%; overflow: auto;"><div class="zh-scroller-content" style="position: static; display: block; visibility: visible; overflow: hidden; width: 315px; min-height: 100%;">
-                                <div class="zm-noti7-content-inner">
-                                    <div class="zm-noti7-content-body">
-                                        <div class="zm-noti7-popup-loading">
-                                            <span class="noti-spinner-loading"></span>
+                            <div class="zh-scroller-inner" style="height: 100%; width: 150%; overflow: auto;">
+                                <div class="zh-scroller-content"
+                                     style="position: static; display: block; visibility: visible; overflow: hidden; width: 315px; min-height: 100%;">
+                                    <div class="zm-noti7-content-inner">
+                                        <div class="zm-noti7-content-body">
+                                            <div class="zm-noti7-popup-loading">
+                                                <span class="noti-spinner-loading"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div></div>
-                            <div class="zh-scroller-bar-container" style="position: absolute; right: 1px; top: 0px; height: 98px; width: 6px; border: 1px solid rgb(68, 68, 68); opacity: 0; cursor: default; border-radius: 2px; -webkit-user-select: none; background: rgb(102, 102, 102);"><div style="-webkit-user-select: none;"></div></div><div class="zh-scroller-bar" style="position: absolute; right: 2px; top: 2px; opacity: 0.5; width: 6px; border-radius: 3px; cursor: default; -webkit-user-select: none; display: none; background: rgb(0, 0, 0);"></div>
+                            </div>
+                            <div class="zh-scroller-bar-container"
+                                 style="position: absolute; right: 1px; top: 0px; height: 98px; width: 6px; border: 1px solid rgb(68, 68, 68); opacity: 0; cursor: default; border-radius: 2px; -webkit-user-select: none; background: rgb(102, 102, 102);">
+                                <div style="-webkit-user-select: none;"></div>
+                            </div>
+                            <div class="zh-scroller-bar"
+                                 style="position: absolute; right: 2px; top: 2px; opacity: 0.5; width: 6px; border-radius: 3px; cursor: default; -webkit-user-select: none; display: none; background: rgb(0, 0, 0);"></div>
                         </div>
-                        <div class="zm-noti7-content user zh-scroller" style="display: none; position: relative; overflow: hidden;"><div class="zh-scroller-inner" style="height: 100%; width: 150%; overflow: auto;"><div class="zh-scroller-content" style="position: static; display: block; visibility: visible; overflow: hidden; width: 315px; min-height: 100%;">
-                            <div class="zm-noti7-content-inner">
-                                <div class="zm-noti7-content-body">
-                                    <div class="zm-noti7-popup-loading">
-                                        <span class="noti-spinner-loading"></span>
+                        <div class="zm-noti7-content user zh-scroller"
+                             style="display: none; position: relative; overflow: hidden;">
+                            <div class="zh-scroller-inner" style="height: 100%; width: 150%; overflow: auto;">
+                                <div class="zh-scroller-content"
+                                     style="position: static; display: block; visibility: visible; overflow: hidden; width: 315px; min-height: 100%;">
+                                    <div class="zm-noti7-content-inner">
+                                        <div class="zm-noti7-content-body">
+                                            <div class="zm-noti7-popup-loading">
+                                                <span class="noti-spinner-loading"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div></div><div class="zh-scroller-bar-container" style="position: absolute; right: 1px; top: 0px; height: 98px; width: 6px; border: 1px solid rgb(68, 68, 68); opacity: 0; cursor: default; border-radius: 2px; -webkit-user-select: none; background: rgb(102, 102, 102);"><div style="-webkit-user-select: none;"></div></div><div class="zh-scroller-bar" style="position: absolute; right: 2px; top: 2px; opacity: 0.5; width: 6px; border-radius: 3px; cursor: default; -webkit-user-select: none; display: none; background: rgb(0, 0, 0);"></div></div>
-                        <div class="zm-noti7-content thanks zh-scroller" style="display: none; position: relative; overflow: hidden;"><div class="zh-scroller-inner" style="height: 100%; width: 150%; overflow: auto;"><div class="zh-scroller-content" style="position: static; display: block; visibility: visible; overflow: hidden; width: 315px; min-height: 100%;">
-                            <div class="zm-noti7-content-inner">
-                                <div class="zm-noti7-content-body">
-                                    <div class="zm-noti7-popup-loading">
-                                        <span class="noti-spinner-loading"></span>
+                            <div class="zh-scroller-bar-container"
+                                 style="position: absolute; right: 1px; top: 0px; height: 98px; width: 6px; border: 1px solid rgb(68, 68, 68); opacity: 0; cursor: default; border-radius: 2px; -webkit-user-select: none; background: rgb(102, 102, 102);">
+                                <div style="-webkit-user-select: none;"></div>
+                            </div>
+                            <div class="zh-scroller-bar"
+                                 style="position: absolute; right: 2px; top: 2px; opacity: 0.5; width: 6px; border-radius: 3px; cursor: default; -webkit-user-select: none; display: none; background: rgb(0, 0, 0);"></div>
+                        </div>
+                        <div class="zm-noti7-content thanks zh-scroller"
+                             style="display: none; position: relative; overflow: hidden;">
+                            <div class="zh-scroller-inner" style="height: 100%; width: 150%; overflow: auto;">
+                                <div class="zh-scroller-content"
+                                     style="position: static; display: block; visibility: visible; overflow: hidden; width: 315px; min-height: 100%;">
+                                    <div class="zm-noti7-content-inner">
+                                        <div class="zm-noti7-content-body">
+                                            <div class="zm-noti7-popup-loading">
+                                                <span class="noti-spinner-loading"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div></div><div class="zh-scroller-bar-container" style="position: absolute; right: 1px; top: 0px; height: 98px; width: 6px; border: 1px solid rgb(68, 68, 68); opacity: 0; cursor: default; border-radius: 2px; -webkit-user-select: none; background: rgb(102, 102, 102);"><div style="-webkit-user-select: none;"></div></div><div class="zh-scroller-bar" style="position: absolute; right: 2px; top: 2px; opacity: 0.5; width: 6px; border-radius: 3px; cursor: default; -webkit-user-select: none; display: none; background: rgb(0, 0, 0);"></div></div>
+                            <div class="zh-scroller-bar-container"
+                                 style="position: absolute; right: 1px; top: 0px; height: 98px; width: 6px; border: 1px solid rgb(68, 68, 68); opacity: 0; cursor: default; border-radius: 2px; -webkit-user-select: none; background: rgb(102, 102, 102);">
+                                <div style="-webkit-user-select: none;"></div>
+                            </div>
+                            <div class="zh-scroller-bar"
+                                 style="position: absolute; right: 2px; top: 2px; opacity: 0.5; width: 6px; border-radius: 3px; cursor: default; -webkit-user-select: none; display: none; background: rgb(0, 0, 0);"></div>
+                        </div>
                     </div>
                     <div class="zm-noti7-frame-border bottom"></div>
                     <div class="zm-noti7-popup-footer">
-                        <a href="https://nowcoder.com/notifications" class="zm-noti7-popup-footer-all zg-right">查看全部 »</a>
-                        <a href="https://nowcoder.com/settings/notification" class="zm-noti7-popup-footer-set" title="通知设置"><i class="zg-icon zg-icon-settings"></i></a>
+                        <a href="https://nowcoder.com/notifications" class="zm-noti7-popup-footer-all zg-right">查看全部
+                            »</a>
+                        <a href="https://nowcoder.com/settings/notification" class="zm-noti7-popup-footer-set"
+                           title="通知设置"><i class="zg-icon zg-icon-settings"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!------------------------------------------------>
+
+<div id="add-question-suggesstion2" style="display: none;" class="modal-dialog absolute-position" tabindex="0"
+     role="dialog" aria-labelledby=":f">
+    <div class="modal-dialog-title"><span class="modal-dialog-title-text" role="heading">提问</span>
+        <span class="modal-dialog-title-close" role="button" tabindex="0" aria-label="Close"></span>
+    </div>
+    <!--<div class="modal-dialog-content">-->
+    <div class="zh-add-question-form"
+         style="display: table; width: 500px; margin-left: 10px; margin-right: 10px; margin-top: 10px">
+        <div class="js-add-question-splash add-question-splash-page" style="display: table; width: 500px">
+            <p>
+                这是一个真诚、友善、认真、互助的网站<br>
+                我们希望每一个疑惑都有解答，好的问题更容易得到好答案
+            </p>
+
+            <p>
+                <b>您的提问会首先交由管理员审核</b><br>
+                1、注意是否存在相似度很高的问题，<b>为避免重复，提问前可以先进行搜索</b><br>
+                2、提问时，请选择问题类别
+            </p>
+            <div class="before-ask-form" style="margin-bottom: 10px">
+                <b>提问前请先回车搜索</b>
+                <div style="position:relative;margin-top:18px;">
+                    <input type="text" class="zg-form-text-input" id="id-before-ask" placeholder="请输入你的问题, 并回车搜索"
+                           role="combobox" aria-autocomplete="list" autocomplete="off" aria-haspopup="true"
+                           aria-owns=":g">
+                    <div style="margin-top: 8px"></div>
+                    <div id="id-similarQuestionList">
+                        <!--<div class="class-similar-question">
+                            <a class="class-searchQuestionResult">问题111问题11
+                                问题111问题111问题111问题1111问</a>
+                            <sapn class="class-similar-question-answers">3个回答</sapn>
+                        </div>
+                        -->
+                    </div>
+
+                    <div class="ac-renderer" role="listbox" id="id-noquestion" aria-expanded="true"
+                         style="user-select: none; display: none; margin-top: 3px">
+                        <div class="ac-row ac-last iwanttoask" style="user-select: none;"><a href="#"
+                                                                                             style="user-select: none;">没有找到相关问题，马上提问
+                            »</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--</div>-->
+    <div class="modal-dialog-buttons" style="display: none;"></div>
+</div>
+
+
+<!--********************************************-->
+<div style="display: none" id="add-question-form">
+    <div class="modal-dialog absolute-position" tabindex="0" role="dialog" aria-labelledby=":f" style="width: 550px;">
+        <div class="modal-dialog-title"><span class="modal-dialog-title-text" id=":f" role="heading">提问</span><span
+                class="modal-dialog-title-close" role="button" tabindex="0" aria-label="Close"></span></div>
+        <div class="modal-dialog-content">
+            <div class="zh-add-question-form">
+                <!--<div id="add-question-suggesstion" class="js-add-question-splash add-question-splash-page" style="display: none;" >
+                   &lt;!&ndash; <p>
+                        知乎是一个真诚、友善、认真、互助的社区<br>
+                        我们希望每一个疑惑都有解答，好的问题更容易得到好答案 <a href="//www.zhihu.com/question/19555761">如何提一个好问题？</a>
+                    </p>
+                    <p>
+                        <b>提问应遵循真实、客观、简洁、明确、规范的原则</b><br>
+                        1、提问应尽可能简洁明了，避免「请问」「有谁知道」「谢谢！」等与问题本身无关的附加语。<br>
+                        2、应避免使用「为神马」「童鞋」「肿么办」等网络用语。<br>
+                        3、基于个人判断或传言的问题，在提问时应在补充说明里详细说明原由<br>
+                        4、避免太宽泛问题，如调查性的问题容易变成每个人都可以发表观点，但对其他人没有价值。<br>
+                    </p>
+                    <p>
+                        <b>知乎禁止这些提问</b><br>
+                        1、和已有问题完全重复的问题，<b>为避免重复，提问前可以先进行搜索</b><br>
+                        2、招聘 / 求职、交易 / 合作、寻人 / 征友、召集 / 赠送、求码类内容<br>
+                        3、投票类问题。例如：你支持方舟子还是韩寒？<br>
+                        4、作业或其他希望代为完成个人任务类的内容，以及针对个人具体病情的求医问药类问题<br>
+                        完整的提问建议可查看 <a href="//www.zhihu.com/question/19806261">知乎的提问规范有哪些？</a><br>
+                    </p>&ndash;&gt;
+                    <div class="before-ask-form">
+                        <b>提问前请先搜索</b>
+                        <div style="position:relative;margin-top:18px;">
+                            <input type="text" class="zg-form-text-input" id="js-before-ask" placeholder="请输入你的问题"
+                                   role="combobox" aria-autocomplete="list" autocomplete="off" aria-haspopup="true"
+                                   aria-owns=":g">
+                            <div class="ac-renderer" role="listbox" id=":g" aria-expanded="true" style="user-select: none;">
+                                <div class="ac-row ac-last iwanttoask" style="user-select: none;"><a href="#"
+                                                                                                     style="user-select: none;">没有找到相关问题，马上提问
+                                    »</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                <form class="js-add-question-form" style="display: block;">
+                    <div class="zg-section-big clearfix">
+                        <div id="zm-modal-dialog-info-wrapper"></div>
+                        <div style="display: none;position: relative;" id="zm-modal-dialog-warnmsg-wrapper">
+                            <div class="zm-modal-dialog-warnmsg zm-modal-dialog-guide-warn-message zg-r5px"></div>
+                            <a name="close" title="关闭" href="javascript:;" class="zu-global-notify-close"
+                               style="display:none">x</a>
+                            <span class="zm-modal-dialog-guide-title-msg"></span>
+                        </div>
+                        <div class="zg-form-text-input add-question-title-form" style="position: relative;">
+                        <textarea name="title" rows="1" class="zg-editor-input zu-seamless-input-origin-element" title="在这里输入问题"
+                                  id="zh-question-suggest-title-content" aria-label="写下你的问题" placeholder="写下你的问题"
+                                  role="combobox" aria-autocomplete="list" autocomplete="off"
+                                  style="height: 22px;"></textarea>
+                        </div>
+                        <span id="js-title-length-err-msg" class="title-length-err-msg zg-right"></span>
+                        <!--<div id="zh-question-suggest-ac-wrap" class="question-suggest-ac-wrap">
+                            <div class="ac-renderer" role="listbox" id=":l" style="display: none;">
+                                <div class="ac-head zg-gray">你的问题可能已经有答案</div>
+                            </div>
+                        </div>-->
+                    </div>
+                    <div class="zg-section-big">
+                        <div style="display: none;position: relative;" class="zm-modal-dialog-warnmsg-wrapper">
+                            <div class="zm-modal-dialog-warnmsg zm-modal-dialog-guide-warn-message zg-r5px"></div>
+                            <a name="close" title="关闭" href="javascript:;" class="zu-global-notify-close"
+                               style="display:none">x</a>
+                            <span class="zm-modal-dialog-guide-title-msg"></span>
+                        </div>
+                        <div class="add-question-section-title">
+                            问题说明（可选）：
+                            <span id="zh-question-form-detail-err"></span>
+                        </div>
+                        <div id="zh-question-suggest-detail-container" class="zm-editable-status-editing">
+                            <div class="zm-editable-content" data-disabled="1" style="display: none;"></div>
+
+                            <!--<textarea  placeholder="问题描述" style="width: 508px; height: 170px;border: 1px solid #ccc;border-radius: 0 0 3px 3px;">
+                            </textarea>-->
+
+                            <div class="zm-editable-editor-field-wrap">
+                                <div id="id-addQuestion-content" class="zm-editable-editor-field-element editable"
+                                     g_editable="true"
+                                     role="textbox" contenteditable="true">
+                                </div>
+
+                            </div>
+
+                            <!--<div class="zm-editable-editor-wrap no-toolbar" style="">
+                                <div class="zm-editable-editor-outer">
+                                    <div class="zm-editable-toolbar-container goog-scrollfloater"
+                                         style="display: none;">
+                                        <div class="goog-toolbar goog-toolbar-horizontal" role="toolbar" tabindex="-1"
+                                             style="user-select: none;">
+                                            <div class="goog-inline-block goog-toolbar-button" title="粗体 (ctrl+b)"
+                                                 role="button" aria-pressed="false" id="+bold"
+                                                 style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-bold" style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="斜体 (ctrl+i)"
+                                                 role="button" aria-pressed="false" id="+italic"
+                                                 style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-italic" style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="下划线 (ctrl+u)"
+                                                 role="button" aria-pressed="false" id="+underline"
+                                                 style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-underline"
+                                                             style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-toolbar-separator goog-toolbar-separator-disabled goog-inline-block"
+                                                 aria-disabled="true" role="separator" id=":i"
+                                                 style="user-select: none;">
+                                                &nbsp;
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="引用内容"
+                                                 role="button"
+                                                 aria-pressed="false" id="+blockquote" style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-blockquote"
+                                                             style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="插入代码"
+                                                 role="button"
+                                                 aria-pressed="false" id="+code" style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-code" style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="有序列表"
+                                                 role="button"
+                                                 aria-pressed="false" id="+insertOrderedList"
+                                                 style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-insertOrderedList"
+                                                             style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="无序列表"
+                                                 role="button"
+                                                 aria-pressed="false" id="+insertUnorderedList"
+                                                 style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-insertUnorderedList"
+                                                             style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="插入公式"
+                                                 role="button"
+                                                 id="+equation" style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-equation"
+                                                             style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-toolbar-separator goog-toolbar-separator-disabled goog-inline-block"
+                                                 aria-disabled="true" role="separator" id=":j"
+                                                 style="user-select: none;">
+                                                &nbsp;
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="插入图片"
+                                                 role="button"
+                                                 id="image" style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-image" style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="插入视频"
+                                                 role="button"
+                                                 id="video" style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-video" style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="goog-toolbar-separator goog-toolbar-separator-disabled goog-inline-block"
+                                                 aria-disabled="true" role="separator" id=":k"
+                                                 style="user-select: none;">
+                                                &nbsp;
+                                            </div>
+                                            <div class="goog-inline-block goog-toolbar-button" title="清除格式"
+                                                 role="button"
+                                                 id="+removeFormat" style="user-select: none;">
+                                                <div class="goog-inline-block goog-toolbar-button-outer-box"
+                                                     style="user-select: none;">
+                                                    <div class="goog-inline-block goog-toolbar-button-inner-box"
+                                                         style="user-select: none;">
+                                                        <div class="tr-icon tr-removeFormat"
+                                                             style="user-select: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tr-spinner spinner-gray" style="display: none;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="zm-editable-editor-field-wrap">
+                                        <div id="mock:h" class="zm-editable-editor-field-element editable"
+                                             g_editable="true"
+                                             role="textbox" contenteditable="true" style="font-style: italic;"><p><span
+                                                style="font-style: normal;color: #999;">问题背景、条件等详细信息222</span></p></div>
+                                        <div class="editable-dropzone">
+                                            <div class="row">
+                                                <div class="cell">
+                                                    <div>拖拽至此处上传</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="zm-command"><a class="zm-command-cancel" name="cancel"
+                                                           href="javascript:;">取消</a><a class="zg-r3px zg-btn-blue"
+                                                                                        name="save"
+                                                                                        href="javascript:;">保存</a></div>
+                            </div>-->
+                        </div>
+                    </div>
+                    <div class="zm-add-question-form-topic-wrap">
+                        <div class="add-question-section-title">
+                            <span class="zg-gray zg-right hidden-phone">话题越精准，越容易让相关领域人士看到你的问题</span>
+                            选择话题：
+                            <span id="zh-question-form-tag-err"></span>
+                        </div>
+                        <div id="zh-question-suggest-topic-container" class="zm-tag-editor zg-section">
+                            <div class="zm-tag-editor-labels" style="display: none;"></div>
+                            <div>
+                                <select id="id-select-category" class="selectpicker show-tick form-control" style="width: 30%;">
+                                    <option value="1">Java</option>
+                                    <option>C++</option>
+                                    <option>C</option>
+                                    <option>计算机网络</option>
+                                    <option>操作系统</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="zm-command">
+                        <a href="javascript:;" name="cancel" class="zm-command-cancel">取消</a>
+                        <a href="javascript:;" id="id-button-addQuestion" name="addq" class="zg-r5px zu-question-form-add zg-btn-blue">发布</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-dialog-buttons" style="display: none;"></div>
+    </div>
+</div>
+<!--********************************************-->
+
+<script>
+
+    $(document).ready(function () {
+
+        var userQuestion = "";
+
+        $("#my-zu-top-add-question").bind("click", function () {
+            //$("#add-question-form").show(500);
+            $("#add-question-suggesstion2").show(500);
+        });
+
+        //没有找到相似问题
+        $("#id-noquestion").bind("click", function () {
+            //$("#add-question-form").show(500);
+            $("#add-question-suggesstion2").hide(0);
+            $("#add-question-form").show(500);
+            userQuestion = $("#id-before-ask").val();
+            $("#zh-question-suggest-title-content").val(userQuestion);
+
+            //获取分类数据
+            $.ajax({
+                url: "/question/getCategoryList",
+                async: true,
+                type: 'GET',
+                success: function (result) {
+                    var questionList = "";
+                    if (result != null) {
+                        $.each(result, function (n, value) {
+                            //alert(n + ' ' + value);
+                            var question = "";
+                            //<option class="class-select-option" value="1">Java</option>
+                            question += "<option class=\"class-select-option\" value=\"" + value.id + "\">" + value.name + "</option>";
+                            questionList += question;
+                        });
+
+                        $("#id-select-category").html(questionList);
+                    }
+
+                }
+            });
+        });
+
+        //关闭提问按钮 modal-dialog-title-close
+        $(".modal-dialog-title-close").bind("click", function () {
+            //$("#add-question-form").show(500);
+            $("#add-question-suggesstion2").hide(200);
+            $("#add-question-form").hide(200);
+        });
+
+        //
+
+        var a = 1;
+
+        $('#id-before-ask').keyup(function (event) {
+
+            var question = $("#id-before-ask").val();
+            if (event.keyCode == 8) {
+                console.log(question);
+                if (question === null || question === "") {
+                    $("#id-similarQuestionList").html("").hide(300);
+                    $("#id-noquestion").hide(800);
+                }
+            }
+        });
+
+        $('#id-before-ask').keydown(function (event) {
+
+            var question = $("#id-before-ask").val();
+
+            if (event.keyCode == 13) {
+
+                if (question === null || question === "") {
+                    $("#id-similarQuestionList").html("").hide(200);
+                    $("#id-noquestion").hide(800);
+                } else {
+
+                    $.ajax({
+                        url: "/searchSimilarQuestion?q=" + question,
+                        async: true,
+                        type: 'GET',
+                        success: function (result) {
+                            var questionList = "";
+                            if (result != null) {
+                                $.each(result, function (n, value) {
+                                    //alert(n + ' ' + value);
+                                    var question = "";
+                                    question += "<div id=\"id-similarQuestionList\">\n" +
+                                        "                            <div class=\"class-similar-question\">\n" +
+                                        "                                <a class=\"class-searchQuestionResult\" href=\"/question/" + value.id + "\">" + value.title + "</a>"
+                                        + "<sapn class=\"class-similar-question-answers\">" + value.commentCount + "个回答</sapn></div>\n" +
+                                        "                        </div>";
+                                    questionList += question;
+                                });
+
+                                $("#id-similarQuestionList").html("").hide(100);
+                                $("#id-similarQuestionList").html(questionList).show(200);
+                                $("#id-noquestion").show(800);
+                            }
+
+                        }
+                    });
+                }
+            }
+
+        });
+
+
+        //提交问题
+        $("#id-button-addQuestion").bind("click", function () {
+            //获取数据
+            var title = $("#zh-question-suggest-title-content").val();
+            var content = $("#id-addQuestion-content").html();
+            var categoryId = $("#id-select-category").val();
+
+            var question = {
+              title: title,
+              content: content,
+              categoryId: categoryId
+            };
+
+            console.log(title + "=" + content + "=" + categoryId);
+            $.ajax({
+                url : "/question/add2",
+                type : 'POST',
+                data : question,
+                success : function (result) {
+                    var result = jQuery.parseJSON(result);
+                    console.log("code=" + result.code);
+                    //alert(result)
+                    if (result.code == 0) {
+                        window.location.href = "/"
+                    } else if (result.code == 999) {
+                        window.location.href = "/reglogin"
+                    } else {
+                        alert(result.msg)
+                    }
+                }
+            });
+
+
+        });
+
+
+    });
+
+
+</script>

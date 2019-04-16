@@ -45,4 +45,8 @@
         ORDER BY q.id DESC
         LIMIT #{offset},#{limit}
     </select>
+
+    <select id="getCategoryListByParentId" resultType="top.kongk.wenda.model.Category">
+         select id, name, parent_id from category where parent_id = #{parentId}
+    </select>
 </mapper>

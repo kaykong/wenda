@@ -2,6 +2,7 @@ package top.kongk.wenda.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import top.kongk.wenda.model.Category;
 import top.kongk.wenda.model.Question;
 import top.kongk.wenda.model.User;
 
@@ -49,4 +50,12 @@ public interface QuestionDao {
      * @return int
      */
     int updateCommentCount(@Param("id") int id, @Param("commentCount") int commentCount);
+
+    /**
+     * 根据 parentId 获取分类数据
+     *
+     * @param parentId
+     * @return java.util.List<top.kongk.wenda.model.Category>
+     */
+    List<Category> getCategoryListByParentId(String parentId);
 }

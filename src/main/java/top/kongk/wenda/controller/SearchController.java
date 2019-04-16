@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import top.kongk.wenda.model.EntityType;
 import top.kongk.wenda.model.Question;
 import top.kongk.wenda.model.ViewObject;
@@ -18,6 +19,7 @@ import top.kongk.wenda.service.SearchService;
 import top.kongk.wenda.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -83,5 +85,30 @@ public class SearchController {
             logger.error("搜索评论失败" + e.getMessage());
         }
         return "result";
+    }
+
+
+    /**
+     * 获取相似问题
+     *
+     * @param model
+     * @param keyword
+     * @param offset
+     * @param count
+     * @return java.util.List<top.kongk.wenda.model.Question>
+     */
+    @RequestMapping(path = {"/searchSimilarQuestion"}, method = {RequestMethod.GET})
+    @ResponseBody
+    public List<Question> searchSimilarQuestion(Model model, @RequestParam("q") String keyword,
+                         @RequestParam(value = "offset", defaultValue = "0") int offset,
+                         @RequestParam(value = "count", defaultValue = "10") int count) {
+        try {
+            List<Question> questionList = searchService.searchQuestionTitle(keyword, offset, count);
+            return questionList;
+        } catch (Exception e) {
+            logger.error("搜索相似问题失败" + e.getMessage());
+        }
+
+        return Collections.EMPTY_LIST;
     }
 }

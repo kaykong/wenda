@@ -20,6 +20,7 @@ import top.kongk.wenda.util.WendaUtil;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -159,6 +160,50 @@ public class QuestionController {
             log.error("增加题目失败" + e.getMessage());
         }
         return WendaUtil.getJSONString(1, "失败");
+    }
+
+    @RequestMapping(value = "/add2", method = {RequestMethod.POST})
+    @ResponseBody
+    public String addQuestion2(@RequestParam("title") String title,
+                              @RequestParam("content") String content,
+                               @RequestParam("categoryId") Integer categoryId) {
+        try {
+            Question question = new Question();
+            question.setContent(content);
+            question.setCreatedDate(new Date());
+            question.setTitle(title);
+            //默认不匿名
+            question.setAnonymous(false);
+            question.setCategoryId(categoryId);
+            if (hostHolder.getCurrentUser() == null) {
+                return WendaUtil.getJSONString(999);
+            } else {
+                question.setUserId(hostHolder.getCurrentUser().getId());
+            }
+
+            if (questionService.addQuestion(question, hostHolder.getCurrentUser()).isSuccess()) {
+                eventProducer.fireEvent(new EventModel(EventType.ADD_QUESTION)
+                        .setActorId(question.getUserId()).setEntityId(question.getId())
+                        .setExt("title", question.getTitle()).setExt("content", question.getContent()));
+                return WendaUtil.getJSONString(0);
+            }
+        } catch (Exception e) {
+            log.error("增加题目失败" + e.getMessage());
+        }
+        return WendaUtil.getJSONString(1, "失败");
+    }
+
+
+    @RequestMapping(value = "/getCategoryList", method = {RequestMethod.GET})
+    @ResponseBody
+    public List<Category> getCategoryList(@RequestParam(value = "parentId", defaultValue = "1") String parentId) {
+        try {
+            List<Category> categories = questionService.getCategoryListByParentId(parentId);
+            return categories;
+        } catch (Exception e) {
+            log.error("获取分类数据失败" + e.getMessage());
+        }
+        return Collections.EMPTY_LIST;
     }
 
 

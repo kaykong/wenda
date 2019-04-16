@@ -1,6 +1,5 @@
 package top.kongk.wenda.service;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +8,10 @@ import org.springframework.web.util.HtmlUtils;
 import top.kongk.wenda.common.QuestionCode;
 import top.kongk.wenda.common.ServerResponse;
 import top.kongk.wenda.dao.QuestionDao;
+import top.kongk.wenda.model.Category;
 import top.kongk.wenda.model.Question;
 import top.kongk.wenda.model.User;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class QuestionService {
          */
         //过滤html标签
         question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
-        question.setContent(HtmlUtils.htmlEscape(question.getContent()));
+        //question.setContent(HtmlUtils.htmlEscape(question.getContent()));
 
         //过滤敏感词
         question.setTitle(sensitiveService.filter(question.getTitle()));
@@ -127,5 +126,16 @@ public class QuestionService {
      */
     public int updateCommentCount(int id, int count) {
         return questionDao.updateCommentCount(id, count);
+    }
+
+
+    /**
+     * 根据 parentId 获取分类数据
+     *
+     * @param parentId
+     * @return java.util.List<top.kongk.wenda.model.Category>
+     */
+    public List<Category> getCategoryListByParentId(String parentId) {
+        return questionDao.getCategoryListByParentId(parentId);
     }
 }

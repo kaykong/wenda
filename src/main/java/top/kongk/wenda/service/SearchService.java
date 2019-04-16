@@ -1,10 +1,14 @@
 package top.kongk.wenda.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.kongk.wenda.model.Question;
 
@@ -18,6 +22,10 @@ import java.util.Map;
  */
 @Service
 public class SearchService {
+
+
+    @Autowired
+    QuestionService questionService;
 
     /**
      * solr 连接url
@@ -83,6 +91,55 @@ public class SearchService {
             questionList.add(q);
         }
         return questionList;
+    }
+
+
+    /**
+     * 获取相似问题列表
+     *
+     * @param keyword
+     * @param offset
+     * @param count
+     * @return java.util.List<top.kongk.wenda.model.Question>
+     */
+    public List<Question> searchQuestionTitle(String keyword, int offset, int count) throws Exception {
+
+        //设置查询条件
+        SolrQuery query = new SolrQuery(keyword);
+        query.setRows(count);
+        query.setStart(offset);
+        query.set("fl", QUESTION_TITLE_FIELD + ",score,id");
+        query.set("df", QUESTION_TITLE_FIELD);
+
+        QueryResponse response = client.query(query);
+
+        SolrDocumentList results = response.getResults();
+        List<Question> questions = new ArrayList<>();
+
+        for (SolrDocument result : results) {
+            String id = (String) result.get("id");
+            if (StringUtils.isNumeric(id)) {
+                int i = Integer.parseInt(id);
+                Question questionById = questionService.getById(i);
+                if (questionById == null) {
+                    continue;
+                }
+                Question question = new Question();
+
+                question.setId(questionById.getId());
+                //标题
+                question.setTitle(questionById.getTitle());
+                //回答数
+                question.setCommentCount(questionById.getCommentCount());
+                //相似度
+                question.setContent("相似度:" + result.get("score"));
+                questions.add(question);
+            } else {
+                continue;
+            }
+        }
+
+        return questions;
     }
 
 
