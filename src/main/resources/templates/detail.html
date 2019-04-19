@@ -46,6 +46,48 @@
                     </div>
                 </div>
             </div>
+
+            #if($!orderBy ==  1)
+            <a target="_self" href="javascript:;">
+                按热度排序
+            </a>
+            <span>&nbsp;&nbsp;|&nbsp;</span>
+            <a class="meta-item" target="_self" href="/question/$!{question.id}?orderBy=time">
+                按时间排序
+            </a>
+            #else
+            <a class="meta-item" target="_self" href="/question/$!{question.id}">
+                按热度排序
+            </a>
+            <span>&nbsp;&nbsp;|&nbsp;</span>
+            <a target="_self" href="javascript:;">
+                按时间排序
+            </a>
+            #end
+            <br>
+            <br>
+
+
+            <!--<div class="menu-txt-box">
+                <ul class="menu-txt clearfix">
+                    <li class="selected">
+                        <a href="/discuss?order=0&amp;type=0">最新回复</a>
+                    </li>
+                    <li class="menu-pipe">|</li>
+                    <li>
+                        <a href="/discuss?order=3&amp;type=0">最新发表</a>
+                    </li>
+                    <li class="menu-pipe">|</li>
+                    <li>
+                        <a href="/discuss?order=1&amp;type=0">最热</a>
+                    </li>
+                    <li class="menu-pipe">|</li>
+                    <li>
+                        <a href="/discuss?order=4&amp;type=0">精华</a>
+                    </li>
+                </ul>
+            </div>-->
+
             <div id="zh-question-answer-wrap" data-pagesize="10" class="zh-question-answer-wrapper navigable"
                  data-widget="navigable" data-navigable-options="{&quot;items&quot;: &quot;&gt;.zm-item-answer&quot;}"
                  data-init="{&quot;params&quot;: {&quot;url_token&quot;: 36301524, &quot;pagesize&quot;: 10, &quot;offset&quot;: 0}, &quot;nodename&quot;: &quot;QuestionAnswerListV2&quot;}">
@@ -85,7 +127,7 @@
                         </div>
                         <div class="zm-item-vote-info">
                                 <span class="voters text">
-                                    <a href="" class="more text"><span class="js-voteCount">$!{comment.likeCount}</span>&nbsp;人赞同</a>
+                                    <a href="javascript:;" class="more text"><span class="js-voteCount">$!{comment.likeCount}</span>&nbsp;人赞同</a>
                                 </span>
                         </div>
                     </div>
@@ -121,6 +163,14 @@
                             <textarea name="content" id="content" class="zm-editable-editor-field-element editable" style="width:100%;"></textarea>
                         </div>
                     </div>
+                    <!--测试框
+                    <div class="zm-editable-editor-field-wrap">
+                        <div id="id-addQuestion-content" class="zm-editable-editor-field-element editable"
+                             g_editable="true"
+                             role="textbox" contenteditable="true">
+                        </div>
+
+                    </div>-->
 
                     <div class="zm-command clearfix">
                             <span class=" zg-right">

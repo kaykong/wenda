@@ -52,6 +52,16 @@ public class Question extends BaseIdEntity {
      */
     private String categoryName;
 
+    private Integer followCount;
+
+    public Integer getFollowCount() {
+        return followCount;
+    }
+
+    public void setFollowCount(Integer followCount) {
+        this.followCount = followCount;
+    }
+
     public Integer getCategoryId() {
         return categoryId;
     }

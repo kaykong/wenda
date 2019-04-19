@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import top.kongk.wenda.dao.LoginTicketDao;
 import top.kongk.wenda.model.HostHolder;
 import top.kongk.wenda.model.User;
+import top.kongk.wenda.service.MessageService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +21,12 @@ public class PassportInterceptor implements HandlerInterceptor {
 
     @Autowired
     private HostHolder hostHolder;
+
     @Autowired
     private LoginTicketDao loginTicketDao;
+
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -51,6 +56,10 @@ public class PassportInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if (modelAndView != null && hostHolder.getCurrentUser() != null) {
             modelAndView.addObject("user", hostHolder.getCurrentUser());
+            //在这里获取未读消息
+            int unreadCount = messageService.getUserUnreadCount(hostHolder.getCurrentUser().getId());
+            //在header.html中要用到
+            modelAndView.addObject("unreadCountHeader", unreadCount);
         }
     }
 

@@ -120,6 +120,19 @@ public class QuestionService {
         return questionDao.selectLatestQuestionsByCategoryId(userId, offset, limit, categoryId);
     }
 
+    /**
+     * 分页或者不分页地获取数据 (limit 为 null), 可以按问题的分类 categoryId, 问题的创建人 userId
+     *
+     * @param userId
+     * @param offset
+     * @param limit
+     * @param categoryId
+     * @return java.util.List<top.kongk.wenda.model.Question>
+     */
+    public List<Question> getQuestions(Integer userId, Integer offset, Integer limit, Integer categoryId) {
+        return questionDao.selectQuestions(userId, offset, limit, categoryId);
+    }
+
 
     /**
      * 根据问题id更新问题的评论数

@@ -79,4 +79,8 @@ public class MessageService {
     public int updateMessageStatusByConversationId(String conversationId, int userId) {
         return messageDao.updateMessageStatusByConversationId(conversationId, userId);
     }
+
+    public int getUserUnreadCount(Integer id) {
+        return messageDao.getUserUnreadCount(id);
+    }
 }

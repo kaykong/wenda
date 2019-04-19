@@ -1,15 +1,35 @@
 #parse("header.html")
 <link rel="stylesheet" href="../styles/index.css">
 <link rel="stylesheet" href="../styles/detail.css">
+
+
+
 <div class="zg-wrap zu-main clearfix " role="main">
     <div class="zu-main-content">
         <div class="zu-main-content-inner">
+
             <div class="zg-section" id="zh-home-list-title">
-                <i class="zg-icon zg-icon-feedlist"></i>最新动态
+                <i class="zg-icon zg-icon-feedlist"></i>最新动态&nbsp;&nbsp;
                 <input type="hidden" id="is-topstory">
-                <!--<span class="zg-right zm-noti-cleaner-setting" style="list-style:none">
-                        <a href="https://nowcoder.com/settings/filter" class="zg-link-gray-normal">
-                            <i class="zg-icon zg-icon-settings"></i>设置</a></span>-->
+
+                #if($!orderBy ==  1)
+                <a target="_self" href="javascript:;">
+                    按时间排序
+                </a>
+                <span>&nbsp;&nbsp;|&nbsp;</span>
+                <a class="meta-item" target="_self" href="/?orderBy=hot${requestURI}">
+                    按热度排序
+                </a>
+                #else
+                <a class="meta-item" target="_self" href="/?orderBy=time${requestURI}">
+                    按时间排序
+                </a>
+                <span>&nbsp;&nbsp;|&nbsp;</span>
+                <a target="_self" href="javascript:;">
+                    按热度排序
+                </a>
+                #end
+
             </div>
             <div class="zu-main-feed-con navigable" data-feedtype="topstory" id="zh-question-list"
                  data-widget="navigable"

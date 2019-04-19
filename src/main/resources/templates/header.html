@@ -56,6 +56,31 @@
             color: #636363;
         }
 
+        /*hasUnread {
+            display: block;
+            background: #f00;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            top: 19px;
+            right: 58px;
+            position: absolute;
+        }*/
+        .msg-num {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #e84a4a;
+            color: #FFF;
+            border-radius: 50px;
+            line-height: 16px;
+            min-height: 16px;
+            outline: medium none;
+            padding: 0 4px;
+            text-align: center;
+            z-index: 10;
+        }
+
     </style>
 
 </head>
@@ -77,8 +102,12 @@
                 <span class="name">$!{user.name}</span>
                 <img class="Avatar" src="$!{user.headUrl}" alt="$!{user.name}">
                 <span id="zh-top-nav-new-pm" class="zg-noti-number zu-top-nav-pm-count" style="visibility:hidden"
-                      data-count="0">
+                      data-count="4">
                     </span>
+                #if($!unreadCountHeader > 0)
+                <small><span style="color: #00BC9B">&nbsp;有新消息</span></small>
+                #end
+                <!--<hasUnread></hasUnread>-->
             </a>
             <ul class="top-nav-dropdown" id="top-nav-profile-dropdown" aria-labelledby=":0">
                 <li>
@@ -89,9 +118,12 @@
                 <li>
                     <a href="/msg/list" tabindex="-1" id=":2">
                         <i class="zg-icon zg-icon-dd-pm"></i>私信
-                        <span id="zh-top-nav-pm-count" class="zu-top-nav-pm-count zg-noti-number"
-                              style="visibility:hidden" data-count="0">
-                    </span>
+
+                        #if($!unreadCountHeader > 0)
+                        <span class="msg-num" style="position: absolute; top: 52px; left: 80px">
+                            $!unreadCountHeader
+                        </span>
+                        #end
                     </a>
                 </li>
                 <li>
@@ -109,9 +141,9 @@
         <div role="search" id="zh-top-search" class="zu-top-search">
             <form method="GET" action="/search" id="zh-top-search-form" class="zu-top-search-form">
                 <label for="q" class="hide-text">搜索</label><input type="text" class="zu-top-search-input" id="q"
-                                                                    name="q" autocomplete="off" value="$!{keyword}"
-                                                                    placeholder="搜索你感兴趣的内容..." role="combobox"
-                                                                    aria-autocomplete="list">
+                                                                  name="q" autocomplete="off" value="$!{keyword}"
+                                                                  placeholder="搜索你感兴趣的内容..." role="combobox"
+                                                                  aria-autocomplete="list">
                 <button type="submit" class="zu-top-search-button"><span class="hide-text">搜索</span><span
                         class="sprite-global-icon-magnifier-dark"></span></button>
             </form>
@@ -331,7 +363,8 @@
                             <span class="zm-modal-dialog-guide-title-msg"></span>
                         </div>
                         <div class="zg-form-text-input add-question-title-form" style="position: relative;">
-                        <textarea name="title" rows="1" class="zg-editor-input zu-seamless-input-origin-element" title="在这里输入问题"
+                        <textarea name="title" rows="1" class="zg-editor-input zu-seamless-input-origin-element"
+                                  title="在这里输入问题"
                                   id="zh-question-suggest-title-content" aria-label="写下你的问题" placeholder="写下你的问题"
                                   role="combobox" aria-autocomplete="list" autocomplete="off"
                                   style="height: 22px;"></textarea>
@@ -552,7 +585,8 @@
                         <div id="zh-question-suggest-topic-container" class="zm-tag-editor zg-section">
                             <div class="zm-tag-editor-labels" style="display: none;"></div>
                             <div>
-                                <select id="id-select-category" class="selectpicker show-tick form-control" style="width: 30%;">
+                                <select id="id-select-category" class="selectpicker show-tick form-control"
+                                        style="width: 30%;">
                                     <option value="1">Java</option>
                                     <option>C++</option>
                                     <option>C</option>
@@ -563,8 +597,10 @@
                         </div>
                     </div>
                     <div class="zm-command">
-                        <a href="javascript:;" id="id-button-addQuestion-cancel" name="cancel" class="zm-command-cancel">取消</a>
-                        <a href="javascript:;" id="id-button-addQuestion" name="addq" class="zg-r5px zu-question-form-add zg-btn-blue">发布</a>
+                        <a href="javascript:;" id="id-button-addQuestion-cancel" name="cancel"
+                           class="zm-command-cancel">取消</a>
+                        <a href="javascript:;" id="id-button-addQuestion" name="addq"
+                           class="zg-r5px zu-question-form-add zg-btn-blue">发布</a>
                     </div>
                 </form>
             </div>
@@ -696,17 +732,17 @@
             var categoryId = $("#id-select-category").val();
 
             var question = {
-              title: title,
-              content: content,
-              categoryId: categoryId
+                title: title,
+                content: content,
+                categoryId: categoryId
             };
 
             console.log(title + "=" + content + "=" + categoryId);
             $.ajax({
-                url : "/question/add2",
-                type : 'POST',
-                data : question,
-                success : function (result) {
+                url: "/question/add2",
+                type: 'POST',
+                data: question,
+                success: function (result) {
                     var result = jQuery.parseJSON(result);
                     console.log("code=" + result.code);
                     //alert(result)

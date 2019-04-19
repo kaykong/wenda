@@ -27,6 +27,18 @@ public class LikeService {
     }
 
     /**
+     * 根据 entityType 和 entityId 获取不喜欢的数量
+     *
+     * @param entityType
+     * @param entityId
+     * @return long
+     */
+    public long getDisikeCount(int entityType, int entityId) {
+        String dislikeKey = RedisKeyUtil.getDisLikeKey(entityType, entityId);
+        return jedisAdapter.scard(dislikeKey);
+    }
+
+    /**
      * 判断 user 对某个 comment 是否喜欢
      *
      * @param userId

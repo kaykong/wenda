@@ -65,4 +65,12 @@ public interface MessageDao {
      */
     int updateMessageStatusByConversationId(@Param("conversationId") String conversationId,
                                             @Param("userId") int userId);
+
+    /**
+     * 返回用户未读消息数量
+     *
+     * @param id
+     * @return int
+     */
+    int getUserUnreadCount(Integer id);
 }

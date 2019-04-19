@@ -59,8 +59,22 @@ public interface QuestionDao {
      */
     List<Category> getCategoryListByParentId(String parentId);
 
-    List<Question> selectLatestQuestionsByCategoryId(@Param("userId") Integer userId, @Param("offset") Integer offset,
+    List<Question> selectLatestQuestionsByCategoryId(@Param("userId") Integer userId,
+                                                     @Param("offset") Integer offset,
                                                      @Param("limit") Integer limit,
                                                      @Param("categoryId") Integer categoryId);
 
+    /**
+     * 分页或者不分页地获取数据 (limit 为 null), 可以按问题的分类 categoryId, 问题的创建人 userId
+     *
+     * @param userId
+     * @param offset
+     * @param limit
+     * @param categoryId
+     * @return java.util.List<top.kongk.wenda.model.Question>
+     */
+    List<Question> selectQuestions(@Param("userId") Integer userId,
+                                   @Param("offset") Integer offset,
+                                   @Param("limit") Integer limit,
+                                   @Param("categoryId") Integer categoryId);
 }

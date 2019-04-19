@@ -76,4 +76,11 @@
         order by created_date desc
         limit #{offset}, #{limit}
     </select>
+
+    <select id="getUserUnreadCount" resultType="java.lang.Integer">
+        select count(id)
+        from message
+        where has_read = 0
+        and to_id = #{userId}
+    </select>
 </mapper>

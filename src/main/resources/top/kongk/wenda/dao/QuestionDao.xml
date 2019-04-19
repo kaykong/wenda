@@ -66,6 +66,29 @@
         </where>
 
         ORDER BY q.id DESC
+
         LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="selectQuestions" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q LEFT JOIN category c
+        on q.category_id = c.id
+        <where>
+            <if test="userId != null and userId != 0">
+                q.user_id = #{userId}
+            </if>
+            <if test="categoryId != null">
+                and q.category_id = #{categoryId}
+            </if>
+        </where>
+
+        ORDER BY q.id DESC
+
+        <if test="offset != null and limit != null">
+            LIMIT #{offset}, #{limit}
+        </if>
+
     </select>
 </mapper>

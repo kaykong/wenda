@@ -81,15 +81,58 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "{qid}", method = {RequestMethod.GET})
-    public String questionDetail(Model model, @PathVariable("qid") int qid) {
+    public String questionDetail(Model model, @PathVariable("qid") int qid,
+                                 @RequestParam(value = "orderBy", defaultValue = "hot") String orderBy) {
+        if ("hot".equals(orderBy)) {
+            model.addAttribute("orderBy", 1);
+        } else {
+            model.addAttribute("orderBy", 2);
+        }
+
         Question question = questionService.getById(qid);
         model.addAttribute("question", question);
+        //获取问题下的所有回答
         List<Comment> commentList = commentService.getCommentsByEntity(qid, EntityType.ENTITY_QUESTION);
-        List<ViewObject> vos = new ArrayList<>();
+
+        for (Comment comment : commentList) {
+            comment.setReplyCount(commentService.getAnswerReplyCount(comment.getId(), EntityType.ENTITY_ANSWER));
+
+            //获取回答的喜欢人数
+            long likeCount = likeService.getLikeCount(EntityType.ENTITY_ANSWER, comment.getId());
+            comment.setLikeCount((int) likeCount);
+            //获取回答的不喜欢人数
+            long dislikeCount = likeService.getDisikeCount(EntityType.ENTITY_ANSWER, comment.getId());
+            comment.setDislikeCount((int) dislikeCount);
+        }
+
+        //按热度排序
+        if ("heat".equals(orderBy)) {
+
+            //获取权重, 可以通过数据库获取
+            int likeCountWeight = 6;
+            int dislikeCountWeight = 1;
+            //回复数量的权重
+            int replyCountWeight = 1;
+
+            commentList.sort(new Comparator<Comment>() {
+                private int getScore(Comment comment) {
+                    //喜欢的数量*权重 - 不喜欢的数量*权重 + 回复的数量*权重
+                    return comment.getLikeCount() * likeCountWeight
+                            - comment.getDislikeCount() * dislikeCountWeight + comment.getReplyCount() * replyCountWeight;
+                }
+
+                @Override
+                public int compare(Comment o1, Comment o2) {
+                    return getScore(o2) - getScore(o1);
+                }
+            });
+        }
+
+        //封装回答
+        List<ViewObject> vos = new ArrayList<>(commentList.size());
         for (Comment comment : commentList) {
             ViewObject vo = new ViewObject();
             vo.set("comment", comment);
-            comment.setReplyCount(commentService.getAnswerReplyCount(comment.getId(), EntityType.ENTITY_ANSWER));
 
             if (hostHolder.getCurrentUser() == null) {
                 vo.set("liked", 0);
@@ -99,9 +142,7 @@ public class QuestionController {
                         likeService.getLikeStatus(hostHolder.getCurrentUser().getId(),
                                 EntityType.ENTITY_ANSWER, comment.getId()));
             }
-
-            //获取回答的喜欢人数
-            vo.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_ANSWER, comment.getId()));
+            vo.set("likeCount", comment.getLikeCount());
             vo.set("user", userService.getUser(comment.getUserId()));
             vos.add(vo);
         }

@@ -39,6 +39,16 @@ public class Comment extends BaseIdEntity {
      */
     private Integer replyCount;
 
+    /**
+     * 评论的赞同数
+     */
+    private Integer likeCount;
+
+    /**
+     * 评论的反对数, 点踩的人数
+     */
+    private Integer dislikeCount;
+
     public Integer getUserId() {
         return userId;
     }
@@ -93,5 +103,21 @@ public class Comment extends BaseIdEntity {
 
     public void setReplyCount(Integer replyCount) {
         this.replyCount = replyCount;
+    }
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public Integer getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public void setDislikeCount(Integer dislikeCount) {
+        this.dislikeCount = dislikeCount;
     }
 }
