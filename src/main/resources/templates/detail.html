@@ -67,26 +67,24 @@
             <br>
             <br>
 
-
-            <!--<div class="menu-txt-box">
-                <ul class="menu-txt clearfix">
-                    <li class="selected">
-                        <a href="/discuss?order=0&amp;type=0">最新回复</a>
-                    </li>
-                    <li class="menu-pipe">|</li>
-                    <li>
-                        <a href="/discuss?order=3&amp;type=0">最新发表</a>
-                    </li>
-                    <li class="menu-pipe">|</li>
-                    <li>
-                        <a href="/discuss?order=1&amp;type=0">最热</a>
-                    </li>
-                    <li class="menu-pipe">|</li>
-                    <li>
-                        <a href="/discuss?order=4&amp;type=0">精华</a>
-                    </li>
-                </ul>
-            </div>-->
+            <form action="/addComment" method="post">
+                <input type="hidden" name="questionId" value="$!{question.id}"/>
+                <div id="zh-question-answer-form-wrap" class="zh-question-answer-form-wrap">
+                    <div class="zm-editable-editor-wrap" style="">
+                        <div class="zm-editable-editor-outer">
+                            <div class="zm-editable-editor-field-wrap">
+                                <textarea name="content" id="content" class="zm-editable-editor-field-element editable" style="width:100%;"></textarea>
+                            </div>
+                        </div>
+                        <div class="zm-command clearfix">
+                            <span class=" zg-right">
+                                <button type="submit" class="submit-button zg-btn-blue">发布回答</button></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <br>
 
             <div id="zh-question-answer-wrap" data-pagesize="10" class="zh-question-answer-wrapper navigable"
                  data-widget="navigable" data-navigable-options="{&quot;items&quot;: &quot;&gt;.zm-item-answer&quot;}"
@@ -154,34 +152,12 @@
             </div>
             <a name="draft"></a>
 
-            <form action="/addComment" method="post">
-                <input type="hidden" name="questionId" value="$!{question.id}"/>
-            <div id="zh-question-answer-form-wrap" class="zh-question-answer-form-wrap">
-                <div class="zm-editable-editor-wrap" style="">
-                    <div class="zm-editable-editor-outer">
-                        <div class="zm-editable-editor-field-wrap">
-                            <textarea name="content" id="content" class="zm-editable-editor-field-element editable" style="width:100%;"></textarea>
-                        </div>
-                    </div>
-                    <!--测试框
-                    <div class="zm-editable-editor-field-wrap">
-                        <div id="id-addQuestion-content" class="zm-editable-editor-field-element editable"
-                             g_editable="true"
-                             role="textbox" contenteditable="true">
-                        </div>
-
-                    </div>-->
-
-                    <div class="zm-command clearfix">
-                            <span class=" zg-right">
-                                <button type="submit" class="submit-button zg-btn-blue">发布回答</button></span>
-                    </div>
-                </div>
-            </div>
-            </form>
+            <br>
+            <br>
 
 
-            <section id="comments">
+
+            <!--<section id="comments">
                 <h2>评论列表</h2>
                 <div class="media">
                     <div class="media-left">
@@ -250,7 +226,7 @@
 
                     </div>
                 </div>
-            </section>
+            </section>-->
 
         </div>
     </div>

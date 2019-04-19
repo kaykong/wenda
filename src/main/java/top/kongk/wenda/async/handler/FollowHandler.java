@@ -45,11 +45,11 @@ public class FollowHandler implements EventHandler {
         User user = userService.getUser(model.getActorId());
 
         if (model.getEntityType() == EntityType.ENTITY_QUESTION) {
-            message.setContent("用户" + user.getName()
-                    + "关注了您的问题, <a href=\"/question/" + model.getEntityId() + "\">您的问题链接</a>");
+            message.setContent("用户[" + user.getName()
+                    + "]关注了您的问题, <a href=\"/question/" + model.getEntityId() + "\">您的问题链接</a>");
         } else if (model.getEntityType() == EntityType.ENTITY_USER) {
-            message.setContent("用户" + user.getName()
-                    + "关注了您 , <a href=\"/user/" + model.getActorId() + "\">他的个人主页</a>");
+            message.setContent("用户[" + user.getName()
+                    + "]关注了您 , <a href=\"/user/" + model.getActorId() + "\">他的个人主页</a>");
         }
 
         messageService.addMessage(message);

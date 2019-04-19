@@ -69,8 +69,10 @@ public class CommentController {
             if (question == null) {
                 return "redirect:/";
             }
+
             content = HtmlUtils.htmlEscape(content);
             content = sensitiveService.filter(content);
+            content = divideContent(content);
             // 过滤content
             Comment comment = new Comment();
             if (hostHolder.getCurrentUser() != null) {
@@ -106,6 +108,10 @@ public class CommentController {
         }
 
         return "redirect:/question/" + String.valueOf(questionId);
+    }
+
+    private String divideContent(String content) {
+        return content.replaceAll("\r\n", "<br/>");
     }
 
 
@@ -169,8 +175,9 @@ public class CommentController {
                 return WendaUtil.getJSONString(999, "回答不存在的!");
             }
 
-            //content = HtmlUtils.htmlEscape(content);
+            content = HtmlUtils.htmlEscape(content);
             content = sensitiveService.filter(content);
+            content = divideContent(content);
             // 过滤content
             Comment comment = new Comment();
             if (hostHolder.getCurrentUser() != null) {
@@ -224,9 +231,10 @@ public class CommentController {
                 return WendaUtil.getJSONString(999, "不存在的!");
             }
 
-            //content = HtmlUtils.htmlEscape(content);
+            content = HtmlUtils.htmlEscape(content);
             content = sensitiveService.filter(content);
-            // 过滤content
+            content = divideContent(content);
+
             Comment reply = new Comment();
             if (hostHolder.getCurrentUser() != null) {
                 reply.setUserId(hostHolder.getCurrentUser().getId());
