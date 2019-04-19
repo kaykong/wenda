@@ -14,8 +14,9 @@
     <meta http-equiv="mobile-agent" content="format=html5;url=https://nowcoder.com/">
     <meta id="znonce" name="znonce" content="d3edc464cf014708819feffde7ddd01e">
     <link rel="search" type="application/opensearchdescription+xml" href="https://nowcoder.com/static/search.xml"
-          title="牛客">
+          title="">
     <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css">
+
     <!--引入jQuery-->
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
     <style>
@@ -62,7 +63,7 @@
 <div role="navigation" class="zu-top">
     <div class="zg-wrap modal-shifting clearfix" id="zh-top-inner">
         <a href="/" class="zu-top-link-logo" id="zh-top-link-logo" data-za-c="view_home" data-za-a="visit_home"
-           data-za-l="top_navigation_zhihu_logo">牛客</a>
+           data-za-l="top_navigation_zhihu_logo"></a>
         <div class="top-nav-profile">
             #if(!$user)
             <ul class="topnav-noauth clearfix">
@@ -107,7 +108,7 @@
         #end
         <div role="search" id="zh-top-search" class="zu-top-search">
             <form method="GET" action="/search" id="zh-top-search-form" class="zu-top-search-form">
-                <label for="q" class="hide-text">牛客搜索</label><input type="text" class="zu-top-search-input" id="q"
+                <label for="q" class="hide-text">搜索</label><input type="text" class="zu-top-search-input" id="q"
                                                                     name="q" autocomplete="off" value="$!{keyword}"
                                                                     placeholder="搜索你感兴趣的内容..." role="combobox"
                                                                     aria-autocomplete="list">
@@ -117,7 +118,7 @@
         </div>
         <div id="zg-top-nav" class="zu-top-nav">
             <ul class="zu-top-nav-ul zg-clear">
-                <li class="zu-top-nav-li current" id="zh-top-nav-home">
+                <li class="zu-top-nav-li " id="zh-top-nav-home">
                     <a class="zu-top-nav-link" href="/" id="zh-top-link-home" data-za-c="view_home"
                        data-za-a="visit_home" data-za-l="top_navigation_home">首页</a>
                 </li>
@@ -320,7 +321,7 @@
                         </div>
                     </div>
                 </div>-->
-                <form class="js-add-question-form" style="display: block;">
+                <form class="add-question-form" style="display: block;">
                     <div class="zg-section-big clearfix">
                         <div id="zm-modal-dialog-info-wrapper"></div>
                         <div style="display: none;position: relative;" id="zm-modal-dialog-warnmsg-wrapper">
@@ -562,7 +563,7 @@
                         </div>
                     </div>
                     <div class="zm-command">
-                        <a href="javascript:;" name="cancel" class="zm-command-cancel">取消</a>
+                        <a href="javascript:;" id="id-button-addQuestion-cancel" name="cancel" class="zm-command-cancel">取消</a>
                         <a href="javascript:;" id="id-button-addQuestion" name="addq" class="zg-r5px zu-question-form-add zg-btn-blue">发布</a>
                     </div>
                 </form>
@@ -617,6 +618,13 @@
 
         //关闭提问按钮 modal-dialog-title-close
         $(".modal-dialog-title-close").bind("click", function () {
+            //$("#add-question-form").show(500);
+            $("#add-question-suggesstion2").hide(200);
+            $("#add-question-form").hide(200);
+        });
+
+        //关闭提问按钮 modal-dialog-title-close
+        $("#id-button-addQuestion-cancel").bind("click", function () {
             //$("#add-question-form").show(500);
             $("#add-question-suggesstion2").hide(200);
             $("#add-question-form").hide(200);

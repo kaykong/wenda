@@ -34,6 +34,10 @@ public class Comment extends BaseIdEntity {
      * 评论的状态
      */
     private Integer status;
+    /**
+     * 评论的回复数
+     */
+    private Integer replyCount;
 
     public Integer getUserId() {
         return userId;
@@ -81,5 +85,13 @@ public class Comment extends BaseIdEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(Integer replyCount) {
+        this.replyCount = replyCount;
     }
 }

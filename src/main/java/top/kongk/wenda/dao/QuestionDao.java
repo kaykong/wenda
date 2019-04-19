@@ -58,4 +58,9 @@ public interface QuestionDao {
      * @return java.util.List<top.kongk.wenda.model.Category>
      */
     List<Category> getCategoryListByParentId(String parentId);
+
+    List<Question> selectLatestQuestionsByCategoryId(@Param("userId") Integer userId, @Param("offset") Integer offset,
+                                                     @Param("limit") Integer limit,
+                                                     @Param("categoryId") Integer categoryId);
+
 }

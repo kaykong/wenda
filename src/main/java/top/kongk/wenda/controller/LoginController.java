@@ -80,6 +80,7 @@ public class LoginController {
                 Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
                 cookie.setPath("/");
                 if (rememberme) {
+                    //5天
                     cookie.setMaxAge(3600 * 24 * 5);
                 }
                 response.addCookie(cookie);

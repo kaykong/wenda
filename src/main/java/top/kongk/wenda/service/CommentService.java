@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.kongk.wenda.dao.CommentDao;
 import top.kongk.wenda.model.Comment;
+import top.kongk.wenda.model.EntityType;
 
 import java.util.List;
 
@@ -41,4 +42,50 @@ public class CommentService {
     public Comment getCommentById(int commentId) {
         return commentDao.getCommentById(commentId);
     }
+
+    public Comment getAnswerByqIdAnswerId(int questionId, int answerId) {
+        return commentDao.getAnswerByqIdAnswerId(questionId, answerId);
+    }
+
+    //获得回答下的评论
+    public Integer getAnswerReplyCount(int answerId, int entityType, int count) {
+        //entityType = EntityType.ENTITY_ANSWER;
+        //Integer replyCount = 0;
+        //回答下的第一层评论
+        List<Comment> comments = commentDao.selectByEntity(answerId, entityType);
+
+        for (Comment comment : comments) {
+            count++;
+            Integer commentReplyCount = getCommentReplyCount(comment.getId(), EntityType.ENTITY_COMMENT, count);
+            count = commentReplyCount;
+        }
+
+        return count;
+    }
+
+    public Integer getAnswerReplyCount(int answerId, int entityType) {
+
+        return getAnswerReplyCount(answerId, entityType, 0);
+    }
+
+    //获得评论的回复
+    public Integer getCommentReplyCount(int entityId, int entityType) {
+
+        return getCommentReplyCount(entityId, entityType, 0);
+    }
+
+    public Integer getCommentReplyCount(int entityId, int entityType, int count) {
+        //entityType = EntityType.ENTITY_ANSWER;
+        //Integer replyCount = 0;
+        //回答下的第一层评论
+        List<Comment> comments = commentDao.selectByEntity(entityId, entityType);
+
+        for (Comment comment : comments) {
+            count++;
+            count = getCommentReplyCount(comment.getId(), EntityType.ENTITY_COMMENT, count);
+        }
+
+        return count;
+    }
+
 }

@@ -116,6 +116,10 @@ public class QuestionService {
         return questionDao.selectLatestQuestions(userId, offset, limit);
     }
 
+    public List<Question> getLatestQuestions(Integer userId, Integer offset, Integer limit, Integer categoryId) {
+        return questionDao.selectLatestQuestionsByCategoryId(userId, offset, limit, categoryId);
+    }
+
 
     /**
      * 根据问题id更新问题的评论数
@@ -138,4 +142,6 @@ public class QuestionService {
     public List<Category> getCategoryListByParentId(String parentId) {
         return questionDao.getCategoryListByParentId(parentId);
     }
+
+
 }

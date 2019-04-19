@@ -67,4 +67,11 @@
         where user_id = #{id} and entity_type = 1
     </select>
 
+    <select id="getAnswerByqIdAnswerId" resultType="top.kongk.wenda.model.Comment">
+        select
+        <include refid="common-column"/>
+        from comment
+        where entity_id = #{questionId} and entity_type = 1 and id = #{answerId}
+    </select>
+
 </mapper>

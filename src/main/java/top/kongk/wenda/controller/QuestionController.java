@@ -1,5 +1,6 @@
 package top.kongk.wenda.controller;
 
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,7 @@ import top.kongk.wenda.util.WendaUtil;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 问题模块
@@ -91,6 +89,7 @@ public class QuestionController {
         for (Comment comment : commentList) {
             ViewObject vo = new ViewObject();
             vo.set("comment", comment);
+            comment.setReplyCount(commentService.getAnswerReplyCount(comment.getId(), EntityType.ENTITY_ANSWER));
 
             if (hostHolder.getCurrentUser() == null) {
                 vo.set("liked", 0);
@@ -130,6 +129,74 @@ public class QuestionController {
         }
 
         return "detail";
+    }
+
+
+    @RequestMapping(value = "{qid}/answer", method = {RequestMethod.GET})
+    public String questionAnswerDetail(Model model,
+                                       @PathVariable("qid") int qid,
+                                       @RequestParam("aid") int aid) {
+        Question question = questionService.getById(qid);
+        model.addAttribute("question", question);
+
+        Comment comment = commentService.getAnswerByqIdAnswerId(qid, aid);
+
+
+        if (comment != null) {
+            //获取回答的信息
+            ViewObject vo = new ViewObject();
+            vo.set("answer", comment);
+            if (hostHolder.getCurrentUser() == null) {
+                vo.set("liked", 0);
+            } else {
+                //获取用户是否喜欢该回答
+                vo.set("liked",
+                        likeService.getLikeStatus(hostHolder.getCurrentUser().getId(),
+                                EntityType.ENTITY_ANSWER, comment.getId()));
+            }
+
+            //获取回答的喜欢人数
+            vo.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_ANSWER, comment.getId()));
+            vo.set("user", userService.getUser(comment.getUserId()));
+
+            //获取回答下的评论
+            List<Comment> commentList = commentService.getCommentsByEntity(aid, EntityType.ENTITY_ANSWER);
+            List<ViewObject> commentVos = new ArrayList<>(commentList.size());
+            //每个评论的回复
+            for (Comment comment1 : commentList) {
+                comment1.setReplyCount(commentService.getCommentReplyCount(comment1.getId(), EntityType.ENTITY_COMMENT));
+                ViewObject v1 = new ViewObject();
+                v1.set("comment", comment1);
+                v1.set("user", userService.getUser(comment1.getUserId()));
+                commentVos.add(v1);
+            }
+            //添加进评论
+            vo.set("commentVos", commentVos);
+
+            model.addAttribute("vo", vo);
+        }
+        // 获取关注此问题的用户信息
+        List<ViewObject> followUsers = new ArrayList<>(20);
+        List<Integer> users = followService.getFollowers(EntityType.ENTITY_QUESTION, qid, 20);
+        for (Integer userId : users) {
+            ViewObject vo = new ViewObject();
+            User u = userService.getUser(userId);
+            if (u == null) {
+                continue;
+            }
+            vo.set("name", u.getName());
+            vo.set("headUrl", u.getHeadUrl());
+            vo.set("id", u.getId());
+            followUsers.add(vo);
+        }
+        model.addAttribute("followUsers", followUsers);
+        if (hostHolder.getCurrentUser() != null) {
+            model.addAttribute("followed", followService.isFollower(hostHolder.getCurrentUser().getId(), EntityType.ENTITY_QUESTION, qid));
+        } else {
+            model.addAttribute("followed", false);
+        }
+
+        return "detailAnswer";
     }
 
     @RequestMapping(value = "/add", method = {RequestMethod.POST})

@@ -21,4 +21,9 @@ public class EntityType {
      * 用户实体类型
      */
     public static int ENTITY_USER = 3;
+
+    /**
+     * 评论实体类型
+     */
+    public static int ENTITY_COMMENT = 4;
 }

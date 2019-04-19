@@ -82,7 +82,7 @@ public class SearchController {
             model.addAttribute("vos", vos);
             model.addAttribute("keyword", keyword);
         } catch (Exception e) {
-            logger.error("搜索评论失败" + e.getMessage());
+            logger.error("搜索问题失败" + e.getMessage());
         }
         return "result";
     }

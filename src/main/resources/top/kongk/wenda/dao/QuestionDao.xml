@@ -49,4 +49,23 @@
     <select id="getCategoryListByParentId" resultType="top.kongk.wenda.model.Category">
          select id, name, parent_id from category where parent_id = #{parentId}
     </select>
+
+    <select id="selectLatestQuestionsByCategoryId" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q LEFT JOIN category c
+        on q.category_id = c.id
+
+        <where>
+            <if test="userId != null and userId != 0">
+                q.user_id = #{userId}
+            </if>
+            <if test="categoryId != null">
+                and q.category_id = #{categoryId}
+            </if>
+        </where>
+
+        ORDER BY q.id DESC
+        LIMIT #{offset},#{limit}
+    </select>
 </mapper>
