@@ -34,6 +34,10 @@
         update message set has_read = 1 where conversation_id = #{conversationId} and to_id = #{userId}
     </update>
 
+    <delete id="deleteMessageByFromToIdContent">
+        delete from message where from_id = #{fromId} and to_id = #{toId} and content = #{content}
+    </delete>
+
 
     <select id="getQuestionById" resultType="top.kongk.wenda.model.Question">
         SELECT
@@ -50,6 +54,15 @@
         <include refid="insert-column"/>
         values
         <include refid="insert-values-column"/>
+    </insert>
+
+    <insert id="addMessageList">
+        insert into message
+        <include refid="insert-column"/>
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.fromId}, #{item.toId}, #{item.content}, #{item.hasRead}, #{item.conversationId}, #{item.createdDate})
+        </foreach>
     </insert>
 
     <select id="getConversationDetail" resultType="top.kongk.wenda.model.Message">

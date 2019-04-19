@@ -2,6 +2,7 @@ package top.kongk.wenda.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.kongk.wenda.model.EntityType;
 import top.kongk.wenda.util.JedisAdapter;
 import top.kongk.wenda.util.RedisKeyUtil;
 

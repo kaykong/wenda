@@ -30,7 +30,7 @@
 
 
     <!--*************************-->
-    <insert id="addComment">
+    <insert id="addComment" keyProperty="id" useGeneratedKeys="true">
         insert into comment
         <include refid="insert-column"/>
         values

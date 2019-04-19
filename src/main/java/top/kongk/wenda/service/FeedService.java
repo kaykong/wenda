@@ -50,4 +50,7 @@ public class FeedService {
         return feedDao.getFeedById(id);
     }
 
+    public void deleteFeedByUserIdDataType(int userId, String data, int type) {
+        feedDao.deleteFeedByUserIdDataType(userId, data, type);
+    }
 }

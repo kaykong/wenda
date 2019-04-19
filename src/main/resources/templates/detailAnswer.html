@@ -15,7 +15,7 @@
             </div>
             <div id="zh-question-title" data-editable="true" class="zm-editable-status-normal">
                 <h2 class="zm-item-title">
-                    <span class="zm-editable-content">$!{question.title}</span>
+                    <a href="/question/$!{question.id}" target="_self"><span class="zm-editable-content">$!{question.title}</span></a>
                 </h2>
             </div>
             <div id="zh-question-detail" class="zm-item-rich-text zm-editable-status-normal">
@@ -63,23 +63,23 @@
 
                     <div class="zm-votebar goog-scrollfloater js-vote" data-id="$!{vo.answer.id}">
                         #if($vo.liked > 0)
-                        <button class="up js-like pressed" title="赞同">
-                            #else
-                            <button class="up js-like" title="赞同">
-                                #end
-                                <i class="icon vote-arrow"></i>
-                                <span class="count js-voteCount">$!{vo.likeCount}</span>
-                                <span class="label sr-only">赞同</span>
-                            </button>
+                        <button class="up js-like pressed" title="赞同"/>
+                        #else
+                        <button class="up js-like" title="赞同">
+                            #end
+                            <i class="icon vote-arrow"></i>
+                            <span class="count js-voteCount">$!{vo.likeCount}</span>
+                            <span class="label sr-only">赞同</span>
+                        </button>
 
-                            #if( $vo.liked < 0)
-                            <button class="down js-dislike pressed" title="反对，不会显示你的姓名">
-                                #else
-                                <button class="down js-dislike" title="反对，不会显示你的姓名">
-                                    #end
-                                    <i class="icon vote-arrow"></i>
-                                    <span class="label sr-only">反对，不会显示你的姓名</span>
-                                </button>
+                        #if( $vo.liked < 0)
+                        <button class="down js-dislike pressed" title="反对，不会显示你的姓名"/>
+                        #else
+                        <button class="down js-dislike" title="反对，不会显示你的姓名">
+                            #end
+                            <i class="icon vote-arrow"></i>
+                            <span class="label sr-only">反对，不会显示你的姓名</span>
+                        </button>
                     </div>
                     <!--<div class="zm-votebar goog-scrollfloater js-vote" data-id="$!{comment.comment.id}">
                         #if($vo.liked > 0)
@@ -181,7 +181,8 @@
                             HH:mm:ss', $commentVo.comment.createdDate)
                         </a></time>
 
-                        <a href="/comment/$commentVo.comment.id" name="addcomment" class="meta-item toggle-comment js-toggleCommentBox">
+                        <a href="/comment/$commentVo.comment.id" name="addcomment"
+                           class="meta-item toggle-comment js-toggleCommentBox">
                             <i class="z-icon-comment"></i>$commentVo.comment.replyCount 条回复</a>
 
                         <!--<div class="media">
@@ -209,11 +210,10 @@
             <br/>
             <br/>
         </div>
-
+        #end
     </div>
 </div>
 #parse("js.html")
 <script type="text/javascript" src="/scripts/main/site/detail.js"></script>\
-
 #parse("footer.html")
-#end
+

@@ -83,4 +83,13 @@ public class MessageService {
     public int getUserUnreadCount(Integer id) {
         return messageDao.getUserUnreadCount(id);
     }
+
+    public void addMessageList(List<Message> messageList) {
+        messageDao.addMessageList(messageList);
+    }
+
+
+    public void deleteMessageByFromToIdContent(Integer fromId, Integer toId, String content) {
+        messageDao.deleteMessageByFromToIdContent(fromId, toId, content);
+    }
 }

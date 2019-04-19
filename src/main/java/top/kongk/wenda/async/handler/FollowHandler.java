@@ -8,8 +8,10 @@ import top.kongk.wenda.async.EventModel;
 import top.kongk.wenda.async.EventType;
 import top.kongk.wenda.model.EntityType;
 import top.kongk.wenda.model.Message;
+import top.kongk.wenda.model.Question;
 import top.kongk.wenda.model.User;
 import top.kongk.wenda.service.MessageService;
+import top.kongk.wenda.service.QuestionService;
 import top.kongk.wenda.service.UserService;
 import top.kongk.wenda.util.WendaUtil;
 
@@ -32,6 +34,9 @@ public class FollowHandler implements EventHandler {
     @Autowired
     UserService userService;
 
+    @Autowired
+    QuestionService questionService;
+
     @Override
     public void doHandle(EventModel model) {
 
@@ -45,13 +50,15 @@ public class FollowHandler implements EventHandler {
         User user = userService.getUser(model.getActorId());
 
         if (model.getEntityType() == EntityType.ENTITY_QUESTION) {
+            Question question = questionService.getById(model.getEntityId());
             message.setContent("用户[" + user.getName()
-                    + "]关注了您的问题, <a href=\"/question/" + model.getEntityId() + "\">您的问题链接</a>");
+                    + "]关注了您的问题, <a href=\"/question/" + model.getEntityId() + "\">" + question.getTitle() +"</a>");
         } else if (model.getEntityType() == EntityType.ENTITY_USER) {
             message.setContent("用户[" + user.getName()
                     + "]关注了您 , <a href=\"/user/" + model.getActorId() + "\">他的个人主页</a>");
         }
 
+        messageService.deleteMessageByFromToIdContent(message.getFromId(), message.getToId(), message.getContent());
         messageService.addMessage(message);
     }
 

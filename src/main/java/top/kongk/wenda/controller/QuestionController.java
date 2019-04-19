@@ -1,25 +1,19 @@
 package top.kongk.wenda.controller;
 
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import top.kongk.wenda.async.EventHandler;
 import top.kongk.wenda.async.EventModel;
 import top.kongk.wenda.async.EventProducer;
 import top.kongk.wenda.async.EventType;
-import top.kongk.wenda.common.QuestionCode;
-import top.kongk.wenda.common.ResponseCode;
 import top.kongk.wenda.common.ServerResponse;
 import top.kongk.wenda.model.*;
 import top.kongk.wenda.service.*;
 import top.kongk.wenda.util.WendaUtil;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -106,7 +100,7 @@ public class QuestionController {
         }
 
         //按热度排序
-        if ("heat".equals(orderBy)) {
+        if ("hot".equals(orderBy)) {
 
             //获取权重, 可以通过数据库获取
             int likeCountWeight = 6;

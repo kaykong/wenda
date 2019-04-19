@@ -21,9 +21,7 @@ import top.kongk.wenda.service.SensitiveService;
 import top.kongk.wenda.service.UserService;
 import top.kongk.wenda.util.WendaUtil;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -95,12 +93,15 @@ public class CommentController {
             int count = commentService.getCommentCount(comment.getEntityId(), comment.getEntityType());
             questionService.updateCommentCount(comment.getEntityId(), count);
 
+            Map<String, String> map = new HashMap<>(1);
+            map.put("answerId", comment.getId().toString());
             //回答问题事件
             eventProducer.fireEvent(new EventModel(EventType.Answer)
                     .setActorId(hostHolder.getCurrentUser().getId())
                     .setEntityId(questionId)
                     .setEntityType(EntityType.ENTITY_QUESTION)
-                    .setEntityOwnerId(question.getUserId()));
+                    .setEntityOwnerId(question.getUserId())
+                    .setExts(map));
 
 
         } catch (Exception e) {

@@ -40,4 +40,16 @@ public interface FeedDao {
     List<Feed> selectUserFeeds(@Param("maxId") int maxId,
                                @Param("userIds") List<Integer> userIds,
                                @Param("count") int count);
+
+    /**
+     * 删除 已经存在的 userId, data, type
+     *
+     * @param userId
+     * @param data
+     * @param type
+     * @return void
+     */
+    void deleteFeedByUserIdDataType(@Param("userId") int userId,
+                                    @Param("data") String data,
+                                    @Param("type") int type);
 }

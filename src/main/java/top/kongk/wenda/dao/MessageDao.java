@@ -73,4 +73,25 @@ public interface MessageDao {
      * @return int
      */
     int getUserUnreadCount(Integer id);
+
+    /**
+     * 批量插入message
+     *
+     * @param messageList
+     * @return void
+     */
+    void addMessageList(List<Message> messageList);
+
+
+    /**
+     * 根据from toId和content删除重复的message
+     *
+     * @param fromId
+     * @param toId
+     * @param content
+     * @return void
+     */
+    void deleteMessageByFromToIdContent(@Param("fromId") Integer fromId,
+                                        @Param("toId") Integer toId,
+                                        @Param("content") String content);
 }

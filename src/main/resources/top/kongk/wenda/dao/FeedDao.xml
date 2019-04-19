@@ -19,6 +19,10 @@
         <include refid="insert-values-column"/>
     </insert>
 
+    <delete id="deleteFeedByUserIdDataType">
+      DELETE from feed where user_id = #{userId} and data = #{data} and type = #{type}
+    </delete>
+
     <select id="getFeedById" resultType="top.kongk.wenda.model.Feed">
         SELECT
         <include refid="common-column"/>
@@ -44,7 +48,7 @@
                 #{item}
             </foreach>
         </if>
-        ORDER BY id DESC
+        ORDER BY created_date DESC
         LIMIT #{count}
     </select>
 
