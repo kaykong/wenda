@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.HtmlUtils;
 import top.kongk.wenda.model.HostHolder;
 import top.kongk.wenda.model.Message;
 import top.kongk.wenda.model.User;
@@ -53,6 +54,7 @@ public class MessageController {
             List<Message> conversationList = messageService.getConversationList(localUserId, 0, 10);
             for (Message msg : conversationList) {
                 ViewObject vo = new ViewObject();
+                msg.setContent(msg.getContent().replaceAll("<br/>", " "));
                 vo.set("message", msg);
                 int targetId = msg.getFromId() == localUserId ? msg.getToId() : msg.getFromId();
                 User user = userService.getUser(targetId);
@@ -92,7 +94,16 @@ public class MessageController {
                 return "redirect:/";
             }
 
-            List<Message> conversationList = messageService.getConversationDetail(conversationId, 0, 10);
+            int toId = -1;
+            if (currentUser.getId().toString().equals(userIds[0])) {
+                toId = Integer.parseInt(userIds[1]);
+            } else {
+                toId = Integer.parseInt(userIds[0]);
+            }
+
+            User toUser = userService.getUser(toId);
+
+            List<Message> conversationList = messageService.getConversationDetail(conversationId, 0, 1000);
             List<ViewObject> messages = new ArrayList<>();
             for (Message msg : conversationList) {
                 ViewObject vo = new ViewObject();
@@ -106,6 +117,7 @@ public class MessageController {
                 messages.add(vo);
             }
             model.addAttribute("messages", messages);
+            model.addAttribute("toUser", toUser);
 
             /*
              * 把 conversationId 中 toId 为当前用户id的 message 的修改为已读
@@ -136,7 +148,10 @@ public class MessageController {
             }
 
             Message msg = new Message();
-            msg.setContent(sensitiveService.filter(content));
+            content = HtmlUtils.htmlEscape(content);
+            content = content.replaceAll("\n", "<br/>");
+            content = sensitiveService.filter(content);
+            msg.setContent(content);
             msg.setFromId(hostHolder.getCurrentUser().getId());
             msg.setToId(user.getId());
             msg.setCreatedDate(new Date());
@@ -147,6 +162,35 @@ public class MessageController {
             logger.error("增加站内信失败" + e.getMessage());
             return WendaUtil.getJSONString(1, "插入站内信失败");
         }
+    }
+
+    @RequestMapping(path = {"/msg/addMessage2"}, method = {RequestMethod.POST})
+    public String addMessage2(@RequestParam("toName") String toName,
+                              @RequestParam("content") String content) {
+        try {
+            if (hostHolder.getCurrentUser() == null) {
+                return WendaUtil.getJSONString(999, "未登录");
+            }
+            User user1 = userService.getUserByName(toName);
+            if (user1 == null) {
+                return WendaUtil.getJSONString(1, "用户不存在");
+            }
+
+            Message msg1 = new Message();
+            msg1.setContent(sensitiveService.filter(content));
+            msg1.setFromId(hostHolder.getCurrentUser().getId());
+            msg1.setToId(user1.getId());
+            msg1.setCreatedDate(new Date());
+            msg1.setHasRead(0);
+            messageService.addMessage(msg1);
+            return "redirect:/msg/detail?conversationId=" + msg1.getConversationId();
+
+        } catch (Exception e) {
+            logger.error("增加站内信失败" + e.getMessage());
+
+        }
+
+        return "/";
     }
 
 

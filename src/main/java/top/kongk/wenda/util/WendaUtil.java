@@ -75,6 +75,11 @@ public class WendaUtil {
         }
     }
 
+    public static String divideContent(String content) {
+        return content.replaceAll("\r\n", "<br/>");
+        //return content.replaceAll("\n", "<br/>");
+    }
+
     public static String get32UUID() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }

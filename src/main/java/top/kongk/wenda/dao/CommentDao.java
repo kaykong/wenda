@@ -75,4 +75,15 @@ public interface CommentDao {
      */
     Comment getAnswerByqIdAnswerId(@Param("questionId") int questionId,
                                    @Param("answerId") int answerId);
+
+
+    /**
+     * 获取用户在某一类型下的comment
+     *
+     * @param userId
+     * @param entityType
+     * @return java.util.List<top.kongk.wenda.model.Comment>
+     */
+    List<Comment> getAnswersByUserId(@Param("userId") Integer userId,
+                                     @Param("entityType") Integer entityType);
 }

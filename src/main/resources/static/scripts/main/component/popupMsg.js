@@ -26,6 +26,7 @@ var oPopupAdd = new PopupAdd({
                         '<div class="zm-editable-editor-wrap no-toolbar">',
                             '<div class="zm-editable-editor-outer">',
                                 '<div class="zm-editable-editor-field-wrap">',
+            /*zm-editable-editor-field-element editable   || js-content zm-editable-editor-field-element editable*/
                                     '<textarea class="js-content zm-editable-editor-field-element editable" placeholder="私信内容" style="font-style:italic;width:98%;"></textarea>',
                                 '</div>',
                             '</div>',

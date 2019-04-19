@@ -47,9 +47,16 @@
             call: function (oResult) {
                 // 调整样式
                 oDv.find('.pressed').removeClass('pressed');
-                oDv.find(bLike ? '.js-like' : '.js-dislike').addClass('pressed');
+                //oDv.find(bLike ? '.js-like' : '.js-dislike').addClass('pressed');
+
+                if (oResult.likeStatus > 0) {
+                    oDv.find('.js-like').addClass('pressed');
+                } else if (oResult.likeStatus < 0) {
+                    oDv.find('.js-dislike').addClass('pressed');
+                }
+
                 // 更新数量
-                oDv.closest('div.js-comment').find('span.js-voteCount').html(oResult.msg);
+                oDv.closest('div.js-comment').find('span.js-voteCount').html(oResult.likeCount);
             },
             error: function (oResult) {
                 if (oResult.code === 999) {

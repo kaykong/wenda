@@ -70,7 +70,7 @@ public class CommentController {
 
             content = HtmlUtils.htmlEscape(content);
             content = sensitiveService.filter(content);
-            content = divideContent(content);
+            content = WendaUtil.divideContent(content);
             // 过滤content
             Comment comment = new Comment();
             if (hostHolder.getCurrentUser() != null) {
@@ -178,7 +178,7 @@ public class CommentController {
 
             content = HtmlUtils.htmlEscape(content);
             content = sensitiveService.filter(content);
-            content = divideContent(content);
+            content = WendaUtil.divideContent(content);
             // 过滤content
             Comment comment = new Comment();
             if (hostHolder.getCurrentUser() != null) {

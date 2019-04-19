@@ -2,6 +2,30 @@
 <link rel="stylesheet" media="all" href="../styles/letter.css">
 <div id="main">
     <div class="zg-wrap zu-main clearfix ">
+
+        #if($toUser)
+        <a href="/msg/list" target="_self">&lt;&lt;&lt; 返回</a>
+        <br><br>
+        <form action="/msg/addMessage2" method="post">
+            <input type="hidden" name="toName" value="$toUser.name"/>
+            <h5>发私信给 <!--<img class="Avatar" src="$toUser.headUrl" alt="a">--> $toUser.name </h5>
+
+            <div id="zh-question-answer-form-wrap" class="zh-question-answer-form-wrap">
+                <div class="zm-editable-editor-wrap" style="">
+                    <div class="zm-editable-editor-outer">
+                        <div class="zm-editable-editor-field-wrap">
+                            <textarea name="content" id="content" class="zm-editable-editor-field-element editable" style="width:100%;"></textarea>
+                        </div>
+                    </div>
+                    <div class="zm-command clearfix">
+                            <span class="zg-right">
+                                <button type="submit" class="submit-button zg-btn-blue">发送</button></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+        #end
+
         <ul class="letter-chatlist">
              #foreach($message in $messages)
             <li id="msg-item-4009580">
@@ -26,6 +50,17 @@
 
     </div>
 </div>
+
+
+<script>
+    $(function(){
+        $("#content").keyup(function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + "px";
+        });
+    });
+</script>
+
 #parse("js.html")
 <script type="text/javascript" src="/scripts/main/site/detail.js"></script>
 #parse("footer.html")

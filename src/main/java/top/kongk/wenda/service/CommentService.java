@@ -47,7 +47,14 @@ public class CommentService {
         return commentDao.getAnswerByqIdAnswerId(questionId, answerId);
     }
 
-    //获得回答下的评论
+    /**
+     * 获得回答下的评论
+     *
+     * @param answerId
+     * @param entityType
+     * @param count
+     * @return java.lang.Integer
+     */
     public Integer getAnswerReplyCount(int answerId, int entityType, int count) {
         //entityType = EntityType.ENTITY_ANSWER;
         //Integer replyCount = 0;
@@ -68,7 +75,13 @@ public class CommentService {
         return getAnswerReplyCount(answerId, entityType, 0);
     }
 
-    //获得评论的回复
+    /**
+     * 评论的回复数
+     *
+     * @param entityId
+     * @param entityType
+     * @return java.lang.Integer
+     */
     public Integer getCommentReplyCount(int entityId, int entityType) {
 
         return getCommentReplyCount(entityId, entityType, 0);
@@ -88,4 +101,11 @@ public class CommentService {
         return count;
     }
 
+    public List<Comment> getAnswersByUserId(Integer id) {
+        return getAnswersByUserIdEntityType(id, EntityType.ENTITY_QUESTION);
+    }
+
+    private List<Comment> getAnswersByUserIdEntityType(Integer id, int entityType) {
+        return commentDao.getAnswersByUserId(id, entityType);
+    }
 }

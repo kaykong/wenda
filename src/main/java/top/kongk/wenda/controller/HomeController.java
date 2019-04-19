@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import top.kongk.wenda.model.*;
-import top.kongk.wenda.service.CommentService;
-import top.kongk.wenda.service.FollowService;
-import top.kongk.wenda.service.QuestionService;
-import top.kongk.wenda.service.UserService;
+import top.kongk.wenda.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -44,6 +41,9 @@ public class HomeController {
 
     @Autowired
     HostHolder hostHolder;
+
+    @Autowired
+    LikeService likeService;
 
     private List<ViewObject> getQuestions(Integer userId, Integer offset, Integer limit) {
         List<Question> questionList = questionService.getLatestQuestions(userId, offset, limit);
@@ -159,12 +159,13 @@ public class HomeController {
                             @PathVariable("userId") Integer userId,
                             @RequestParam(value = "categoryId", required = false) Integer categoryId) {
 
-        model.addAttribute("vos", getQuestions(userId, 0, 100, categoryId));
+        model.addAttribute("vos", getQuestions(userId, 0, 1000, categoryId));
 
         //获取人物简介
         User user = userService.getUser(userId);
         ViewObject vo = new ViewObject();
         vo.set("user", user);
+        //getUserCommentCount 获取的就是回答数量
         vo.set("commentCount", commentService.getUserCommentCount(userId));
         vo.set("followerCount", followService.getFollowerCount(EntityType.ENTITY_USER, userId));
         vo.set("followeeCount", followService.getFolloweeCount(userId, EntityType.ENTITY_USER));
@@ -174,6 +175,15 @@ public class HomeController {
         } else {
             vo.set("followed", false);
         }
+        //获取用户的赞同数
+        //1.获取用户的所有回答,
+        //2.获取用户的所有回答的赞同数
+        List<Comment> commentList = commentService.getAnswersByUserId(user.getId());
+        long likeCount = 0;
+        for (Comment comment : commentList) {
+            likeCount += likeService.getLikeCount(EntityType.ENTITY_ANSWER, comment.getId());
+        }
+        vo.set("likeCount", likeCount);
 
         model.addAttribute("profileUser", vo);
 
