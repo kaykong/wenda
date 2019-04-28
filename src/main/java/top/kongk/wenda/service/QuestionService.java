@@ -157,4 +157,7 @@ public class QuestionService {
     }
 
 
+    public boolean deleteById(int id) {
+        return questionDao.updateStatusById(id, 0) > 0;
+    }
 }

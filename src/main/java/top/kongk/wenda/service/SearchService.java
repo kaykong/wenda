@@ -2,6 +2,7 @@ package top.kongk.wenda.service;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.kongk.wenda.model.Question;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -160,5 +162,23 @@ public class SearchService {
         UpdateResponse response = client.add(doc, 1000);
         return response != null && response.getStatus() == 0;
     }
+
+    /**
+     * 根据id 删除
+     *
+     * @param id
+     * @return void
+     */
+    public void deleteById(String id) {
+        System.out.println("======================deleteById ===================");
+        try {
+            UpdateResponse rsp = client.deleteById(id);
+            client.commit();
+            System.out.println("delete id:" + id + " result:" + rsp.getStatus() + " Qtime:" + rsp.getQTime());
+        } catch (SolrServerException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

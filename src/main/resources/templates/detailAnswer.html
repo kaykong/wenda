@@ -7,20 +7,30 @@
         <div class="zu-main-content-inner">
             <meta itemprop="isTopQuestion" content="false">
             <meta itemprop="visitsCount" content="402">
+            #if ($question.status == 1)
             <div class="zm-tag-editor zg-section">
                 <div class="zm-tag-editor-labels zg-clear">
                     <a data-tip="t$b$19550730" class="zm-item-tag" href="/?categoryId=$!{question.categoryId}"
                        target="_blank">$!{question.categoryName}</a>
+                    #if ($user.manager || $user.id == $question.userId)
+                    <a href="javascript:void(0);" onclick="deleteQuestion(${question.id})" style="float: right;color: #999;">删除问题</a>
+                    #end
                 </div>
             </div>
+            #end
             <div id="zh-question-title" data-editable="true" class="zm-editable-status-normal">
                 <h2 class="zm-item-title">
+                    #if ($question.status == 1)
                     <a href="/question/$!{question.id}" target="_self"><span class="zm-editable-content">$!{question.title}</span></a>
+                    #else
+                    <span class="zm-editable-content">$!{question.title}</span>
+                    #end
                 </h2>
             </div>
             <div id="zh-question-detail" class="zm-item-rich-text zm-editable-status-normal">
                 <div class="zm-editable-content">$!{question.content}</div>
             </div>
+            #if ($question.status == 1)
             <div class="zm-side-section">
                 <div class="zm-side-section-inner" id="zh-question-side-header-wrap">
                     #if ($followed)
@@ -49,6 +59,7 @@
                     </div>
                 </div>
             </div>
+            #end
             #if( $vo )
             <div id="zh-question-answer-wrap" data-pagesize="10" class="zh-question-answer-wrapper navigable"
                  data-widget="navigable" data-navigable-options="{&quot;items&quot;: &quot;&gt;.zm-item-answer&quot;}"
@@ -141,7 +152,7 @@
             </div>
 
             <a name="draft"></a>
-
+            #if ($question.status == 1)
             <form action="/addAnswerComment" method="post">
                 <input type="hidden" name="answerId" value="$!{vo.answer.id}"/>
                 <div id="zh-question-answer-form-wrap" class="zh-question-answer-form-wrap">
@@ -160,8 +171,9 @@
                     </div>
                 </div>
             </form>
+            #end
 
-            <section id="comments">
+            <section id="comments" style="margin-top: 5px">
                 <h2>评论列表</h2>
 
                 <!--回答下的评论-->
@@ -222,6 +234,30 @@
         });
 
     });
+
+    /*回答页删除问题*/
+    function deleteQuestion(id) {
+
+        $.ajax({
+            url: "/question/delete/" + id,
+            type: 'GET',
+            data: null,
+            success: function (result) {
+                var result = jQuery.parseJSON(result);
+//                console.log("code=" + result.code);
+//                console.log("msg=" + result.msg);
+
+                if (result.code === 0) {
+                    alert("成功删除");
+                    window.location.href = "/"
+                } else if (result.code === 999) {
+                    window.location.href = "/reglogin"
+                } else {
+                    alert(result.msg);
+                }
+            }
+        });
+    }
 </script>
 
 #parse("js.html")

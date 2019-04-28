@@ -48,6 +48,9 @@ public class QuestionController {
     @Autowired
     EventProducer eventProducer;
 
+    @Autowired
+    SearchService searchService;
+
     /**
      * 用户提交问题, 把问题插入数据库, 设置状态为待审核
      *
@@ -84,6 +87,9 @@ public class QuestionController {
         }
 
         Question question = questionService.getById(qid);
+        if (question.getStatus() == 0) {
+            return "redirect:/";
+        }
         model.addAttribute("question", question);
         //获取问题下的所有回答
         List<Comment> commentList = commentService.getCommentsByEntity(qid, EntityType.ENTITY_QUESTION);
@@ -172,6 +178,10 @@ public class QuestionController {
                                        @PathVariable("qid") int qid,
                                        @RequestParam("aid") int aid) {
         Question question = questionService.getById(qid);
+        if (question.getStatus() == 0) {
+            question.setTitle("该问题已经被删除");
+            question.setContent("");
+        }
         model.addAttribute("question", question);
 
         Comment comment = commentService.getAnswerByqIdAnswerId(qid, aid);
@@ -277,6 +287,7 @@ public class QuestionController {
             //默认不匿名
             question.setAnonymous(false);
             question.setCategoryId(categoryId);
+            question.setStatus(1);
             if (hostHolder.getCurrentUser() == null) {
                 return WendaUtil.getJSONString(999);
             } else {
@@ -290,7 +301,7 @@ public class QuestionController {
                 return WendaUtil.getJSONString(0);
             }
         } catch (Exception e) {
-            log.error("增加题目失败" + e.getMessage());
+            log.error("增加问题失败" + e.getMessage());
         }
         return WendaUtil.getJSONString(1, "失败");
     }
@@ -308,5 +319,37 @@ public class QuestionController {
         return Collections.EMPTY_LIST;
     }
 
+
+    @RequestMapping(value = "/delete/{id}", method = {RequestMethod.GET})
+    @ResponseBody
+    public String delete(@PathVariable("id") int id) {
+
+        if (hostHolder.getCurrentUser() == null) {
+            return WendaUtil.getJSONString(999, "请登录");
+        }
+
+        Question question = questionService.getById(id);
+        if (question == null) {
+            return WendaUtil.getJSONString(1, "该问题不存在");
+        }
+
+        /*
+         * 检查用户是否有权限
+         */
+        User currentUser = hostHolder.getCurrentUser();
+        if (!(question.getUserId().equals(currentUser.getId()) || currentUser.getManager())) {
+            return WendaUtil.getJSONString(1, "您没有删除问题的权限");
+        }
+
+
+        boolean check = questionService.deleteById(id);
+
+        if (check) {
+            searchService.deleteById(String.valueOf(id));
+            return WendaUtil.getJSONString(0, id + "成功");
+        }
+
+        return WendaUtil.getJSONString(1, "删除失败");
+    }
 
 }

@@ -9,6 +9,11 @@
             <div class="zm-tag-editor zg-section">
                 <div class="zm-tag-editor-labels zg-clear">
                     <a data-tip="t$b$19550730" class="zm-item-tag" href="/?categoryId=$!{question.categoryId}" target="_blank">$!{question.categoryName}</a>
+                    #if ($question.status == 1)
+                    #if ($user.manager || $user.id == $question.userId)
+                    <a href="javascript:void(0);" onclick="deleteQuestion(${question.id})" style="float: right;color: #999;">删除问题</a>
+                    #end
+                    #end
                 </div>
             </div>
             <div id="zh-question-title" data-editable="true" class="zm-editable-status-normal">
@@ -19,6 +24,7 @@
             <div id="zh-question-detail" class="zm-item-rich-text zm-editable-status-normal">
                 <div class="zm-editable-content">$!{question.content}</div>
             </div>
+
             <div class="zm-side-section">
                 <div class="zm-side-section-inner" id="zh-question-side-header-wrap">
                     #if ($followed)
@@ -143,8 +149,9 @@
                             <a href="/question/$!{question.id}/answer?aid=$!{comment.comment.id}" name="addcomment" class="meta-item toggle-comment js-toggleCommentBox">
                                 <i class="z-icon-comment"></i>$!{comment.comment.replyCount} 条评论</a>
 
-                            <button class="item-collapse js-collapse" style="transition: none;">
-                                <i class="z-icon-fold"></i>收起</button>
+                            <!--<button class="item-collapse js-collapse" style="transition: none;">
+                                <i class="z-icon-fold"></i>收起</button>  onclick="deleteQuestion(43)"-->
+                            <a href="javascript:void(0);" onclick="deleteAnswer($comment.comment.id)" style="float: right;color: #999;">删除回答</a>
                         </div>
                     </div>
                 </div>
@@ -241,6 +248,54 @@
         });
 
     });
+
+    /*问题页删除问题*/
+    function deleteQuestion(id) {
+
+        $.ajax({
+            url: "/question/delete/" + id,
+            type: 'GET',
+            data: null,
+            success: function (result) {
+                var result = jQuery.parseJSON(result);
+//                console.log("code=" + result.code);
+//                console.log("msg=" + result.msg);
+
+                if (result.code === 0) {
+                    alert("成功删除");
+                    window.location.href = "/"
+                } else if (result.code === 999) {
+                    window.location.href = "/reglogin"
+                } else {
+                    alert(result.msg);
+                }
+            }
+        });
+    }
+
+    /*问题页删除回答*/
+    function deleteAnswer(id) {
+
+        /*$.ajax({
+            url: "/question/delete/" + id,
+            type: 'GET',
+            data: null,
+            success: function (result) {
+                var result = jQuery.parseJSON(result);
+//                console.log("code=" + result.code);
+//                console.log("msg=" + result.msg);
+
+                if (result.code === 0) {
+                    alert("成功删除");
+                    window.location.href = "/"
+                } else if (result.code === 999) {
+                    window.location.href = "/reglogin"
+                } else {
+                    alert(result.msg);
+                }
+            }
+        });*/
+    }
 </script>
 
 #parse("js.html")

@@ -1,5 +1,8 @@
 package top.kongk.wenda.model;
 
+/**
+ * @author kk
+ */
 public class User extends BaseIdEntity {
 
     /**
@@ -107,5 +110,9 @@ public class User extends BaseIdEntity {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public boolean getManager() {
+        return role != null && role <= 1;
     }
 }

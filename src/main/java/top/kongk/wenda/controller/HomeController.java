@@ -130,8 +130,7 @@ public class HomeController {
     }
 
     @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
-    public String index(HttpServletRequest request,
-                        Model model,
+    public String index(Model model,
                         @RequestParam(value = "pop", defaultValue = "0") int pop,
                         @RequestParam(value = "categoryId", required = false) Integer categoryId,
                         @RequestParam(value = "orderBy", defaultValue = "time") String orderBy) {

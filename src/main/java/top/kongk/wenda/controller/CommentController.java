@@ -105,7 +105,7 @@ public class CommentController {
 
 
         } catch (Exception e) {
-            logger.error("增加评论失败" + e.getMessage());
+            logger.error("回答问题失败" + e.getMessage());
         }
 
         return "redirect:/question/" + String.valueOf(questionId);

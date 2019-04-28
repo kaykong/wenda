@@ -41,7 +41,7 @@
                      data-delayed="true" data-za-module="TopStoryFeedList">
 
                     #foreach($vo in $vos)
-                    <div class="feed-item folding feed-item-hook feed-item-2
+                    <div id="id-question-${vo.question.id}" class="feed-item folding feed-item-hook feed-item-2
                         " feed-item-a="" data-type="a" id="feed-2" data-za-module="FeedItem" data-za-index="">
                         <meta itemprop="ZReactor" data-id="389034"
                               data-meta="{&quot;source_type&quot;: &quot;promotion_answer&quot;, &quot;voteups&quot;: 4168, &quot;comments&quot;: 69, &quot;source&quot;: []}">
@@ -55,8 +55,14 @@
                                 <div class="feed-source" data-za-module="FeedSource">来自
                                     <a href="/?categoryId=$!{vo.question.categoryId}" data-tip="t$t$19562033"
                                        data-token="19562033" data-topicid="3946" target="_self">$!{vo.question.categoryName}</a>
-                                    <!--<a data-follow="t:link" href="javascript:;"
-                                       class="zg-follow zu-autohide follow-topic zu-edit-button" data-id="3946">关注话题</a>-->
+
+                                    #if ($vo.question.status == 1)
+                                    #if ($user.manager || $user.id == $vo.question.userId)
+                                    <a href="javascript:void(0);" onclick="deleteQuestion(${vo.question.id})" style="float: right">删除</a>
+                                    #end
+                                    #end
+                                    <!--<a data-follow="t:link" href="javascript:;" href="/question/delete/$!{vo.question.id}"
+                                       class="zg-follow zu-autohide follow-topic zu-edit-button" data-id="3946">删除</a>-->
                                 </div>
                                 <div class="feed-content" data-za-module="AnswerItem">
                                     <meta itemprop="answer-id" content="389034">
@@ -83,7 +89,7 @@
                                         </div>
                                         <div class="zm-item-rich-text expandable js-collapse-body"
                                              data-resourceid="123114" data-action="/answer/content"
-                                             data-author-name="李淼" data-entry-url="/question/19857995/answer/13174385">
+                                             data-author-name="" data-entry-url="/question/19857995/answer/13174385">
                                             <div class="zh-summary summary clearfix">${vo.question.content}</div>
                                         </div>
                                     </div>
@@ -114,6 +120,31 @@
         </div>
     </div>
 </div>
+<script>
+    /*首页删除问题*/
+    function deleteQuestion(id) {
+        //alert(id)
+        $.ajax({
+            url: "/question/delete/" + id,
+            type: 'GET',
+            data: null,
+            success: function (result) {
+                var result = jQuery.parseJSON(result);
+                console.log("code=" + result.code);
+                console.log("msg=" + result.msg);
+
+                if (result.code === 0) {
+                    alert("成功删除");
+                    $("#id-question-" + id).hide(500, function(){ $(this).remove() });
+                } else if (result.code === 999) {
+                    window.location.href = "/reglogin"
+                } else {
+                    alert(result.msg);
+                }
+            }
+        });
+    }
+</script>
 #parse("js.html")
 <script type="text/javascript" src="/scripts/main/site/detail.js"></script>
 #parse("footer.html")

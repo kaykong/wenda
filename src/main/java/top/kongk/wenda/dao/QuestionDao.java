@@ -17,9 +17,9 @@ public interface QuestionDao {
     /**
      * 用户提交问题, 把问题插入数据库, 设置状态为待审核
      *
-     * @author kongkk
      * @param question
      * @return void
+     * @author kongkk
      */
     void addQuestion(Question question);
 
@@ -77,4 +77,14 @@ public interface QuestionDao {
                                    @Param("offset") Integer offset,
                                    @Param("limit") Integer limit,
                                    @Param("categoryId") Integer categoryId);
+
+    /**
+     * 根据id 更新问题的status
+     *
+     * @param id
+     * @param status
+     * @return int
+     */
+    int updateStatusById(@Param("id") int id,
+                         @Param("status") int status);
 }

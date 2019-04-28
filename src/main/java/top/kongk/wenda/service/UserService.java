@@ -32,7 +32,7 @@ public class UserService {
     private LoginTicketDao loginTicketDao;
 
     public Map<String, Object> register(String username, String password) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         if (StringUtils.isBlank(username)) {
             map.put("msg", "用户名不能为空");
             return map;

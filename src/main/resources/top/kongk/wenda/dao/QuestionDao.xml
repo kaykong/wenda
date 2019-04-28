@@ -25,6 +25,11 @@
         where id = #{id}
     </update>
 
+    <update id="updateStatusById">
+        update question set status = #{status}
+        where id = #{id}
+    </update>
+
 
     <select id="getQuestionById" resultType="top.kongk.wenda.model.Question">
         SELECT
@@ -39,9 +44,13 @@
         <include refid="common-column"/>
         from question q LEFT JOIN category c
         on q.category_id = c.id
-        <if test="userId != null and userId != 0">
-            where q.user_id = #{userId}
-        </if>
+
+        <where>
+                and q.status = 1
+            <if test="userId != null and userId != 0">
+                and q.user_id = #{userId}
+            </if>
+        </where>
         ORDER BY q.id DESC
         LIMIT #{offset},#{limit}
     </select>
@@ -57,8 +66,9 @@
         on q.category_id = c.id
 
         <where>
+                and q.status = 1
             <if test="userId != null and userId != 0">
-                q.user_id = #{userId}
+                and q.user_id = #{userId}
             </if>
             <if test="categoryId != null">
                 and q.category_id = #{categoryId}
@@ -76,8 +86,9 @@
         from question q LEFT JOIN category c
         on q.category_id = c.id
         <where>
+            and q.status = 1
             <if test="userId != null and userId != 0">
-                q.user_id = #{userId}
+                and q.user_id = #{userId}
             </if>
             <if test="categoryId != null">
                 and q.category_id = #{categoryId}
