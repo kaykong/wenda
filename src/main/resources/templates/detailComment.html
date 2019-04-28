@@ -99,7 +99,8 @@
                             <span class="label sr-only">反对，不会显示你的姓名</span>
                         </button>
                         #end
-                    </div>-->
+                    </div>
+                    -->
                     <div class="answer-head">
                         <div class="zm-item-answer-author-info">
                             <a class="zm-item-link-avatar avatar-link" href="/user/${commentVo.user.id}" target="_blank"
@@ -130,9 +131,14 @@
                             <!--<a href="" name="addcomment" class="meta-item toggle-comment js-toggleCommentBox">
                                 <i class="z-icon-comment"></i>4 条评论</a>-->
 
-                            <button class="item-collapse js-collapse" style="transition: none;">
+                            #if ($commentVo.comment.status == 0)
+                            #if ($user.manager || $user.id == $commentVo.comment.userId)
+                            <a href="javascript:void(0);" onclick="deleteComment($commentVo.comment.id)" style="float: right;color: #999;">删除</a>
+                            #end
+                            #end
+                            <!--<button class="item-collapse js-collapse" style="transition: none;">
                                 <i class="z-icon-fold"></i>收起
-                            </button>
+                            </button>-->
                         </div>
                     </div>
                 </div>
@@ -165,13 +171,13 @@
 
                 <!--回答下的评论-->
                 #foreach( $replyVo in $repliesVo)
-                <div class="media">
+                <div class="media" id="id-reply-${replyVo.reply.id}">
                     <div class="media-left">
                         <a href="/user/${replyVo.user.id}">
                             <img class="media-object zm-list-avatar avatar" src="${replyVo.user.headUrl}" alt="头像">
                         </a>
                     </div>
-                    <div class="media-body">
+                    <div class="media-body" style="width: 100%;">
                         <h5 class="media-heading">${replyVo.user.name}</h5>
                         <div>
                             $replyVo.reply.content
@@ -183,6 +189,11 @@
                         <a href="/comment/$replyVo.reply.id" name="addcomment" class="meta-item toggle-comment js-toggleCommentBox">
                             <i class="z-icon-comment"></i>$replyVo.reply.replyCount条回复</a>
 
+                        #if ($replyVo.reply.status == 0)
+                        #if ($user.manager || $user.id == $replyVo.reply.userId)
+                        <a href="javascript:void(0);" onclick="deleteReply($replyVo.reply.id)" style="float: right;color: #999;">删除</a>
+                        #end
+                        #end
                         <!--<div class="media">
                             <div class="media-left">
                                 <a href="#">
@@ -199,11 +210,13 @@
 
                     </div>
                 </div>
+                <!-- foreach( $replyVo in $repliesVo) -->
                 #end
             </section>
             #else
-            <!-- 关掉回答的信息的#if ($vo) -->
+            <!-- 关掉回答的信息的 if( $commentVo ) -->
             #end
+
             <br/>
             <br/>
             <br/>
@@ -211,8 +224,60 @@
 
     </div>
 </div>
-#parse("js.html")
-<script type="text/javascript" src="/scripts/main/site/detail.js"></script>\
 
+<script>
+    /*删除评论*/
+    function deleteComment(id) {
+
+        $.ajax({
+            url: "/comment/comment/delete/" + id,
+            type: 'GET',
+            data: null,
+            success: function (result) {
+                var result = jQuery.parseJSON(result);
+//                console.log("code=" + result.code);
+//                console.log("msg=" + result.msg);
+
+                if (result.code === 0) {
+                    alert("成功删除");
+                    window.location.href = "/"
+                    //$("#id-comment-" + id).hide(500, function(){ $(this).remove() });
+                } else if (result.code === 999) {
+                    window.location.href = "/reglogin"
+                } else {
+                    alert(result.msg);
+                }
+            }
+        });
+    }
+
+    /*删除评论的回复*/
+    function deleteReply(id) {
+
+        $.ajax({
+            url: "/comment/comment/delete/" + id,
+            type: 'GET',
+            data: null,
+            success: function (result) {
+                var result = jQuery.parseJSON(result);
+//                console.log("code=" + result.code);
+//                console.log("msg=" + result.msg);
+
+                if (result.code === 0) {
+                    alert("成功删除");
+                    //window.location.href = "/question/${question.id}"
+                    $("#id-reply-" + id).hide(500, function(){ $(this).remove() });
+                } else if (result.code === 999) {
+                    window.location.href = "/reglogin"
+                } else {
+                    alert(result.msg);
+                }
+            }
+        });
+    }
+</script>
+
+#parse("js.html")
+<script type="text/javascript" src="/scripts/main/site/detail.js"></script>
 #parse("footer.html")
-#end
+

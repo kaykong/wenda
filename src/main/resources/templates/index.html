@@ -56,7 +56,7 @@
                                     <a href="/?categoryId=$!{vo.question.categoryId}" data-tip="t$t$19562033"
                                        data-token="19562033" data-topicid="3946" target="_self">$!{vo.question.categoryName}</a>
 
-                                    #if ($vo.question.status == 1)
+                                    #if ($vo.question.status == 0)
                                     #if ($user.manager || $user.id == $vo.question.userId)
                                     <a href="javascript:void(0);" onclick="deleteQuestion(${vo.question.id})" style="float: right">删除</a>
                                     #end

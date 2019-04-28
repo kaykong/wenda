@@ -9,7 +9,7 @@
             <div class="zm-tag-editor zg-section">
                 <div class="zm-tag-editor-labels zg-clear">
                     <a data-tip="t$b$19550730" class="zm-item-tag" href="/?categoryId=$!{question.categoryId}" target="_blank">$!{question.categoryName}</a>
-                    #if ($question.status == 1)
+                    #if ($question.status == 0)
                     #if ($user.manager || $user.id == $question.userId)
                     <a href="javascript:void(0);" onclick="deleteQuestion(${question.id})" style="float: right;color: #999;">删除问题</a>
                     #end
@@ -97,7 +97,7 @@
                  data-init="{&quot;params&quot;: {&quot;url_token&quot;: 36301524, &quot;pagesize&quot;: 10, &quot;offset&quot;: 0}, &quot;nodename&quot;: &quot;QuestionAnswerListV2&quot;}">
 
                 #foreach($comment in $comments)
-                <div class="zm-item-answer  zm-item-expanded js-comment">
+                <div id="id-answer-${comment.comment.id}" class="zm-item-answer  zm-item-expanded js-comment" >
                     <link itemprop="url" href="">
                     <meta itemprop="answer-id" content="22162611">
                     <meta itemprop="answer-url-token" content="66862039">
@@ -151,7 +151,11 @@
 
                             <!--<button class="item-collapse js-collapse" style="transition: none;">
                                 <i class="z-icon-fold"></i>收起</button>  onclick="deleteQuestion(43)"-->
+                            #if ($comment.comment.status == 0)
+                            #if ($user.manager || $user.id == $comment.comment.userId)
                             <a href="javascript:void(0);" onclick="deleteAnswer($comment.comment.id)" style="float: right;color: #999;">删除回答</a>
+                            #end
+                            #end
                         </div>
                     </div>
                 </div>
@@ -276,8 +280,8 @@
     /*问题页删除回答*/
     function deleteAnswer(id) {
 
-        /*$.ajax({
-            url: "/question/delete/" + id,
+        $.ajax({
+            url: "/comment/answer/delete/" + id,
             type: 'GET',
             data: null,
             success: function (result) {
@@ -286,15 +290,15 @@
 //                console.log("msg=" + result.msg);
 
                 if (result.code === 0) {
-                    alert("成功删除");
-                    window.location.href = "/"
+                    alert("成功删除回答");
+                    $("#id-answer-" + id).hide(500, function(){ $(this).remove() });
                 } else if (result.code === 999) {
                     window.location.href = "/reglogin"
                 } else {
                     alert(result.msg);
                 }
             }
-        });*/
+        });
     }
 </script>
 

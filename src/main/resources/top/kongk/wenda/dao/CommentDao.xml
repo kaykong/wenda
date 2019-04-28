@@ -42,11 +42,16 @@
         where entity_id = #{entityId} and entity_type = #{entityType}
     </update>
 
+    <update id="updateStatusById">
+        update comment set status = #{status}
+        where id=#{id}
+    </update>
+
     <select id="selectByEntity" resultType="top.kongk.wenda.model.Comment">
         select
         <include refid="common-column"/>
         from comment
-        where entity_id = #{entityId} and entity_type = #{entityType}
+        where entity_id = #{entityId} and entity_type = #{entityType} and status = 0
         order by id desc
     </select>
 
@@ -64,21 +69,21 @@
 
     <select id="getUserCommentCount" resultType="java.lang.Integer">
         select count(id) from comment
-        where user_id = #{id} and entity_type = 1
+        where user_id = #{id} and entity_type = 1 and status = 0
     </select>
 
     <select id="getAnswerByqIdAnswerId" resultType="top.kongk.wenda.model.Comment">
         select
         <include refid="common-column"/>
         from comment
-        where entity_id = #{questionId} and entity_type = 1 and id = #{answerId}
+        where entity_id = #{questionId} and entity_type = 1 and id = #{answerId} and status = 0
     </select>
 
     <select id="getAnswersByUserId" resultType="top.kongk.wenda.model.Comment">
         select
         <include refid="common-column"/>
         FROM comment
-        where user_id = #{userId} and entity_type = #{entityType}
+        where user_id = #{userId} and entity_type = #{entityType} and status = 0
     </select>
 
 </mapper>

@@ -46,7 +46,7 @@
         on q.category_id = c.id
 
         <where>
-                and q.status = 1
+                and q.status = 0
             <if test="userId != null and userId != 0">
                 and q.user_id = #{userId}
             </if>
@@ -66,7 +66,7 @@
         on q.category_id = c.id
 
         <where>
-                and q.status = 1
+                and q.status = 0
             <if test="userId != null and userId != 0">
                 and q.user_id = #{userId}
             </if>
@@ -86,7 +86,7 @@
         from question q LEFT JOIN category c
         on q.category_id = c.id
         <where>
-            and q.status = 1
+            and q.status = 0
             <if test="userId != null and userId != 0">
                 and q.user_id = #{userId}
             </if>

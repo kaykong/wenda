@@ -30,6 +30,14 @@ public interface CommentDao {
      */
     void updateStatus(@Param("entityId") int entityId, @Param("entityType") int entityType, @Param("status") int status);
 
+    /**
+     * 根据 id  更新评论的状态
+     *
+     * @param id
+     * @param status
+     * @return void
+     */
+    int updateStatusById(@Param("id") int id, @Param("status") int status);
 
     /**
      * 根据 entityId 和 entityType 选出评论列表

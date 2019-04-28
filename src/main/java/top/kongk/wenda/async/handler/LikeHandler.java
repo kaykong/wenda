@@ -45,7 +45,7 @@ public class LikeHandler implements EventHandler {
         User actorUser = userService.getUser(model.getActorId());
         User entityOwnerUser = userService.getUser(model.getEntityOwnerId());
         message.setContent("用户 [" + actorUser.getName()
-                + "] 赞了您的回答 , <a href=\"/question/"+ model.getExt("questionId") + "\">您的回答链接</a>");
+                + "] 赞了您的回答 , <a href=\"/question/"+ model.getExt("questionId") + "/answer?aid=" + model.getEntityId() + "\">您的回答链接</a>");
 
         messageService.addMessage(message);
 

@@ -7,7 +7,7 @@
         <div class="zu-main-content-inner">
             <meta itemprop="isTopQuestion" content="false">
             <meta itemprop="visitsCount" content="402">
-            #if ($question.status == 1)
+            #if ($question.status == 0)
             <div class="zm-tag-editor zg-section">
                 <div class="zm-tag-editor-labels zg-clear">
                     <a data-tip="t$b$19550730" class="zm-item-tag" href="/?categoryId=$!{question.categoryId}"
@@ -20,7 +20,7 @@
             #end
             <div id="zh-question-title" data-editable="true" class="zm-editable-status-normal">
                 <h2 class="zm-item-title">
-                    #if ($question.status == 1)
+                    #if ($question.status == 0)
                     <a href="/question/$!{question.id}" target="_self"><span class="zm-editable-content">$!{question.title}</span></a>
                     #else
                     <span class="zm-editable-content">$!{question.title}</span>
@@ -30,7 +30,7 @@
             <div id="zh-question-detail" class="zm-item-rich-text zm-editable-status-normal">
                 <div class="zm-editable-content">$!{question.content}</div>
             </div>
-            #if ($question.status == 1)
+            #if ($question.status == 0)
             <div class="zm-side-section">
                 <div class="zm-side-section-inner" id="zh-question-side-header-wrap">
                     #if ($followed)
@@ -142,9 +142,14 @@
                             <!--<a href="" name="addcomment" class="meta-item toggle-comment js-toggleCommentBox">
                                 <i class="z-icon-comment"></i>4 条评论</a>-->
 
-                            <button class="item-collapse js-collapse" style="transition: none;">
+                            #if ($vo.answer.status == 0)
+                            #if ($user.manager || $user.id == $vo.answer.userId)
+                            <a href="javascript:void(0);" onclick="deleteAnswer($vo.answer.id)" style="float: right;color: #999;">删除回答</a>
+                            #end
+                            #end
+                            <!--<button class="item-collapse js-collapse" style="transition: none;">
                                 <i class="z-icon-fold"></i>收起
-                            </button>
+                            </button>-->
                         </div>
                     </div>
                 </div>
@@ -152,7 +157,7 @@
             </div>
 
             <a name="draft"></a>
-            #if ($question.status == 1)
+            #if ($question.status == 0)
             <form action="/addAnswerComment" method="post">
                 <input type="hidden" name="answerId" value="$!{vo.answer.id}"/>
                 <div id="zh-question-answer-form-wrap" class="zh-question-answer-form-wrap">
@@ -178,13 +183,13 @@
 
                 <!--回答下的评论-->
                 #foreach( $commentVo in $vo.commentVos)
-                <div class="media">
+                <div class="media" id="id-comment-${commentVo.comment.id}">
                     <div class="media-left">
                         <a href="/user/${commentVo.user.id}">
                             <img class="media-object zm-list-avatar avatar" src="${commentVo.user.headUrl}" alt="头像">
                         </a>
                     </div>
-                    <div class="media-body">
+                    <div class="media-body" style="width: 100%">
                         <h5 class="media-heading">${commentVo.user.name}</h5>
                         <div>
                             $commentVo.comment.content
@@ -197,6 +202,11 @@
                            class="meta-item toggle-comment js-toggleCommentBox">
                             <i class="z-icon-comment"></i>$commentVo.comment.replyCount 条回复</a>
 
+                        #if ($commentVo.comment.status == 0)
+                        #if ($user.manager || $user.id == $commentVo.comment.userId)
+                        <a href="javascript:void(0);" onclick="deleteComment($commentVo.comment.id)" style="float: right;color: #999;">删除评论</a>
+                        #end
+                        #end
                         <!--<div class="media">
                             <div class="media-left">
                                 <a href="#">
@@ -258,9 +268,59 @@
             }
         });
     }
+
+    /*问题回答页删除回答*/
+    function deleteAnswer(id) {
+
+        $.ajax({
+            url: "/comment/answer/delete/" + id,
+            type: 'GET',
+            data: null,
+            success: function (result) {
+                var result = jQuery.parseJSON(result);
+//                console.log("code=" + result.code);
+//                console.log("msg=" + result.msg);
+
+                if (result.code === 0) {
+                    alert("成功删除回答");
+                    window.location.href = "/question/${question.id}"
+                    //$("#id-answer-" + id).hide(500, function(){ $(this).remove() });
+                } else if (result.code === 999) {
+                    window.location.href = "/reglogin"
+                } else {
+                    alert(result.msg);
+                }
+            }
+        });
+    }
+
+    /*问题回答页删除回答评论*/
+    function deleteComment(id) {
+
+        $.ajax({
+            url: "/comment/comment/delete/" + id,
+            type: 'GET',
+            data: null,
+            success: function (result) {
+                var result = jQuery.parseJSON(result);
+//                console.log("code=" + result.code);
+//                console.log("msg=" + result.msg);
+
+                if (result.code === 0) {
+                    alert("成功删除评论");
+                    //window.location.href = "/question/${question.id}"
+                    $("#id-comment-" + id).hide(500, function(){ $(this).remove() });
+                } else if (result.code === 999) {
+                    window.location.href = "/reglogin"
+                } else {
+                    alert(result.msg);
+                }
+            }
+        });
+    }
 </script>
 
 #parse("js.html")
-<script type="text/javascript" src="/scripts/main/site/detail.js"></script>\
+<script type="text/javascript" src="/scripts/main/site/detail.js"></script>
 #parse("footer.html")
 

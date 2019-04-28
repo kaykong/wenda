@@ -87,7 +87,7 @@ public class QuestionController {
         }
 
         Question question = questionService.getById(qid);
-        if (question.getStatus() == 0) {
+        if (question.getStatus() == 1) {
             return "redirect:/";
         }
         model.addAttribute("question", question);
@@ -178,7 +178,7 @@ public class QuestionController {
                                        @PathVariable("qid") int qid,
                                        @RequestParam("aid") int aid) {
         Question question = questionService.getById(qid);
-        if (question.getStatus() == 0) {
+        if (question.getStatus() == 1) {
             question.setTitle("该问题已经被删除");
             question.setContent("");
         }

@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 import top.kongk.wenda.async.EventModel;
 import top.kongk.wenda.async.EventProducer;
@@ -129,7 +126,7 @@ public class CommentController {
             //评论
             Comment comment = commentService.getCommentById(id);
 
-            if (comment == null) {
+            if (comment == null || comment.getStatus() == 1) {
                 return "redirect:/";
             }
             ViewObject commentVo = new ViewObject();
@@ -268,6 +265,65 @@ public class CommentController {
         return "redirect:/comment/" + String.valueOf(commentId);
     }
 
+    @RequestMapping(value = "/comment/answer/delete/{id}", method = {RequestMethod.GET})
+    @ResponseBody
+    public String deleteAnswer(@PathVariable("id") int id) {
 
+        if (hostHolder.getCurrentUser() == null) {
+            return WendaUtil.getJSONString(999, "请登录");
+        }
+
+        Comment comment = commentService.getCommentById(id);
+        if (comment == null) {
+            return WendaUtil.getJSONString(1, "该回答不存在");
+        }
+
+        /*
+         * 检查用户是否有权限
+         */
+        User currentUser = hostHolder.getCurrentUser();
+        if (!(comment.getUserId().equals(currentUser.getId()) || currentUser.getManager())) {
+            return WendaUtil.getJSONString(1, "您没有删除回答的权限");
+        }
+
+        boolean check = commentService.deleteById(id);
+
+        if (check) {
+            return WendaUtil.getJSONString(0, id + "成功");
+        } else {
+            return WendaUtil.getJSONString(1, "删除失败");
+        }
+    }
+
+
+    @RequestMapping(value = "/comment/comment/delete/{id}", method = {RequestMethod.GET})
+    @ResponseBody
+    public String deleteComment(@PathVariable("id") int id) {
+
+        if (hostHolder.getCurrentUser() == null) {
+            return WendaUtil.getJSONString(999, "请登录");
+        }
+
+        Comment comment = commentService.getCommentById(id);
+        if (comment == null) {
+            return WendaUtil.getJSONString(1, "该回答评论不存在");
+        }
+
+        /*
+         * 检查用户是否有权限
+         */
+        User currentUser = hostHolder.getCurrentUser();
+        if (!(comment.getUserId().equals(currentUser.getId()) || currentUser.getManager())) {
+            return WendaUtil.getJSONString(1, "您没有删除评论的权限");
+        }
+
+        boolean check = commentService.deleteById(id);
+
+        if (check) {
+            return WendaUtil.getJSONString(0, id + "成功");
+        } else {
+            return WendaUtil.getJSONString(1, "删除失败");
+        }
+    }
 
 }

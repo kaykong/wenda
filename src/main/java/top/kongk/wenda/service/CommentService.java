@@ -108,4 +108,8 @@ public class CommentService {
     private List<Comment> getAnswersByUserIdEntityType(Integer id, int entityType) {
         return commentDao.getAnswersByUserId(id, entityType);
     }
+
+    public boolean deleteById(int id) {
+        return commentDao.updateStatusById(id, 1) > 0;
+    }
 }
