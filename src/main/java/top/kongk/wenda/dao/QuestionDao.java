@@ -87,4 +87,6 @@ public interface QuestionDao {
      */
     int updateStatusById(@Param("id") int id,
                          @Param("status") int status);
+
+    List<Question> selectQuestionByCategoryId(Integer id);
 }

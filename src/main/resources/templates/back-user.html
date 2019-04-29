@@ -258,8 +258,8 @@
         <div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">用户权限</a></li>
-                <li><a href="#">课程分类</a></li>
-                <li><a href="#">敏感词</a></li>
+                <li><a href="/backend/courseCategoryIndex">课程分类</a></li>
+                <li><a href="/backend/sensitiveWordIndex">敏感词</a></li>
                 <li><a href="#">数据字典</a></li>
             </ul>
         </div>
@@ -268,19 +268,21 @@
 
 
 <!-- 1.标题 -->
-<div class="row text-center">
+<!--<div class="row text-center">
     <div class="col-md-4 ">
         <h1>用户权限管理</h1>
     </div>
-</div>
+</div>-->
 
 <!-- 2.三个按钮-->
 <div class="row text-center">
+
     <div class="col-md-6 col-md-offset-6">
         <!--<button type="button" class="btn btn-primary btn-lg" id="emp_Add_modal_Btn">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             新增
         </button>-->
+
         <button type="button" class="btn btn-info btn-lg" id="emp_query_modal_btn">
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             查询
@@ -372,7 +374,7 @@
         }
         if (EMP_DATA_BOOL)
             emp_data += EMP_DATA;
-        console.log(emp_data)
+        console.log(emp_data);
         //alert(emp_data);
         $.ajax({
             url: APP_PATH + "/users",
@@ -424,7 +426,7 @@
                 $("<button type=\"button\" class=\"btn btn-danger btn-sm delete_btn\">删除</button>").attr("empId", emp.empId);
 */
             //var caozuo = $("<td></td>").append(edit_btn).append(" ").append(delete_btn);
-            var caozuo = $("<td width=\"65%\"></td>").append(edit_btn);
+            var caozuo = $("<td width=\"10%\"></td>").append(edit_btn);
 
             $("<tr></tr>").append(id).append(name)
                 .append(email).append(roleName)

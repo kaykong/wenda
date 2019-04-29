@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kongk.wenda.dao.CourseCategoryDao">
+
+    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into user
+        <include refid="insert-column"/>
+        values
+        <include refid="insert-values-column"/>
+    </insert>
+
+    <insert id="addCourseCategory" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into category
+        (name, parent_id, level, update_user_id, update_time)
+        VALUES
+        (#{name}, #{parentId}, #{level}, #{updateUserId}, #{updateTime})
+    </insert>
+
+    <update id="updateRoleById">
+        update user set role = #{role} where id = #{id}
+    </update>
+    <update id="updateNameParentIdById">
+        update category set name = #{name}, parent_id = #{parentId} where id = #{id}
+    </update>
+
+    <delete id="deleteCategoryById">
+        delete from category where id = #{id}
+    </delete>
+
+    <select id="getUserList" resultType="top.kongk.wenda.model.User">
+      select * from user;
+    </select>
+    <select id="getUserList2" resultType="top.kongk.wenda.model.User">
+
+    </select>
+
+    <sql id="common-column">
+        id, name, parent_id, level, gender, email, role, head_url
+    </sql>
+    <sql id="insert-column">
+        (name, password, salt, gender, email, role, head_url)
+    </sql>
+    <sql id="insert-values-column">
+        (#{name}, #{password}, #{salt}, #{gender}, #{email}, #{role}, #{headUrl})
+    </sql>
+
+    <select id="getUserByName" resultType="top.kongk.wenda.model.User">
+        select
+        <include refid="common-column"/>
+        from user
+        where name = #{name}
+    </select>
+
+    <select id="getUserByEmail" resultType="top.kongk.wenda.model.User">
+        select
+        <include refid="common-column"/>
+        from user
+        where email = #{email}
+    </select>
+
+    <select id="selectById" resultType="top.kongk.wenda.model.Category">
+        select id, name, parent_id, level
+        from category
+        where id = #{id}
+    </select>
+
+    <select id="countBySelective" resultType="java.lang.Integer">
+        SELECT count(id) FROM category
+        <where>
+            and parent_id != 0
+            <if test="id != null" >
+                and id = #{id}
+            </if>
+            <if test="name != null" >
+                and name LIKE #{name}
+            </if>
+
+            <if test="parentId != null" >
+                and parent_id = #{parentId}
+            </if>
+            <if test="level != null" >
+                and level = #{level}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBySelectiveWithPage" resultType="top.kongk.wenda.model.Category">
+        SELECT c.id, c.name, c.level, c.parent_id, c2.name as parentName
+        FROM category c left join category c2
+        ON c.parent_id = c2.id
+        <where>
+            and c.parent_id != 0
+            <if test="category.id != null" >
+                and c.id = #{category.id}
+            </if>
+            <if test="category.name != null" >
+                and c.name LIKE #{category.name}
+            </if>
+
+            <if test="category.parentId != null" >
+                and c.parent_id = #{category.parentId}
+            </if>
+            <if test="category.level != null" >
+                and c.level = #{category.level}
+            </if>
+        </where>
+        ORDER BY c.id asc
+        <if test="start != null and pageSize != null">
+            limit #{start} , #{pageSize}
+        </if>
+    </select>
+    <select id="getCategoryListByLevel" resultType="top.kongk.wenda.model.Category">
+        select id, name, parent_id, level
+        from category
+        where level = #{level}
+    </select>
+
+
+</mapper>

@@ -63,7 +63,7 @@ public class BackendUserController {
     @ResponseBody
     public Page<User> getUsers(User user,
                                @RequestParam(name = "currPage", defaultValue = "1") int currPage,
-                               @RequestParam(name = "pageSize", defaultValue = "5") int pageSize) {
+                               @RequestParam(name = "pageSize", defaultValue = "8") int pageSize) {
         if (currPage < 1 || pageSize < 1) {
             return null;
         }

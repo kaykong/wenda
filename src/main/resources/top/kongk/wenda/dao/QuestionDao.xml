@@ -102,4 +102,12 @@
         </if>
 
     </select>
+
+    <select id="selectQuestionByCategoryId" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q left join category c
+        on q.category_id = c.id
+        where q.category_id = #{id}
+    </select>
 </mapper>

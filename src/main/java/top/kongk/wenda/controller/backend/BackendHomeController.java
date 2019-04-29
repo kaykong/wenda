@@ -50,9 +50,13 @@ public class BackendHomeController {
     @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String index(Model model) {
 
+        return "back-user";
+    }
 
-        return "back";
-        //return "backend-userManage";
+    @RequestMapping(path = {"/courseCategoryIndex"}, method = {RequestMethod.GET, RequestMethod.POST})
+    public String courseCategory(Model model) {
+
+        return "back-courseCategory";
     }
 
 }
