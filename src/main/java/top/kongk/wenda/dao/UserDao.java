@@ -1,9 +1,11 @@
 package top.kongk.wenda.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import top.kongk.wenda.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author kkk
@@ -49,4 +51,10 @@ public interface UserDao {
      * @return top.kongk.wenda.model.User
      */
     User selectById(Integer id);
+
+    int countBySelective(User user);
+
+    List<User> selectBySelectiveWithPage(Map map);
+
+    int updateRoleById(@Param("id") Integer id,@Param("role") Integer role);
 }

@@ -44,9 +44,22 @@ public class User extends BaseIdEntity {
     private Integer role;
 
     /**
+     * 用户角色，0-1管理员, 2-普通用户
+     */
+    private String roleName;
+
+    /**
      * 头像
      */
     private String headUrl;
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 
     public String getHeadUrl() {
         return headUrl;

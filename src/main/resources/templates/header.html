@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-ZA-Response-Id" content="46acde5c53db46f2806ccad726de9826">
-    <title>首页 - 问答</title>
+    <title>问答</title>
     <meta name="apple-itunes-app" content="app-id=432274380">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="mobile-agent" content="format=html5;url=https://nowcoder.com/">
@@ -16,9 +16,9 @@
     <link rel="search" type="application/opensearchdescription+xml" href="https://nowcoder.com/static/search.xml"
           title="">
     <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css">
-
+    <script type="text/javascript" src="/scripts/main/jquery.js"></script>
     <!--引入jQuery-->
-    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <!--<script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>-->
     <style>
         .zm-item-answer-author-info a.collapse {
             margin-top: 0
@@ -126,6 +126,13 @@
                         #end
                     </a>
                 </li>
+                #if ($user.role <= 1)
+                <li>
+                    <a href="/backend/" tabindex="-1">
+                        <i class="zg-icon zg-icon-dd-settings"></i>后台管理
+                    </a>
+                </li>
+                #end
                 <li>
                     <a href="/logout" tabindex="-1" id=":4">
                         <i class="zg-icon zg-icon-dd-logout"></i>退出
@@ -578,15 +585,21 @@
                     </div>
                     <div class="zm-add-question-form-topic-wrap">
                         <div class="add-question-section-title">
-                            <span class="zg-gray zg-right hidden-phone">话题越精准，越容易让相关领域人士看到你的问题</span>
-                            选择话题：
+                            <span class="zg-gray zg-right hidden-phone">课程越精准，越容易让相关领域人士看到你的问题</span>
+                            选择课程：
                             <span id="zh-question-form-tag-err"></span>
                         </div>
                         <div id="zh-question-suggest-topic-container" class="zm-tag-editor zg-section">
                             <div class="zm-tag-editor-labels" style="display: none;"></div>
-                            <div>
-                                <select id="id-select-category" class="selectpicker show-tick form-control"
-                                        style="width: 30%;">
+                            <div class="form-inline">
+                                <select id="id-select-category" class=" show-tick form-control"
+                                        style="width: 25%;">
+                                    <option value="1">必修</option>
+                                    <option value="2">选修</option>
+                                </select>
+
+                                <select id="id-select-category2" class="selectpicker show-tick form-control"
+                                        style="width: 70%; margin-left: 5px;">
                                     <option value="1">Java</option>
                                     <option>C++</option>
                                     <option>C</option>
@@ -650,7 +663,62 @@
 
                 }
             });
+
+            //获取分类数据2
+            $.ajax({
+                url: "/question/getCategoryList?parentId=" + 2,
+                async: true,
+                type: 'GET',
+                success: function (result) {
+                    var questionList = "";
+                    if (result != null) {
+                        $.each(result, function (n, value) {
+                            //alert(n + ' ' + value);
+                            var question = "";
+                            //<option class="class-select-option" value="1">Java</option>
+                            question += "<option class=\"class-select-option\" value=\"" + value.id + "\">" + value.name + "</option>";
+                            questionList += question;
+                        });
+
+                        $("#id-select-category2").html(questionList);
+                    }
+
+                }
+            });
         });
+
+        $('#id-select-category').change(function () {
+            //alert($(this).children('option:selected').val());
+            var parentId = $(this).children('option:selected').val(); //这就是selected的值
+            console.log("category:" + parentId);
+
+
+            //获取分类数据
+            $.ajax({
+                url: "/question/getCategoryList?parentId=" + parentId,
+                async: true,
+                type: 'GET',
+                success: function (result) {
+                    var questionList = "";
+                    if (result != null) {
+                        $.each(result, function (n, value) {
+                            //alert(n + ' ' + value);
+                            var question = "";
+                            //<option class="class-select-option" value="1">Java</option>
+                            question += "<option class=\"class-select-option\" value=\"" + value.id + "\">" + value.name + "</option>";
+                            questionList += question;
+                        });
+
+                        $("#id-select-category2").html(questionList);
+                    }
+
+                }
+            });
+
+            //var p2 = $('#param2').val();//获取本页面其他标签的值
+            //window.location.href = "xx.php?param1=" + p1 + "¶m2=" + p2 + "";//页面跳转并传参
+        });
+
 
         //关闭提问按钮 modal-dialog-title-close
         $(".modal-dialog-title-close").bind("click", function () {
@@ -729,7 +797,7 @@
             //获取数据
             var title = $("#zh-question-suggest-title-content").val();
             var content = $("#id-addQuestion-content").html();
-            var categoryId = $("#id-select-category").val();
+            var categoryId = $("#id-select-category2").val();
 
             var question = {
                 title: title,

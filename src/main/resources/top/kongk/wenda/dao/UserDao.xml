@@ -9,6 +9,10 @@
         <include refid="insert-values-column"/>
     </insert>
 
+    <update id="updateRoleById">
+        update user set role = #{role} where id = #{id}
+    </update>
+
     <select id="getUserList" resultType="top.kongk.wenda.model.User">
       select * from user;
     </select>
@@ -45,5 +49,72 @@
         <include refid="common-column"/>
         from user
         where id = #{id}
+    </select>
+
+    <select id="countBySelective" resultType="java.lang.Integer">
+        SELECT count(id) FROM user
+        <where>
+            <if test="id != null" >
+                id = #{id}
+            </if>
+            <if test="name != null" >
+                and name LIKE #{name}
+            </if>
+
+            <if test="email != null" >
+                and email LIKE #{email}
+            </if>
+            <if test="role != null" >
+                and role = #{role}
+            </if>
+        </where>
+    </select>
+    <select id="selectBySelectiveWithPage2" resultType="top.kongk.wenda.model.User">
+        SELECT u.id, u.name, u.email, u.role, r.name as roleName
+        FROM user u
+        LEFT JOIN role_category r ON u.role = r.id
+        <where>
+            <if test="id != null" >
+                u.id = #{id}
+            </if>
+            <if test="name != null" >
+                and u.name LIKE #{name}
+            </if>
+
+            <if test="email != null" >
+                and u.email LIKE #{email}
+            </if>
+            <if test="role != null" >
+                and u.role = #{role}
+            </if>
+        </where>
+        ORDER BY u.id
+        <if test="start != null and pageSize != null">
+            limit #{start} , #{pageSize}
+        </if>
+    </select>
+
+    <select id="selectBySelectiveWithPage" resultType="top.kongk.wenda.model.User">
+        SELECT u.id, u.name, u.email, u.role
+        FROM user u
+        <where>
+            <if test="user.id != null" >
+                u.id = #{user.id}
+            </if>
+            <if test="user.name != null" >
+                and u.name LIKE #{user.name}
+            </if>
+
+            <if test="user.email != null" >
+                and u.email LIKE #{user.email}
+            </if>
+            <if test="user.role != null" >
+                and u.role = #{user.role}
+            </if>
+        </where>
+        ORDER BY u.id
+        <if test="start != null and pageSize != null">
+            limit #{start} , #{pageSize}
+        </if>
     </select>
 </mapper>

@@ -287,7 +287,7 @@ public class QuestionController {
             //默认不匿名
             question.setAnonymous(false);
             question.setCategoryId(categoryId);
-            question.setStatus(1);
+            //question.setStatus(1);
             if (hostHolder.getCurrentUser() == null) {
                 return WendaUtil.getJSONString(999);
             } else {
@@ -310,6 +310,18 @@ public class QuestionController {
     @RequestMapping(value = "/getCategoryList", method = {RequestMethod.GET})
     @ResponseBody
     public List<Category> getCategoryList(@RequestParam(value = "parentId", defaultValue = "1") String parentId) {
+        try {
+            List<Category> categories = questionService.getCategoryListByParentId(parentId);
+            return categories;
+        } catch (Exception e) {
+            log.error("获取分类数据失败" + e.getMessage());
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    @RequestMapping(value = "/getCategoryByParentId", method = {RequestMethod.GET})
+    @ResponseBody
+    public List<Category> getCategoryByParentId(@RequestParam(value = "parentId", defaultValue = "1") String parentId) {
         try {
             List<Category> categories = questionService.getCategoryListByParentId(parentId);
             return categories;

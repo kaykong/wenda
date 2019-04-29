@@ -10,6 +10,7 @@ import top.kongk.wenda.common.UserValidatorUtil;
 import top.kongk.wenda.dao.LoginTicketDao;
 import top.kongk.wenda.dao.UserDao;
 import top.kongk.wenda.model.LoginTicket;
+import top.kongk.wenda.model.Page;
 import top.kongk.wenda.model.User;
 import top.kongk.wenda.util.MD5Util;
 import top.kongk.wenda.util.WendaUtil;
@@ -264,5 +265,36 @@ public class UserService {
 
     public void logout(String ticket) {
         loginTicketDao.updateStatus(ticket, 1);
+    }
+
+    public Page<User> getUsersBySelectiveWithPage(User user, int currPage, int pageSize) {
+        int totalCount = userDao.countBySelective(user);
+
+        if (currPage < 0) {
+            currPage = 1;
+        }
+
+        //初始化Page 生成Page对象,传入当前页数,每页的记录数,以及记录总数
+        Page<User> page = new Page<>(currPage,pageSize,totalCount);
+
+        if (totalCount == 0) {
+            return page;
+        }
+
+        //设置map, 因为 userDao.selectBySelectiveWithPage(map) 需要
+        Map map = new HashMap(3);
+        map.put("user", user);
+        map.put("start", page.getStart());
+        map.put("pageSize", page.getPageSize());
+
+        List<User> userList = userDao.selectBySelectiveWithPage(map);
+
+        page.setLists(userList);
+
+        return page;
+    }
+
+    public boolean updateRoleById(Integer id, Integer role) {
+        return userDao.updateRoleById(id, role) > 0;
     }
 }
