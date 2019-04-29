@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kongk.wenda.dao.SensitiveWordDao">
+
+    <insert id="addSensitiveWord" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into sensitive_word
+        (name, category_name)
+        VALUES
+        (#{name}, #{categoryName})
+    </insert>
+
+    <delete id="deleteSensitiveWordById">
+        delete from sensitive_word where id = #{id}
+    </delete>
+
+    <select id="selectById" resultType="top.kongk.wenda.model.Category">
+        select id, name, parent_id, level
+        from sensitive_word
+        where id = #{id}
+    </select>
+
+    <select id="countBySelective" resultType="java.lang.Integer">
+        SELECT count(id) FROM sensitive_word
+        <where>
+
+            <if test="id != null" >
+                and id = #{id}
+            </if>
+            <if test="name != null" >
+                and name LIKE #{name}
+            </if>
+            <if test="categoryName != null" >
+                and category_name = #{categoryName}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBySelectiveWithPage" resultType="top.kongk.wenda.model.SensitiveWord">
+        SELECT id, name, category_name
+        FROM sensitive_word
+        <where>
+            <if test="sensitiveWord.id != null" >
+                and id = #{sensitiveWord.id}
+            </if>
+            <if test="sensitiveWord.name != null" >
+                and name LIKE #{sensitiveWord.name}
+            </if>
+            <if test="sensitiveWord.categoryName != null" >
+                and category_name = #{sensitiveWord.categoryName}
+            </if>
+        </where>
+        ORDER BY id asc
+        <if test="start != null and pageSize != null">
+            limit #{start} , #{pageSize}
+        </if>
+    </select>
+
+    <select id="selectAllSelectiveWord" resultType="top.kongk.wenda.model.SensitiveWord">
+        SELECT id, name, category_name
+        FROM sensitive_word
+    </select>
+
+    <select id="selectByName" resultType="top.kongk.wenda.model.SensitiveWord">
+        select id, name, category_name
+        from sensitive_word where name = #{name}
+    </select>
+
+    <select id="getSensitiveWordById" resultType="top.kongk.wenda.model.SensitiveWord">
+        select id, name, category_name
+        from sensitive_word where id = #{id}
+    </select>
+
+
+</mapper>

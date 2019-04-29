@@ -59,4 +59,10 @@ public class BackendHomeController {
         return "back-courseCategory";
     }
 
+    @RequestMapping(path = {"/sensitiveWordIndex"}, method = {RequestMethod.GET, RequestMethod.POST})
+    public String sensitiveWord(Model model) {
+
+        return "back-sensitiveWord";
+    }
+
 }

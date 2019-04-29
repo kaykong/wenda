@@ -5,13 +5,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.kongk.wenda.dao.SensitiveWordDao;
+import top.kongk.wenda.model.SensitiveWord;
 import top.kongk.wenda.util.WendaUtil;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,13 +29,23 @@ public class SensitiveService implements InitializingBean {
     private TrieNode rootNode = new TrieNode();
 
 
+    @Autowired
+    SensitiveWordDao sensitiveWordDao;
+
     /**
      * 初始化敏感词--字典树
      * afterPropertiesSet方法将在所有的属性被初始化后调用
      */
     @Override
     public void afterPropertiesSet() {
-        try {
+
+        List<SensitiveWord> sensitiveWords = sensitiveWordDao.selectAllSelectiveWord();
+
+        for (SensitiveWord sensitiveWord : sensitiveWords) {
+            addWord(sensitiveWord.getName());
+        }
+
+        /*try {
             InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("SensitiveWords.txt");
             InputStreamReader reader = new InputStreamReader(is);
             BufferedReader bufferedReader = new BufferedReader(reader);
@@ -42,7 +56,7 @@ public class SensitiveService implements InitializingBean {
             }
         } catch (Exception e) {
             log.error("读取敏感词文件[SensitiveWords.txt]失败 {}", e.getMessage());
-        }
+        }*/
     }
 
     private class TrieNode {
@@ -93,7 +107,7 @@ public class SensitiveService implements InitializingBean {
     }
 
 
-    private void addWord(String word) {
+    public void addWord(String word) {
         if (StringUtils.isBlank(word)) {
             return;
         }
@@ -112,6 +126,28 @@ public class SensitiveService implements InitializingBean {
 
             if (i == word.length() - 1) {
                 trieNode.setEndWord(true);
+            }
+        }
+    }
+
+    public void deleteWord(String word) {
+        if (StringUtils.isBlank(word)) {
+            return;
+        }
+
+        TrieNode trieNode = this.rootNode;
+
+        for (int i = 0; i < word.length(); ++i) {
+            char c = word.charAt(i);
+            TrieNode subNode = trieNode.getSubNode(c);
+            if (subNode == null) {
+                return;
+            }
+
+            trieNode = subNode;
+
+            if (i == word.length() - 1) {
+                trieNode.setEndWord(false);
             }
         }
     }
@@ -167,6 +203,8 @@ public class SensitiveService implements InitializingBean {
                 ++position;
             }
         }
+
+        sb.append(text.substring(begin));
 
         return sb.toString();
     }

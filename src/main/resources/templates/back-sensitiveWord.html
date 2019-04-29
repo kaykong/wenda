@@ -1,29 +1,51 @@
-
-
-
 <!DOCTYPE html>
-
-
 <head>
     <!--<meta http-equiv="Content-Type" content="text/html; charset=gb2312">-->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>后台管理</title>
+    <title>敏感词管理</title>
 
     <script type="text/javascript" src="/scripts/main/jquery.js"></script>
     <script type="text/javascript" src="/scripts/main/bootstrap.js"></script>
     <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css">
 
-    <!--&lt;!&ndash; Bootstrap &ndash;&gt;
-    <link href="static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-    &lt;!&ndash; jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) &ndash;&gt;
-    <script src="static/js/jquery-1.12.4.min.js"></script>
-    &lt;!&ndash; 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 &ndash;&gt;
-    <script src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>-->
+
+    <style>
+        .btn-primary {
+            color: #fff;
+            background-color: #00BC9B;
+            border-color: #00B091;
+        }
+
+        .btn-info {
+            color: #fff;
+            background-color: #00BC9B;
+            border-color: #00B091;
+        }
+
+        .pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {
+            z-index: 2;
+            color: #fff;
+            cursor: default;
+            background-color: #00BC9B;
+            border-color: #00B091;
+        }
+
+        .pagination>li>a, .pagination>li>span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #00BC9B;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+    </style>
 </head>
-
-
 
     <!-- 新增Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -31,50 +53,33 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">新增员工</h4>
+                    <h4 class="modal-title" id="myModalLabel">新增敏感词</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" id="emp_add_form" autocomplete="off">
                         <div class="form-group">
-                            <label for="empName_form_input" class="col-sm-2 control-label">姓名</label>
+                            <label for="empName_form_input" class="col-sm-2 control-label">敏感词</label>
                             <div class="col-sm-8  has-feedback">
-                                <input type="text" class="form-control " name="empName" id="empName_form_input"
-                                       placeholder="输入姓名并按下Enter对姓名进行检测" spellcheck =“false”>
+                                <input type="text" class="form-control " name="name" id="empName_form_input"
+                                       placeholder="输入姓名并对敏感词进行重复检测" spellcheck =“false”>
                                 <span class="help-block">提示信息</span>
                             </div>
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-success btn-sm" id="test_emp_name_btn" name="testName">测试姓名</button>
+                                <button type="button" class="btn btn-success btn-sm" id="test_emp_name_btn" name="testName">检测重复</button>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="gender1" class="col-sm-2 control-label">性别</label>
-                            <div class="col-sm-8">
-                                <label class="radio-inline">
-                                    <input type="radio" name="gender"  id="gender1" value="M" checked="checked"> 男
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="gender" id="gender2" value="F"> 女
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email_form_input" class="col-sm-2 control-label">邮箱</label>
-                            <div class="col-sm-8  has-feedback">
-                                <input type="email" class="form-control" name="email" id="email_form_input"
-                                       spellcheck =“false” placeholder="xxx@xxx.xxx">
-                                <span class="help-block">
-                                </span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="departId" class="col-sm-2 control-label">部门</label>
+                            <label for="departId" class="col-sm-2 control-label">类别</label>
                             <div class="col-sm-3">
-                                <select class="form-control" id="departId" name="departId">
-
+                                <select class="form-control" id="departId" name="categoryName">
+                                    <option value="暴恐" selected="selected">暴恐</option>
+                                    <option value="反动">反动</option>
+                                    <option value="民生">民生</option>
+                                    <option value="色情">色情</option>
+                                    <option value="其他">其他</option>
                                 </select>
                             </div>
                         </div>
-
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -151,55 +156,30 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">查询员工</h4>
+                    <h4 class="modal-title">查询敏感词</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" id="emp_query_form" autocomplete="off">
                         <div class="form-group">
-                            <label for="empName_form_input" class="col-sm-2 control-label">ID</label>
-                            <div class="col-sm-8  has-feedback">
-                                <input type="text" class="form-control " name="empName" id="empId_form_input_query"
-                                       placeholder="输入要查询员工的ID" spellcheck =“false”>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="empName_form_input" class="col-sm-2 control-label">姓名</label>
+                            <label for="empName_form_input" class="col-sm-2 control-label">敏感词</label>
                             <div class="col-sm-8  has-feedback">
                                 <input type="text" class="form-control " name="empName" id="empName_form_input_query"
-                                       placeholder="输入要查询员工的姓名" spellcheck =“false”>
+                                       placeholder="输入要查询的敏感词" spellcheck =“false”>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="gender1" class="col-sm-2 control-label">性别</label>
-                            <div class="col-sm-8">
-                                <label class="radio-inline">
-                                    <input type="radio" name="gender"   value="M"> 男
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="gender"  value="F"> 女
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="gender"  value="N" checked="checked"> 不选择
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email_form_input" class="col-sm-2 control-label">邮箱</label>
-                            <div class="col-sm-8  has-feedback">
-                                <input type="email" class="form-control" name="email" id="email_form_input_query"
-                                       spellcheck =“false” placeholder="xxx@xxx.xxx">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="departId" class="col-sm-2 control-label">部门</label>
-                            <div class="col-sm-3" >
-                                <select class="form-control" id="departId_query" name="departId">
-
+                            <label for="departId" class="col-sm-2 control-label">类别</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="departId_query" name="categoryName">
+                                    <option value="N" selected="selected">不选择</option>
+                                    <option value="暴恐">暴恐</option>
+                                    <option value="反动">反动</option>
+                                    <option value="民生">民生</option>
+                                    <option value="色情">色情</option>
+                                    <option value="其他">其他</option>
                                 </select>
                             </div>
                         </div>
-
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -231,11 +211,11 @@
 
 
     <!-- 1.标题 -->
-    <div class="row text-center">
+    <!--<div class="row text-center">
         <div class="col-md-4 ">
             <h1>用户权限管理</h1>
         </div>
-    </div>
+    </div>-->
 
     <!-- 2.三个按钮-->
     <div class="row text-center">
@@ -248,10 +228,10 @@
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                 查询
             </button>
-            <button type="button" class="btn btn-danger btn-lg" id="emp_delete_selected_btn">
+            <!--<button type="button" class="btn btn-danger btn-lg" id="emp_delete_selected_btn">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 删除
-            </button>
+            </button>-->
         </div>
     </div>
 
@@ -260,9 +240,9 @@
     <!-- 3.表格-->
     <div class="row col-md-offset-1">
         <div class="col-md-10 table-responsive">
-            <table class="table table-hover " id="emps_table">
+            <table class="table table-hover " id="emps_table" style="text-align: center;">
                 <caption>
-                    <h4 id="table_head">用户表</h4>
+                    <!--<h4 id="table_head">用户表</h4>-->
                     <div>
                         <span class="col-md-offset-2 " >
                             <span id="query_info"></span>
@@ -272,13 +252,10 @@
                 </caption>
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="check_all_page"></th>
-                        <th>编号</th>
-                        <th>姓名</th>
-                        <th>性别</th>
-                        <th>邮箱</th>
-                        <th>部门</th>
-                        <th>操作</th>
+                        <th style="text-align: center;">编号</th>
+                        <th style="text-align: center;">敏感词</th>
+                        <th style="text-align: center;">类别</th>
+                        <th style="text-align: center;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -305,7 +282,7 @@
     <script type="text/javascript">
 
         //路径
-        var APP_PATH = "/ssmcrud";
+        var APP_PATH = "/backend";
 
         var EMP_DATA = "";
         var EMP_DATA_BOOL = false;
@@ -320,10 +297,6 @@
             getPage(1);
         });
 
-
-
-
-
         function getPage(pageNum) {
             var emp_data = "";
             if (pageNum != undefined) {
@@ -331,9 +304,10 @@
             }
             if (EMP_DATA_BOOL)
                 emp_data += EMP_DATA;
-            alert(emp_data);
+            //alert(emp_data);
+            console.log(emp_data);
             $.ajax({
-                url : APP_PATH + "/emps",
+                url : APP_PATH + "/sensitiveWorlds",
                 data : emp_data,
                 type : 'GET',
                 success : function (result) {
@@ -351,7 +325,6 @@
                         $("#page_nav").empty();
                         $("#page_info").empty();
                     }
-
                 }
             });
         }
@@ -362,29 +335,27 @@
             $("#emps_table tbody").empty();
 
             //还原表单表头的 checkbox
-            $("#check_all_page").attr("checked",false);
-
-            var emps = result.lists;
+            //$("#check_all_page").attr("checked",false);
+            //console.log("初始化/./...")
+            var sensitiveWords = result.lists;
             //jQuery提供的each函数,
-            $.each(emps, function (index, emp) {
+            $.each(sensitiveWords, function (index, sensitiveWord) {
+                //console.log("初始化/./..." + index)
                 //构建表单的每一行记录
-                var checkBox = $("<td><input type='checkbox' class='check_item'></td>");
-                var empId = $("<td></td>").append(emp.empId);
-                var empName = $("<td></td>").append(emp.empName);
-                var gender = $("<td></td>").append(emp.gender == 'M' ? "男" : "女");
-                var email = $("<td></td>").append(emp.email);
-                var deptName = $("<td></td>").append(emp.department.deptName);
+                //var checkBox = $("<td><input type='checkbox' class='check_item'></td>");
+                var id = $("<td width=\"10%\"></td>").append(sensitiveWord.id);
+                var name = $("<td width=\"20%\"></td>").append(sensitiveWord.name);
+                var categoryName = $("<td width=\"10%\"></td>").append(sensitiveWord.categoryName);
 
-                var edit_btn =
+                /*var edit_btn =
                     $("<button type=\"button\" class=\"btn btn-primary btn-sm edit_btn\">修改</button>").attr("empId", emp.empId);
-
+                */
                 var delete_btn =
-                    $("<button type=\"button\" class=\"btn btn-danger btn-sm delete_btn\">删除</button>").attr("empId", emp.empId);
+                    $("<button type=\"button\" class=\"btn btn-danger btn-sm delete_btn\">删除</button>").attr("id", sensitiveWord.id);
 
-                var caozuo = $("<td></td>").append(edit_btn).append(" ").append(delete_btn);
+                var caozuo = $("<td width=\"10%\"></td>").append(" ").append(delete_btn);
 
-                $("<tr></tr>").append(checkBox).append(empId).append(empName)
-                    .append(gender).append(email).append(deptName)
+                $("<tr></tr>").append(id).append(name).append(categoryName)
                     .append(caozuo).appendTo("#emps_table tbody");
             });
         }
@@ -463,7 +434,7 @@
         //员工新增按钮,
         $("#emp_Add_modal_Btn").click(function () {
             //在弹出模态框之前需要获取部门信息
-            getDepts("#departId");
+            //getDepts("#departId");
 
             //清空模态框中的数据
             $("#myModal form")[0].reset();
@@ -477,39 +448,6 @@
                 backdrop : 'static'
             });
         });
-
-        function getPage(pageNum) {
-            var emp_data = "";
-            if (pageNum != undefined) {
-                emp_data += 'currPage=' + pageNum + "&";
-            }
-            if (EMP_DATA_BOOL) {
-                emp_data += EMP_DATA;
-            }
-
-            $.ajax({
-                url : APP_PATH + "/emps",
-                data : emp_data,
-                type : 'GET',
-                success : function (result) {
-                    if (result.totalCount > 0) {
-                        //设置全局的totalCount
-                        totalCount = result.totalCount;
-                        //解析table
-                        build_emp_table(result);
-                        //解析分页信息
-                        build_emp_table_info(result);
-                        //解析分页 页码
-                        build_emp_table_pageNum(result);
-                    }else {
-                        $("#emps_table tbody").empty();
-                        $("#page_nav").empty();
-                        $("#page_info").empty();
-                    }
-
-                }
-            });
-        }
 
         //员工查询按钮
         $("#emp_query_modal_btn").click(function () {
@@ -526,11 +464,8 @@
         });
 
         $("#emp_query_button").click(function () {
-            var empId = $("#empId_form_input_query").val();
             var empName = $("#empName_form_input_query").val();
-            var email = $("#email_form_input_query").val();
 
-            var gender = $("#queryModal input[name=gender]:checked").val();
 
             var departId = $("#departId_query").val();
 
@@ -538,35 +473,22 @@
 
             //传递给后台的组合查询的条件
             var s = "";
-            if (empId != "") {
-                s += "empId=" +empId + "&";
-                info += "员工id : " + empId + " , ";
-            }
-            if (empName != ""){
-                s += "empName=%25" + empName + "%25&";
-                info += "员工姓名 : " + empName + " , ";
-            }
-            if (email != ""){
-                s += "email=%25" +email + "%25&";
-                info += "员工邮箱 : " + email + " , ";
-            }
-            if (gender != "N"){
-                s += "gender=" +gender + "&";
-                if (gender == "M")
-                    info += "员工性别 : 男" +  " , ";
-                else
-                    info += "员工性别 : 女" +  " , ";
-            }
-            if (departId != 0){
-                s += "departId=" +departId + "&";
-                info += "员工部门 : " + $("#departId_query option:selected").text() + " , ";
 
+            if (empName != ""){
+                s += "name=%25" + empName + "%25&";
+                info += "敏感词 : " + empName + " , ";
+            }
+
+
+            if (departId != "N"){
+                s += "categoryName=" +departId + "&";
+                info += "类别 : " + $("#departId_query option:selected").text() + " , ";
             }
             info = info.substring(0, info.length - 2);
 
             if (s != "") {
                 EMP_DATA_BOOL = true;
-                EMP_DATA = s.substring(0,s.length - 1);
+                EMP_DATA = s.substring(0, s.length - 1);
 
                 //隐藏查询modal
                 $('#queryModal').modal('hide');
@@ -646,7 +568,7 @@
         function show_validate_msg(ele, status, msg) {
             //清除当前元素的校验状态
             $(ele).parent().removeClass("has-success has-error");
-            $(ele).next("span").text("");
+            //$(ele).next("span").text("");
 
             //设置信息
             if("success"==status) {
@@ -664,38 +586,40 @@
 
             //验证姓名, 邮箱
             validate_empname();
-            validate_emp_email("#email_form_input");
+            //validate_emp_email("#email_form_input");
 
             //在保存之前先在前端校验数据--利用输入框的change事件 检验
-            if (EMP_EMAIL_CHECK == false || EMP_NAME_CHECK == false) {
+            if (EMP_NAME_CHECK == false) {
                 $('#tips').popover('show');
                 return false;
             } else {
-                EMP_EMAIL_CHECK = false;
                 EMP_NAME_CHECK = false;
             }
 
+            var data = $("#emp_add_form").serialize();
+            console.log(data);
             $.ajax({
-                url : APP_PATH + '/emps',
+                url : APP_PATH + '/addSensitiveWord',
                 type : 'POST',
-                data : $("#emp_add_form").serialize(),
+                data : data,
                 success : function (result) {
-                    if (result.codeNum == 100) {
+                    result = jQuery.parseJSON(result);
+                    if (result.code === 0) {
                         $('#myModal').modal('hide');
                         getPage(totalCount);
                     }
                     else {
                         //显示失败信息
                         //有哪个字段的错误信息就显示哪个字段的；
-                        if(undefined != result.map.empName){
+                        /*if(undefined != result.map.empName){
                             //显示邮箱错误信息
                             show_validate_msg("#empName_form_input", "error", result.map.empName);
                         }
                         if(undefined != result.map.email){
                             //显示员工名字的错误信息
                             show_validate_msg("#email_form_input", "error", result.map.email);
-                        }
-                        alert("保存失败!");
+                        }*/
+                        alert(result.msg);
                     }
                 }
             });
@@ -709,15 +633,15 @@
         function validate_empname() {
 
             var empName = $("#empName_form_input").val();
-            var regex = /(^[a-zA-Z0-9]{6,16})|(^[\u2E80-\u9FFF]{2,15})/;
+
 
             //先根据正则表达式 校验格式
-            if (!regex.test(empName)) {
-                show_validate_msg("#empName_form_input", "error", "用户名6~16为字母数字组合 , 或2~15个汉字");
+            if (empName === null || empName.length === 0) {
+                show_validate_msg("#empName_form_input", "error", "敏感词不能为空");
                 EMP_NAME_CHECK = false;
                 return false;
             } else {
-                show_validate_msg("#empName_form_input", "success", "用户名格式正确")
+                //show_validate_msg("#empName_form_input", "success", "")
             }
 
             //再去后台校验名字是否有重复
@@ -726,16 +650,17 @@
             *  返回信息: true, false
             * */
             $.ajax({
-                url : APP_PATH + '/checkempname',
+                url : APP_PATH + '/checkSensitiveWord',
                 data : "name=" + empName,
                 type : 'Get',
                 success : function (result) {
-                    if(result) {
-                        show_validate_msg("#empName_form_input", "success", "用户名可以用");
+                    var result = jQuery.parseJSON(result);
+                    if(result.code === 0) {
+                        show_validate_msg("#empName_form_input", "success", "敏感词不存在, 可新增");
                         EMP_NAME_CHECK = true;
                         return true;
                     } else {
-                        show_validate_msg("#empName_form_input", "error", "用户名已经被占用了");
+                        show_validate_msg("#empName_form_input", "error", "敏感词已经存在了");
                         EMP_NAME_CHECK = false;
                         return false;
                     }
@@ -750,7 +675,7 @@
 
         //检验用户名 通过input的change事件
         $("#empName_form_input").change(function () {
-            validate_empname();
+            //validate_empname();
         });
 
         /*新增modal 和 更新modal用到的 验证邮箱格式(使用正则)*/
@@ -822,16 +747,16 @@
 
         /*页面中员工记录的末尾的删除按钮 之所以用这种方法, 是因为这个删除按钮的html代码是动态添加的*/
         $(document).on("click", ".delete_btn", function () {
-            //每个删除按钮都给它添加了一个empId属性,对应着该员工
-            var empId = $(this).attr("empId");
+            //每个删除按钮都给它添加了一个 id 属性,对应着该员工
+            var id = $(this).attr("id");
 
-            if (confirm("确定要删除id为" + empId + "的员工吗?")) {
+            if (confirm("确定要删除id为" + id + "的敏感词吗?")) {
                 /* 路径/emp/{id} : DELETE
                 * 成功返回true, 失败返回false
                 * */
                 $.ajax({
-                    url: APP_PATH + "/emp/" + empId,
-                    type: "DELETE",
+                    url: APP_PATH + "/deleteSensitiveWord/" + id,
+                    type: "POST",
                     success: function (result) {
                         if (result) {
                             getPage(CURR_PAGE);

@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.List;
 
 
+/**
+ * @author kk
+ */
 @Controller
 @RequestMapping("/backend")
 public class BackendCourseCategoryController {
@@ -22,9 +25,12 @@ public class BackendCourseCategoryController {
     @Autowired
     HostHolder hostHolder;
 
-    /*
-    *  点击修改小按钮的时候 要根据id获取一个员工
-    * */
+    /**
+     * 点击修改小按钮的时候 要根据id获取一个员工
+     *
+     * @param id
+     * @return top.kongk.wenda.model.Category
+     */
     @RequestMapping(value = "/courseCategory/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Category getUser(@PathVariable("id") Integer id) {
@@ -41,9 +47,13 @@ public class BackendCourseCategoryController {
         return categoryList;
     }
 
-    /*
-    * 根据主键 更新 user
-    * */
+
+    /**
+     * 根据主键 更新 courseCategory
+     *
+     * @param category
+     * @return java.lang.String
+     */
     @RequestMapping(value = "/courseCategory", method = RequestMethod.POST)
     @ResponseBody
     public String getEmployee(Category category) {
@@ -119,20 +129,23 @@ public class BackendCourseCategoryController {
         }
     }
 
-
-    /*
-    * 根据条件 分页查询员工
-    * */
+    /**
+     * 根据条件 分页查询员工
+     *
+     * @param category
+     * @param currPage
+     * @param pageSize
+     * @return top.kongk.wenda.model.Page<top.kongk.wenda.model.Category>
+     */
     @RequestMapping(value = "/courseCategories", method = RequestMethod.GET)
     @ResponseBody
-    public Page<Category> getUsers(Category category,
+    public Page<Category> courseCategories(Category category,
                                @RequestParam(name = "currPage", defaultValue = "1") int currPage,
                                @RequestParam(name = "pageSize", defaultValue = "8") int pageSize) {
         if (currPage < 1 || pageSize < 1) {
             return null;
         }
 
-        //return courseCategoryService.getUsersBySelectiveWithPage(user, currPage, pageSize);
         return courseCategoryService.getCourseCategoriesBySelectiveWithPage(category, currPage, pageSize);
     }
 

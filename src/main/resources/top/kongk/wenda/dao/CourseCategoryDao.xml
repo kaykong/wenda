@@ -2,13 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="top.kongk.wenda.dao.CourseCategoryDao">
 
-    <insert id="addUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into user
-        <include refid="insert-column"/>
-        values
-        <include refid="insert-values-column"/>
-    </insert>
-
     <insert id="addCourseCategory" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into category
         (name, parent_id, level, update_user_id, update_time)
@@ -16,9 +9,7 @@
         (#{name}, #{parentId}, #{level}, #{updateUserId}, #{updateTime})
     </insert>
 
-    <update id="updateRoleById">
-        update user set role = #{role} where id = #{id}
-    </update>
+
     <update id="updateNameParentIdById">
         update category set name = #{name}, parent_id = #{parentId} where id = #{id}
     </update>
@@ -26,37 +17,6 @@
     <delete id="deleteCategoryById">
         delete from category where id = #{id}
     </delete>
-
-    <select id="getUserList" resultType="top.kongk.wenda.model.User">
-      select * from user;
-    </select>
-    <select id="getUserList2" resultType="top.kongk.wenda.model.User">
-
-    </select>
-
-    <sql id="common-column">
-        id, name, parent_id, level, gender, email, role, head_url
-    </sql>
-    <sql id="insert-column">
-        (name, password, salt, gender, email, role, head_url)
-    </sql>
-    <sql id="insert-values-column">
-        (#{name}, #{password}, #{salt}, #{gender}, #{email}, #{role}, #{headUrl})
-    </sql>
-
-    <select id="getUserByName" resultType="top.kongk.wenda.model.User">
-        select
-        <include refid="common-column"/>
-        from user
-        where name = #{name}
-    </select>
-
-    <select id="getUserByEmail" resultType="top.kongk.wenda.model.User">
-        select
-        <include refid="common-column"/>
-        from user
-        where email = #{email}
-    </select>
 
     <select id="selectById" resultType="top.kongk.wenda.model.Category">
         select id, name, parent_id, level
@@ -109,6 +69,7 @@
             limit #{start} , #{pageSize}
         </if>
     </select>
+
     <select id="getCategoryListByLevel" resultType="top.kongk.wenda.model.Category">
         select id, name, parent_id, level
         from category

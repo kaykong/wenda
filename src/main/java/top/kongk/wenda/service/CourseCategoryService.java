@@ -33,56 +33,9 @@ public class CourseCategoryService {
     @Autowired
     private QuestionDao questionDao;
 
-
-
     public Category getCategory(int id) {
         return courseCategoryDao.selectById(id);
     }
-
-    public User getUserByName(String name) {
-
-        if (!UserValidatorUtil.isUsername(name)) {
-            return null;
-        }
-
-        return courseCategoryDao.getUserByName(name);
-    }
-
-    public User getUserByEmail(String email) {
-        if (!UserValidatorUtil.isEmail(email)) {
-            return null;
-        }
-
-        return courseCategoryDao.getUserByEmail(email);
-    }
-
-
-    /*public Page<User> getUsersBySelectiveWithPage(User user, int currPage, int pageSize) {
-        int totalCount = courseCategoryDao.countBySelective(user);
-
-        if (currPage < 0) {
-            currPage = 1;
-        }
-
-        //初始化Page 生成Page对象,传入当前页数,每页的记录数,以及记录总数
-        Page<User> page = new Page<>(currPage,pageSize,totalCount);
-
-        if (totalCount == 0) {
-            return page;
-        }
-
-        //设置map, 因为 courseCategoryDao.selectBySelectiveWithPage(map) 需要
-        Map map = new HashMap(3);
-        map.put("user", user);
-        map.put("start", page.getStart());
-        map.put("pageSize", page.getPageSize());
-
-        List<User> userList = courseCategoryDao.selectBySelectiveWithPage(map);
-
-        page.setLists(userList);
-
-        return page;
-    }*/
 
     public Page<Category> getCourseCategoriesBySelectiveWithPage(Category category, int currPage, int pageSize) {
 
@@ -112,9 +65,6 @@ public class CourseCategoryService {
         return page;
     }
 
-    public boolean updateRoleById(Integer id, Integer role) {
-        return courseCategoryDao.updateRoleById(id, role) > 0;
-    }
 
     public List<Category> getCategoryListByLevel(Integer level) {
         return courseCategoryDao.getCategoryListByLevel(level);
