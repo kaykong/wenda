@@ -32,7 +32,7 @@ public class UserService {
     @Autowired
     private LoginTicketDao loginTicketDao;
 
-    public Map<String, Object> register(String username, String password) {
+    public Map<String, Object> register(String username, String password, String email) {
         Map<String, Object> map = new HashMap<>();
         if (StringUtils.isBlank(username)) {
             map.put("msg", "用户名不能为空");
@@ -51,9 +51,15 @@ public class UserService {
             return map;
         }
 
+        user = userDao.getUserByEmail(email);
+        if (user != null) {
+            map.put("msg", "邮箱[" + email + "]已经被注册");
+        }
+
         // 密码强度
         user = new User();
         user.setName(username);
+        user.setEmail(email);
         user.setSalt(UUID.randomUUID().toString().substring(0, 5));
         if (StringUtils.isBlank(user.getHeadUrl())) {
             String headUrl = "http://kongk.top/q/img/" + new Random().nextInt(40) + ".jpg";
@@ -70,7 +76,7 @@ public class UserService {
 
 
     public Map<String, Object> login(String username, String password) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>(1);
         if (StringUtils.isBlank(username)) {
             map.put("msg", "用户名不能为空");
             return map;
@@ -82,6 +88,36 @@ public class UserService {
         }
 
         User user = userDao.getUserByName(username);
+
+        if (user == null) {
+            map.put("msg", "用户名不存在");
+            return map;
+        }
+
+        if (!WendaUtil.MD5(password + user.getSalt()).equals(user.getPassword())) {
+            map.put("msg", "密码不正确");
+            return map;
+        }
+
+        String ticket = addLoginTicket(user.getId());
+        map.put("ticket", ticket);
+        return map;
+    }
+
+
+    public Map<String, Object> loginByEmail(String email, String password) {
+        Map<String, Object> map = new HashMap<>(1);
+        if (StringUtils.isBlank(email)) {
+            map.put("msg", "邮箱不能为空");
+            return map;
+        }
+
+        if (StringUtils.isBlank(password)) {
+            map.put("msg", "密码不能为空");
+            return map;
+        }
+
+        User user = userDao.getUserByEmail(email);
 
         if (user == null) {
             map.put("msg", "用户名不存在");
@@ -141,9 +177,9 @@ public class UserService {
     }
 
     public User getUserByEmail(String email) {
-        if (!UserValidatorUtil.isEmail(email)) {
+        /*if (!UserValidatorUtil.isEmail(email)) {
             return null;
-        }
+        }*/
 
         return userDao.getUserByEmail(email);
     }
@@ -297,4 +333,5 @@ public class UserService {
     public boolean updateRoleById(Integer id, Integer role) {
         return userDao.updateRoleById(id, role) > 0;
     }
+
 }

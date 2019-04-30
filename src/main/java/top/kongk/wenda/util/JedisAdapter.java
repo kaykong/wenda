@@ -163,6 +163,76 @@ public class JedisAdapter implements InitializingBean {
     }
 
     /**
+     * 设置key, value, 过期时间
+     *
+     * @param key
+     * @param seconds
+     * @param value
+     * @return boolean
+     */
+    public boolean setex(String key, int seconds, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.setex(key, seconds, value);
+            return true;
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 检测是否存在该key
+     *
+     * @param key
+     * @return boolean
+     */
+    public boolean exists(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.exists(key);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 根据key获取value
+     *
+     * @param key
+     * @return java.lang.String
+     */
+    public String get(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.get(key);
+        } catch (Exception e) {
+            logger.error("发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
+
+
+
+
+    /**
      * 向 key 集合中添加元素 value
      *
      * @param key

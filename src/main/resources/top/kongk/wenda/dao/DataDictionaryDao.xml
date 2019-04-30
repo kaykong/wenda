@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.kongk.wenda.dao.DataDictionaryDao">
+
+    <sql id="common-column">
+        q.id, q.title, q.content, q.user_id, q.category_id, c.name as categoryName,
+        q.anonymous, q.status, q.comment_count, q.created_date
+    </sql>
+
+    <sql id="insert-column">
+        (title, content, user_id, category_id, anonymous, status, created_date)
+    </sql>
+    <sql id="insert-values-column">
+        (#{title}, #{content}, #{userId}, #{categoryId}, #{anonymous}, #{status}, #{createdDate})
+    </sql>
+
+    <insert id="addQuestion" keyProperty="id" useGeneratedKeys="true">
+        insert into question
+        <include refid="insert-column"/>
+        values
+        <include refid="insert-values-column"/>
+    </insert>
+
+    <update id="updateCommentCount">
+        update question set comment_count = #{commentCount}
+        where id = #{id}
+    </update>
+
+    <update id="updateStatusById">
+        update question set status = #{status}
+        where id = #{id}
+    </update>
+
+
+    <select id="getQuestionById" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q left join category c
+        on q.category_id = c.id
+        where q.id = #{id}
+    </select>
+
+    <select id="selectLatestQuestions" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q LEFT JOIN category c
+        on q.category_id = c.id
+
+        <where>
+                and q.status = 0
+            <if test="userId != null and userId != 0">
+                and q.user_id = #{userId}
+            </if>
+        </where>
+        ORDER BY q.id DESC
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="getCategoryListByParentId" resultType="top.kongk.wenda.model.Category">
+         select id, name, parent_id from category where parent_id = #{parentId}
+    </select>
+
+    <select id="selectLatestQuestionsByCategoryId" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q LEFT JOIN category c
+        on q.category_id = c.id
+
+        <where>
+                and q.status = 0
+            <if test="userId != null and userId != 0">
+                and q.user_id = #{userId}
+            </if>
+            <if test="categoryId != null">
+                and q.category_id = #{categoryId}
+            </if>
+        </where>
+
+        ORDER BY q.id DESC
+
+        LIMIT #{offset},#{limit}
+    </select>
+
+    <select id="selectQuestions" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q LEFT JOIN category c
+        on q.category_id = c.id
+        <where>
+            and q.status = 0
+            <if test="userId != null and userId != 0">
+                and q.user_id = #{userId}
+            </if>
+            <if test="categoryId != null">
+                and q.category_id = #{categoryId}
+            </if>
+        </where>
+
+        ORDER BY q.id DESC
+
+        <if test="offset != null and limit != null">
+            LIMIT #{offset}, #{limit}
+        </if>
+
+    </select>
+
+    <select id="selectQuestionByCategoryId" resultType="top.kongk.wenda.model.Question">
+        SELECT
+        <include refid="common-column"/>
+        from question q left join category c
+        on q.category_id = c.id
+        where q.category_id = #{id}
+    </select>
+
+    <sql id="common-column2">
+        id, type, code, value, status
+    </sql>
+    <select id="getDataDictionaryListByType" resultType="top.kongk.wenda.model.DataDictionary">
+        SELECT
+        <include refid="common-column2"/>
+        from data_dictionary
+        where type = #{type}
+    </select>
+</mapper>

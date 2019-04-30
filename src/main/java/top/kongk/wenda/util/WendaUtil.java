@@ -80,6 +80,14 @@ public class WendaUtil {
         //return content.replaceAll("\n", "<br/>");
     }
 
+    public static String getRandom(int length) {
+        String num = "";
+        for (int i = 0; i < length; i++) {
+            num = num + String.valueOf((int) Math.floor(Math.random() * 9 + 1));
+        }
+        return num;
+    }
+
     public static String get32UUID() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }

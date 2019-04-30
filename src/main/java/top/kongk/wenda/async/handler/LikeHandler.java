@@ -50,14 +50,14 @@ public class LikeHandler implements EventHandler {
         messageService.addMessage(message);
 
         //发送邮件提醒
-        if (StringUtils.isNotBlank(entityOwnerUser.getEmail())) {
+        /*if (StringUtils.isNotBlank(entityOwnerUser.getEmail())) {
             //可以判断用户是否想要接收点赞通知
             Map<String, Object> map = new HashMap<>(2);
             map.put("username", entityOwnerUser.getName());
             map.put("actorUserName", actorUser.getName());
             map.put("message", message.getContent());
             mailSender.sendWithHTMLTemplate(entityOwnerUser.getEmail(), "有人给你点赞了", "mails/like_comment.html", map);
-        }
+        }*/
     }
 
     @Override

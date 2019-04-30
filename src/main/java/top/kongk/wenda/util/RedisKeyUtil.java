@@ -38,6 +38,11 @@ public class RedisKeyUtil {
      */
     private static String BIZ_TIMELINE = "TIMELINE";
 
+    /**
+     * 邮箱注册
+     */
+    private static String BIZ_EMAIL_REGISTER = "EMAIL_REGISTER";
+
 
     /**
      * 根据 entityType 和 entityId 获取喜欢的key, 用于统一redis的集合key值
@@ -104,4 +109,15 @@ public class RedisKeyUtil {
     public static String getTimelineKey(int userId) {
         return BIZ_TIMELINE + SPLIT + String.valueOf(userId);
     }
+
+    /**
+     * 获取email的注册 key
+     *
+     * @param email
+     * @return java.lang.String
+     */
+    public static String getEmailRegisterKey(String email) {
+        return BIZ_EMAIL_REGISTER + SPLIT + email;
+    }
+
 }
