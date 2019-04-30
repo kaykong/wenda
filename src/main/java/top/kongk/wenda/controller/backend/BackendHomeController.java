@@ -48,21 +48,27 @@ public class BackendHomeController {
     LikeService likeService;
 
     @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
-    public String index(Model model) {
+    public String index() {
 
         return "back-user";
     }
 
     @RequestMapping(path = {"/courseCategoryIndex"}, method = {RequestMethod.GET, RequestMethod.POST})
-    public String courseCategory(Model model) {
+    public String courseCategory() {
 
         return "back-courseCategory";
     }
 
     @RequestMapping(path = {"/sensitiveWordIndex"}, method = {RequestMethod.GET, RequestMethod.POST})
-    public String sensitiveWord(Model model) {
+    public String sensitiveWord() {
 
         return "back-sensitiveWord";
     }
+
+    /*@RequestMapping(path = {"/dataDictionary"}, method = {RequestMethod.GET, RequestMethod.POST})
+    public String dataDictionary(Model model) {
+
+        return "back-dataDictionary";
+    }*/
 
 }

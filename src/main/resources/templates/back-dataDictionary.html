@@ -15,12 +15,39 @@
     <script type="text/javascript" src="/scripts/main/bootstrap.js"></script>
     <link rel="stylesheet" type="text/css" href="/styles/bootstrap.min.css">
 
-    <!--&lt;!&ndash; Bootstrap &ndash;&gt;
-    <link href="static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-    &lt;!&ndash; jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) &ndash;&gt;
-    <script src="static/js/jquery-1.12.4.min.js"></script>
-    &lt;!&ndash; 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 &ndash;&gt;
-    <script src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>-->
+    <style>
+        .btn-primary {
+            color: #fff;
+            background-color: #00BC9B;
+            border-color: #00B091;
+        }
+
+        .btn-info {
+            color: #fff;
+            background-color: #00BC9B;
+            border-color: #00B091;
+        }
+
+        .pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {
+            z-index: 2;
+            color: #fff;
+            cursor: default;
+            background-color: #00BC9B;
+            border-color: #00B091;
+        }
+
+        .pagination>li>a, .pagination>li>span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #00BC9B;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+    </style>
 </head>
 
 
@@ -220,10 +247,15 @@
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">用户权限</a></li>
-                <li><a href="#">课程分类</a></li>
-                <li><a href="#">敏感词</a></li>
-                <li><a href="#">数据字典</a></li>
+                <li><a href="/backend/">用户权限</a></li>
+                <li><a href="/backend/courseCategoryIndex">课程分类</a></li>
+                <li><a href="/backend/sensitiveWordIndex">敏感词</a></li>
+                <li class="active"><a href="/backend/dataDictionary">数据字典</a></li>
+            </ul>
+        </div>
+        <div style="float: right">
+            <ul class="nav navbar-nav">
+                <li><a href="/">前台</a></li>
             </ul>
         </div>
     </div>
@@ -231,11 +263,11 @@
 
 
     <!-- 1.标题 -->
-    <div class="row text-center">
+    <!--<div class="row text-center">
         <div class="col-md-4 ">
             <h1>用户权限管理</h1>
         </div>
-    </div>
+    </div>-->
 
     <!-- 2.三个按钮-->
     <div class="row text-center">
@@ -248,10 +280,10 @@
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                 查询
             </button>
-            <button type="button" class="btn btn-danger btn-lg" id="emp_delete_selected_btn">
+            <!--<button type="button" class="btn btn-danger btn-lg" id="emp_delete_selected_btn">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 删除
-            </button>
+            </button>-->
         </div>
     </div>
 
@@ -260,7 +292,7 @@
     <!-- 3.表格-->
     <div class="row col-md-offset-1">
         <div class="col-md-10 table-responsive">
-            <table class="table table-hover " id="emps_table">
+            <table class="table table-hover " id="emps_table" style="text-align: center;">
                 <caption>
                     <h4 id="table_head">用户表</h4>
                     <div>
@@ -272,13 +304,13 @@
                 </caption>
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="check_all_page"></th>
-                        <th>编号</th>
-                        <th>姓名</th>
-                        <th>性别</th>
-                        <th>邮箱</th>
-                        <th>部门</th>
-                        <th>操作</th>
+                        <!--<th><input type="checkbox" id="check_all_page"></th>-->
+                        <th style="text-align: center;">编号</th>
+                        <th style="text-align: center;">类型</th>
+                        <th style="text-align: center;">编码</th>
+                        <th style="text-align: center;">数据值</th>
+                        <th style="text-align: center;">状态</th>
+                        <th style="text-align: center;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -305,7 +337,7 @@
     <script type="text/javascript">
 
         //路径
-        var APP_PATH = "/ssmcrud";
+        var APP_PATH = "/backend";
 
         var EMP_DATA = "";
         var EMP_DATA_BOOL = false;
@@ -319,9 +351,6 @@
         $(function () {
             getPage(1);
         });
-
-
-
 
 
         function getPage(pageNum) {
@@ -477,39 +506,6 @@
                 backdrop : 'static'
             });
         });
-
-        function getPage(pageNum) {
-            var emp_data = "";
-            if (pageNum != undefined) {
-                emp_data += 'currPage=' + pageNum + "&";
-            }
-            if (EMP_DATA_BOOL) {
-                emp_data += EMP_DATA;
-            }
-
-            $.ajax({
-                url : APP_PATH + "/emps",
-                data : emp_data,
-                type : 'GET',
-                success : function (result) {
-                    if (result.totalCount > 0) {
-                        //设置全局的totalCount
-                        totalCount = result.totalCount;
-                        //解析table
-                        build_emp_table(result);
-                        //解析分页信息
-                        build_emp_table_info(result);
-                        //解析分页 页码
-                        build_emp_table_pageNum(result);
-                    }else {
-                        $("#emps_table tbody").empty();
-                        $("#page_nav").empty();
-                        $("#page_info").empty();
-                    }
-
-                }
-            });
-        }
 
         //员工查询按钮
         $("#emp_query_modal_btn").click(function () {

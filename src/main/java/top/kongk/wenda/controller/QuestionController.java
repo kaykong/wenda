@@ -110,7 +110,7 @@ public class QuestionController {
 
             //获取权重, 可以通过数据库获取
             int likeCountWeight = 6;
-            int dislikeCountWeight = 1;
+            int dislikeCountWeight = -1;
             //回复数量的权重
             int replyCountWeight = 1;
 
@@ -118,7 +118,7 @@ public class QuestionController {
                 private int getScore(Comment comment) {
                     //喜欢的数量*权重 - 不喜欢的数量*权重 + 回复的数量*权重
                     return comment.getLikeCount() * likeCountWeight
-                            - comment.getDislikeCount() * dislikeCountWeight + comment.getReplyCount() * replyCountWeight;
+                            + comment.getDislikeCount() * dislikeCountWeight + comment.getReplyCount() * replyCountWeight;
                 }
 
                 @Override

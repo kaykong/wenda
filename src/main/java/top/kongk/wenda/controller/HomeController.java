@@ -98,6 +98,7 @@ public class HomeController {
             questionList.sort(new Comparator<Question>() {
 
                 int followCountWeight = 2;
+                //answerCountWeight
                 int commentCountWeight = 1;
 
                 private int getScore(Question question) {
