@@ -50,7 +50,7 @@ public class QuestionService {
         question.setContent(sensitiveService.filter(question.getContent()));
 
         question.setUserId(user.getId());
-        question.setStatus(QuestionCode.TO_BE_AUDITED.getCode());
+        //question.setStatus(QuestionCode.TO_BE_AUDITED.getCode());
         question.setCreatedDate(new Date());
         try {
             questionDao.addQuestion(question);
@@ -83,6 +83,30 @@ public class QuestionService {
         }
 
         return serverResponse;
+    }
+
+
+    public boolean addQuestion(Question question) {
+        /*
+         * 对title和content进行敏感词过滤
+         */
+        //过滤html标签
+        question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
+        //question.setContent(HtmlUtils.htmlEscape(question.getContent()));
+
+        //过滤敏感词
+        question.setTitle(sensitiveService.filter(question.getTitle()));
+        question.setContent(sensitiveService.filter(question.getContent()));
+        question.setStatus(0);
+        question.setCreatedDate(new Date());
+        try {
+            questionDao.addQuestion(question);
+        } catch (Exception e) {
+            logger.error("QuestionService.addQuestion Exception", e);
+            return false;
+        }
+
+        return true;
     }
 
     /**

@@ -83,6 +83,12 @@ public class RedisKeyUtil {
      * @return java.lang.String
      */
     public static String getFollowerKey(int entityType, int entityId) {
+        /*
+         * entityType
+         * 问题--1
+         * 回答--2
+         * 用户--3
+         */
         return BIZ_FOLLOWER + SPLIT + String.valueOf(entityType) + SPLIT + String.valueOf(entityId);
     }
 

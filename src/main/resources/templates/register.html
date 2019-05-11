@@ -32,14 +32,14 @@
                     <input type="hidden" name="_xsrf" value="21aa1c8d254df2899b23ab9afbd62a53">
                     <div class="group-inputs">
                         <div class="email input-wrapper">
-                            <input type="text" name="email" id="id-email" aria-label="邮箱" placeholder="邮箱" required="">
+                            <input type="text" name="email" id="id-email" aria-label="邮箱" placeholder="邮箱">
                         </div>
                         <div class="input-wrapper" style="display: inline">
                             <!--<input type="text"  style="display: inline" name="password" aria-label="验证码" placeholder="验证码" required="">
                             -->
-                            <kkk class="sign-button" id="id-getCheckCode"
+                            <button class="sign-button" id="id-getCheckCode"
                                  style="float: right; margin-top: 4px; width: 100px">获取
-                            </kkk>
+                            </button>
                         </div>
                         <div class="input-wrapper">
                             <input type="text" name="checkCode" id="id-checkCode" placeholder="验证码" required="">
@@ -53,17 +53,17 @@
                         </div>
                         <div class="email input-wrapper">
                             <input type="text" name="username" id="id-username" aria-label="用户名" placeholder="用户名"
-                                   required="">
+                                   >
                         </div>
 
                         <div class="input-wrapper">
                             <input type="password" name="password" id="id-password1" aria-label="密码" placeholder="密码"
-                                   required="">
+                                   >
                         </div>
 
                         <div class="input-wrapper">
                             <input type="password" name="password" id="id-password2" aria-label="密码" placeholder="重复密码"
-                                   required="">
+                                   >
                         </div>
                     </div>
                     <input type="hidden" name="next" value="$!{next}"/>
@@ -89,9 +89,17 @@
 
 <script>
 
+    $("#id-email").keyup(function(){
+        //$("#id-getCheckCode").attr('disabled', false);
+        $("#id-getCheckCode").show(500);
+    });
+
     /*点击获取验证码*/
     $("#id-getCheckCode").bind("click", function () {
         var email = $("#id-email").val();
+        //$("#id-getCheckCode").attr('disabled',true);
+        $("#id-getCheckCode").hide(500);
+        //$("#id-getCheckCode").attr({"disabled":"disabled"});
         console.log(email);
         $.ajax({
             url: "/getCheckCode?email=" + email,
@@ -99,7 +107,11 @@
             type: 'GET',
             success: function (result) {
                 result = jQuery.parseJSON(result);
+               /*if(result.code === 1) {
+                    $("#id-getCheckCode").attr('disabled',true);
+                }*/
                 $("#id-subtitle").html(result.msg);
+                alert(result.msg);
             }
         });
     });
@@ -115,6 +127,7 @@
             success: function (result) {
                 result = jQuery.parseJSON(result);
                 $("#id-subtitle").html(result.msg);
+                alert(result.msg);
             }
         });
     });
@@ -122,22 +135,40 @@
     /*点击注册*/
     $("#id-register").bind("click", function () {
 
+        var username = $("#id-username").val();
+        var email = $("#id-email").val();
+        var checkCode = $("#id-checkCode").val();
+
         var password1 = $("#id-password1").val();
         var password2 = $("#id-password2").val();
+
+        if (email === null || email.length === 0) {
+            $("#id-subtitle").html("请输入邮箱");
+            alert("请输入邮箱");
+            return;
+        }
+
+        if (checkCode === null || checkCode.length === 0) {
+            $("#id-subtitle").html("请输入验证码");
+            alert("请输入验证码");
+            return;
+        }
+
+        if (username === null || username.length === 0) {
+            $("#id-subtitle").html("请输入用户名");
+            alert("请输入用户名");
+            return;
+        }
 
         if (password1 === null || password1.length === 0) {
             $("#id-subtitle").html("请输入密码");
             return;
         }
-        if (password1 != password2) {
+        if (password1 !== password2) {
             $("#id-subtitle").html("密码不一致");
             return;
         }
 
-
-        var username = $("#id-username").val();
-        var email = $("#id-email").val();
-        var checkCode = $("#id-checkCode").val();
 
         /*var usernameCheck = false;
         $.ajax({
@@ -173,6 +204,7 @@
                     window.location.href = '/'
                 } else {
                     $("#id-subtitle").html(result.msg);
+                    alert(result.msg);
                 }
             }
         });

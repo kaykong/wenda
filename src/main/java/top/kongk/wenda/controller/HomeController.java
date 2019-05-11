@@ -163,6 +163,9 @@ public class HomeController {
 
         //获取人物简介
         User user = userService.getUser(userId);
+        if (user == null) {
+            return "redirect:/";
+        }
         ViewObject vo = new ViewObject();
         vo.set("user", user);
         //getUserCommentCount 获取的就是回答数量

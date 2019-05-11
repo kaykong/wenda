@@ -62,7 +62,7 @@ public class UserService {
         user.setEmail(email);
         user.setSalt(UUID.randomUUID().toString().substring(0, 5));
         if (StringUtils.isBlank(user.getHeadUrl())) {
-            String headUrl = "http://kongk.top/q/img/" + new Random().nextInt(40) + ".jpg";
+            String headUrl = "/headImg/" + new Random().nextInt(40) + ".jpg";
             user.setHeadUrl(headUrl);
         }
         user.setPassword(WendaUtil.MD5(password + user.getSalt()));

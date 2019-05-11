@@ -154,7 +154,7 @@ public class LoginController {
 
     @RequestMapping(path = {"/getCheckCode"}, method = {RequestMethod.GET})
     @ResponseBody
-    public String getCheckCode(Model model, @RequestParam("email") String email) {
+    public String getCheckCode(@RequestParam("email") String email) {
 
         /*
          * 1.验证邮箱格式
@@ -197,8 +197,6 @@ public class LoginController {
             return WendaUtil.getJSONString(0, "验证码已经发送, 请注意查收");
         }
 
-        //5分钟
-        jedisAdapter.setex(emailRegisterKey, 300, checkCode);
 
         Map<String, Object> map2 = new HashMap<>(2);
         map2.put("checkCode", checkCode);
@@ -208,6 +206,9 @@ public class LoginController {
         boolean send = mailSender.sendWithHTMLTemplate(email, "验证码", "mails/register_checkCode.html", map2);
         if (!send) {
             return WendaUtil.getJSONString(1, "验证码发送失败, 请稍后再试");
+        } else {
+            //5分钟
+            jedisAdapter.setex(emailRegisterKey, 300, checkCode);
         }
 
         return WendaUtil.getJSONString(0, "验证码已发送");
@@ -281,7 +282,7 @@ public class LoginController {
             return WendaUtil.getJSONString(1, "验证码错误, 请重新获取");
         }
 
-        String checkCodeRedis = jedisAdapter.get(RedisKeyUtil.getEmailRegisterKey(email));
+        String checkCodeRedis = jedisAdapter.get(emailRegisterKey);
         if (checkCodeRedis == null) {
             return WendaUtil.getJSONString(1, "验证码错误, 请重新获取");
         }
@@ -295,6 +296,7 @@ public class LoginController {
             user.setName(username);
             user.setPassword(password);
             user.setEmail(email);
+            user.setRole(2);
             Map<String, Object> map = userService.register(username, password, email);
             if (map.containsKey("ticket")) {
                 Cookie cookie = new Cookie("ticket", map.get("ticket").toString());

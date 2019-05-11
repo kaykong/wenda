@@ -244,6 +244,13 @@ public class QuestionController {
         return "detailAnswer";
     }
 
+    /**
+     * 目前废弃
+     *
+     * @param title
+     * @param content
+     * @return java.lang.String
+     */
     @RequestMapping(value = "/add", method = {RequestMethod.POST})
     @ResponseBody
     public String addQuestion(@RequestParam("title") String title,
@@ -274,6 +281,15 @@ public class QuestionController {
         return WendaUtil.getJSONString(1, "失败");
     }
 
+
+    /**
+     * 增加问题
+     *
+     * @param title
+     * @param content
+     * @param categoryId
+     * @return java.lang.String
+     */
     @RequestMapping(value = "/add2", method = {RequestMethod.POST})
     @ResponseBody
     public String addQuestion2(@RequestParam("title") String title,
@@ -287,14 +303,13 @@ public class QuestionController {
             //默认不匿名
             question.setAnonymous(false);
             question.setCategoryId(categoryId);
-            //question.setStatus(1);
             if (hostHolder.getCurrentUser() == null) {
                 return WendaUtil.getJSONString(999);
             } else {
                 question.setUserId(hostHolder.getCurrentUser().getId());
             }
 
-            if (questionService.addQuestion(question, hostHolder.getCurrentUser()).isSuccess()) {
+            if (questionService.addQuestion(question)) {
                 eventProducer.fireEvent(new EventModel(EventType.ADD_QUESTION)
                         .setActorId(question.getUserId()).setEntityId(question.getId())
                         .setExt("title", question.getTitle()).setExt("content", question.getContent()));
@@ -303,7 +318,7 @@ public class QuestionController {
         } catch (Exception e) {
             log.error("增加问题失败" + e.getMessage());
         }
-        return WendaUtil.getJSONString(1, "失败");
+        return WendaUtil.getJSONString(1, "新增问题失败");
     }
 
 

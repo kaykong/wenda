@@ -51,7 +51,7 @@ public class MessageController {
         try {
             int localUserId = hostHolder.getCurrentUser().getId();
             List<ViewObject> conversations = new ArrayList<>();
-            List<Message> conversationList = messageService.getConversationList(localUserId, 0, 10);
+            List<Message> conversationList = messageService.getConversationList(localUserId, 0, 100);
             for (Message msg : conversationList) {
                 ViewObject vo = new ViewObject();
                 msg.setContent(msg.getContent().replaceAll("<br/>", " "));

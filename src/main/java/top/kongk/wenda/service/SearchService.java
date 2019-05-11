@@ -11,6 +11,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.kongk.wenda.dao.QuestionDao;
 import top.kongk.wenda.model.Question;
 
 import java.io.IOException;
@@ -28,6 +29,9 @@ public class SearchService {
 
     @Autowired
     QuestionService questionService;
+
+    @Autowired
+    QuestionDao questionDao;
 
     /**
      * solr 连接url
@@ -179,6 +183,38 @@ public class SearchService {
             e.printStackTrace();
         }
     }
+
+
+    public void deleteAll() {
+        try {
+            //传递List<String>
+            List<Question> questions = questionDao.selectQuestions(null, null, null, null);
+            List<String> stringList = new ArrayList<>(questions.size());
+            for (Question question : questions) {
+                stringList.add(question.getId().toString());
+            }
+            UpdateResponse rsp = client.deleteById(stringList);
+            client.commit();
+            System.out.println("delete id stringList:" + " result:" + rsp.getStatus() + " Qtime:" + rsp.getQTime());
+        } catch (SolrServerException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void indexAll() {
+
+        //传递List<String>
+        List<Question> questions = questionDao.selectQuestions(null, null, null, null);
+        for (Question question : questions) {
+            try {
+                indexQuestion(question.getId(), question.getTitle(), question.getContent());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
 
 }

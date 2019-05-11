@@ -1,6 +1,7 @@
 package top.kongk.wenda.controller;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import top.kongk.wenda.service.FollowService;
 import top.kongk.wenda.service.QuestionService;
 import top.kongk.wenda.service.SearchService;
 import top.kongk.wenda.service.UserService;
+import top.kongk.wenda.util.WendaUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -110,5 +112,19 @@ public class SearchController {
         }
 
         return Collections.EMPTY_LIST;
+    }
+
+
+    @RequestMapping(path = {"/solrReindex"}, method = {RequestMethod.GET})
+    @ResponseBody
+    public String searchSimilarQuestion() {
+        try {
+            searchService.deleteAll();
+            searchService.indexAll();
+        } catch (Exception e) {
+            logger.error("solrReindex失败" + e.getMessage());
+            return WendaUtil.getJSONString(1, "solrReindex失败");
+        }
+        return WendaUtil.getJSONString(0, "solrReindex成功");
     }
 }
