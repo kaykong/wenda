@@ -65,6 +65,7 @@ public class SensitiveService implements InitializingBean {
          * 是否是结尾的字符
          */
         private Boolean endWord = false;
+
         /**
          * 子节点
          */
@@ -176,13 +177,6 @@ public class SensitiveService implements InitializingBean {
                 continue;
             }
 
-            /*
-            //过滤<script>alert("I am an alert box!!")</script>时错误
-            if (isContinueChar(c)) {
-                sb.append(c);
-                position++;
-                continue;
-            }*/
 
             trieNode = trieNode.getSubNode(c);
 
@@ -216,7 +210,7 @@ public class SensitiveService implements InitializingBean {
     }
 
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         SensitiveService service = new SensitiveService();
         service.addWord("你好");
         service.addWord("关键词");
@@ -225,7 +219,7 @@ public class SensitiveService implements InitializingBean {
         String filter = service.filter(text);
         System.out.println(text);
         System.out.println(filter);
-    }
+    }*/
 
 
 

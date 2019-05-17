@@ -159,7 +159,7 @@ public class JedisAdapter implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        pool = new JedisPool("redis://localhost:6379/9");
+        pool = new JedisPool("redis://localhost:6379/8");
     }
 
     /**

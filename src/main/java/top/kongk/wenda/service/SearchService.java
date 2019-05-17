@@ -187,7 +187,12 @@ public class SearchService {
 
     public void deleteAll() {
         try {
-            //传递List<String>
+
+            //把删除的条件设置为"*:*"就可以了
+            client.deleteByQuery("*:*");
+            client.commit();
+
+            /*//传递List<String>
             List<Question> questions = questionDao.selectQuestions(null, null, null, null);
             List<String> stringList = new ArrayList<>(questions.size());
             for (Question question : questions) {
@@ -196,6 +201,7 @@ public class SearchService {
             UpdateResponse rsp = client.deleteById(stringList);
             client.commit();
             System.out.println("delete id stringList:" + " result:" + rsp.getStatus() + " Qtime:" + rsp.getQTime());
+            */
         } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }

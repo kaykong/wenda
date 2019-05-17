@@ -171,7 +171,7 @@ public class LoginController {
             }
         }
 
-        if (!emailFormat) {
+        if (!emailFormat && map.size() > 0) {
             return WendaUtil.getJSONString(1, "邮箱格式不对, 请查看可注册的邮箱");
         }
 

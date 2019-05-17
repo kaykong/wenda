@@ -98,7 +98,6 @@ public class FeedHandler implements EventHandler {
                 map.put("followerName", user.getName());
                 map.put("followerHead", user.getHeadUrl());
                 return JSONObject.toJSONString(map);
-
             } else */
         } else if (model.getType() == EventType.LIKE && model.getEntityType() == EntityType.ENTITY_ANSWER) {
             //点赞了哪个回答

@@ -1,6 +1,7 @@
 package top.kongk.wenda.controller;
 
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,7 @@ import top.kongk.wenda.model.*;
 import top.kongk.wenda.service.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -44,6 +42,9 @@ public class HomeController {
 
     @Autowired
     LikeService likeService;
+
+    @Autowired
+    DataDictionaryService dataDictionaryService;
 
     private List<ViewObject> getQuestions(Integer userId, Integer offset, Integer limit) {
         List<Question> questionList = questionService.getLatestQuestions(userId, offset, limit);
@@ -95,14 +96,32 @@ public class HomeController {
                 //回答的总赞数
             }
 
+            Map<String, String> weightQuestion = dataDictionaryService.getByType("weight-question");
+
+            Integer followCountWeight = null;
+            Integer answerCountWeight = null;
+
+            String followCountWeightString = weightQuestion.get("followCountWeight");
+            if (NumberUtils.isNumber(followCountWeightString)) {
+                followCountWeight = Integer.valueOf(followCountWeightString);
+            }
+            String answerCountWeightString = weightQuestion.get("answerCountWeight");
+            if (NumberUtils.isNumber(answerCountWeightString)) {
+                answerCountWeight = Integer.valueOf(answerCountWeightString);
+            }
+
+            if (followCountWeight == null) {
+                followCountWeight = 1;
+            }
+            if (answerCountWeight == null) {
+                answerCountWeight = 1;
+            }
+            Integer followCountWeightFinal = followCountWeight;
+            Integer answerCountWeightFinal = answerCountWeight;
+
             questionList.sort(new Comparator<Question>() {
-
-                int followCountWeight = 2;
-                //answerCountWeight
-                int commentCountWeight = 1;
-
                 private int getScore(Question question) {
-                    return question.getFollowCount() * followCountWeight + question.getCommentCount() * commentCountWeight;
+                    return question.getFollowCount() * followCountWeightFinal + question.getCommentCount() * answerCountWeightFinal;
                 }
 
                 @Override
@@ -147,8 +166,8 @@ public class HomeController {
         } else if ("hot".equals(orderBy)) {
             model.addAttribute("orderBy", 2);
         }
-        List<ViewObject> questions2 = getQuestions(null, 0, 100, categoryId, orderBy);
-        model.addAttribute("vos", questions2);
+        List<ViewObject> questions = getQuestions(null, 0, 100, categoryId, orderBy);
+        model.addAttribute("vos", questions);
         return "index";
     }
 

@@ -1,5 +1,7 @@
 package top.kongk.wenda.controller;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,9 @@ public class QuestionController {
 
     @Autowired
     SearchService searchService;
+
+    @Autowired
+    DataDictionaryService dataDictionaryService;
 
     /**
      * 用户提交问题, 把问题插入数据库, 设置状态为待审核
@@ -109,16 +114,44 @@ public class QuestionController {
         if ("hot".equals(orderBy)) {
 
             //获取权重, 可以通过数据库获取
-            int likeCountWeight = 6;
-            int dislikeCountWeight = -1;
+            Integer likeCountWeight = null;
+            Integer dislikeCountWeight = null;
             //回复数量的权重
-            int replyCountWeight = 1;
+            Integer replyCountWeight = null;
+
+            Map<String, String> weightAnswer = dataDictionaryService.getByType("weight-answer");
+
+            String likeCountWeight1 = weightAnswer.get("likeCountWeight");
+            if (NumberUtils.isNumber(likeCountWeight1)) {
+                likeCountWeight = Integer.valueOf(likeCountWeight1);
+            }
+            String dislikeCountWeight1 = weightAnswer.get("dislikeCountWeight");
+            if (NumberUtils.isNumber(dislikeCountWeight1)) {
+                dislikeCountWeight = Integer.valueOf(dislikeCountWeight1);
+            }
+            String replyCountWeight1 = weightAnswer.get("replyCountWeight");
+            if (NumberUtils.isNumber(replyCountWeight1)) {
+                replyCountWeight = Integer.valueOf(replyCountWeight1);
+            }
+            if (likeCountWeight == null) {
+                likeCountWeight = 6;
+            }
+            if (dislikeCountWeight == null) {
+                dislikeCountWeight = -1;
+            }
+            if (replyCountWeight == null) {
+                replyCountWeight = 1;
+            }
+
+            Integer finalLikeCountWeight = likeCountWeight;
+            Integer finalDislikeCountWeight = dislikeCountWeight;
+            Integer finalReplyCountWeight = replyCountWeight;
 
             commentList.sort(new Comparator<Comment>() {
                 private int getScore(Comment comment) {
                     //喜欢的数量*权重 - 不喜欢的数量*权重 + 回复的数量*权重
-                    return comment.getLikeCount() * likeCountWeight
-                            + comment.getDislikeCount() * dislikeCountWeight + comment.getReplyCount() * replyCountWeight;
+                    return comment.getLikeCount() * finalLikeCountWeight
+                            + comment.getDislikeCount() * finalDislikeCountWeight + comment.getReplyCount() * finalReplyCountWeight;
                 }
 
                 @Override
@@ -293,7 +326,7 @@ public class QuestionController {
     @RequestMapping(value = "/add2", method = {RequestMethod.POST})
     @ResponseBody
     public String addQuestion2(@RequestParam("title") String title,
-                              @RequestParam("content") String content,
+                               @RequestParam("content") String content,
                                @RequestParam("categoryId") Integer categoryId) {
         try {
             Question question = new Question();
