@@ -60,6 +60,7 @@ public class UserService {
         user = new User();
         user.setName(username);
         user.setEmail(email);
+        user.setRole(2);
         user.setSalt(UUID.randomUUID().toString().substring(0, 5));
         if (StringUtils.isBlank(user.getHeadUrl())) {
             String headUrl = "/headImg/" + new Random().nextInt(40) + ".jpg";
